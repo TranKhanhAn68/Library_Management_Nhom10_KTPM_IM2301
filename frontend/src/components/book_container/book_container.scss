@@ -1,0 +1,29 @@
+* {
+    font-size: 1.2rem;
+    font-weight: 500;
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    color: white;
+    font-weight: 500;
+}
+
+.book-container {
+    background: linear-gradient(135deg, #f5f5f5, #dcdcdc);
+    width: 70%;
+    border-radius: 20px;
+    overflow: hidden;
+
+    .book-container-header {
+        background: linear-gradient(135deg, #ffffff, #eef1f4);   
+        box-shadow: 0 4px 12px rgba(0,0,0,0.08); 
+    }
+   
+    div.dropdown button {
+        background: #6366f1;
+        color: white;
+    }
+
+    div.dropdown button:hover {
+        background: #4f46e5;
+        transform: scale(1.2);    
+    }
+}

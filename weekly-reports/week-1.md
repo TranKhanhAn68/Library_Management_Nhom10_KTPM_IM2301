@@ -31,8 +31,8 @@
 | Phùng Thị Kim Ngân    | Thiết kế database, frontend          | Tuần 9   |
 
 ## 6.	TIMELINE
-Tuần 1-2: Lập nhóm, phân công, phân tích yêu cầu
-Tuần 3: Thiết kế database
-Tuần 4-6: Backend
-Tuần 7-8: Frontend
-Tuần 9-10: Báo cáo, demo, nộp bài và bảo vệ
+- Tuần 1-2: Lập nhóm, phân công, phân tích yêu cầu
+- Tuần 3: Thiết kế database
+- Tuần 4-6: Backend
+- Tuần 7-8: Frontend
+- Tuần 9-10: Báo cáo, demo, nộp bài và bảo vệ

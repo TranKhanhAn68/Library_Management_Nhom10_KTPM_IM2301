@@ -1,38 +1,45 @@
-# ĐỀ TÀI BÀI TẬP LỚN – KIỂM THỬ PHẦN MỀM
-## 1.	THÔNG TIN NHÓM
--	Nhóm: 10
--	Thành viên:
-    + Trần Khánh An - 2351050004
-    + Nguyễn Ngọc Khiết Băng – 2354050016
-    + Phùng Thị Kim Ngân – 2354050073
--	GVHD: Võ Việt Khoa
+# BÁO CÁO TUẦN 1
+## TUẦN: 1 
+## NHÓM: 10
+## ĐỀ TÀI: HỆ THỐNG QUẢN LÝ THƯ VIỆN
+## NHÓM TRƯỞNG: TRẦN KHÁNH AN - 2351050004
 
-## 2.	ĐỀ TÀI
--	Tên đề tài: Hệ thống Quản lý Thư viện
--   Mô tả ngắn: Xây dựng Hệ thống Quản lý Thư viện làm môi trường thực hành các kỹ thuật kiểm thử phần mềm nhằm đánh giá chất lượng hệ thống. Qua quá trình kiểm thử để tiến hành phát hiện lỗi, kiểm tra tính chính xác của các chức năng và đánh giá mức độ ổn định của hệ thống. Đồng thời, đề tài giúp áp dụng kiến thức lý thuyết vào thực tế và rèn luyện kỹ năng thiết kế test case, xây dựng kịch bản kiểm thử.
+## 1. CÔNG VIỆC ĐÃ HOÀN THÀNH
+| Thành viên             | MSSV       | Công việc                       |
+|------------------------|------------|---------------------------------|
+| Trần Khánh An          | 2351050004 | Tạo project và github           |
+| Nguyễn Ngọc Khiết Băng | 2354050016 | Đề xuất đề tài                  |
+| Phùng Thị Kim Ngân     | 2354050073 | Lập nhóm và phân chia công việc |
 
-## 3.	TÍNH NĂNG CHÍNH
-- Tính năng 1: Tra cứu và tìm kiếm thông tin sách
-- Tính năng 2: Quản lý mượn – trả sách
-- Tính năng 3: Đặt trước sách
-- Tính năng 4: Quản lý danh mục và thông tin sách
+## 2. Tiến độ tổng thể
 
-## 4.	CÔNG NGHỆ DỰ KIẾN
-- Test: Pytest
-- Frontend: ReactJS
-- Backend: django
-- DB: MySQL
+| Hạng mục              | Trạng thái   | %   |
+|-----------------------|--------------|---  |
+| Phân tích yêu cầu     | Đang làm     | 50% |
+| Thiết kế kiến trúc    | Đang làm     | 50% |
+| Backend API           | Chưa bắt đầu | 0%  |
+| Frontend UI           | Chưa bắt đầu | 0%  |
+| Docker                | Chưa bắt đầu | 0%  |
+| Testing               | Chưa bắt đầu | 0%  | 
 
-## 5. Phân Công Công Việc
-| Thành viên            | Công việc                            | Timeline |
-|-----------------------|--------------------------------------|----------|
-| Trần Khánh An         | Wireframe, frontend, backend         | Tuần 9   |
-| Nguyễn Ngọc Khiết Băng| Thiết kế database, frontend          | Tuần 9   |
-| Phùng Thị Kim Ngân    | Thiết kế database, frontend          | Tuần 9   |
+**Tổng tiến độ: 30%**
 
-## 6.	TIMELINE
-- Tuần 1-2: Lập nhóm, phân công, phân tích yêu cầu
-- Tuần 3: Thiết kế database
-- Tuần 4-6: Backend
-- Tuần 7-8: Frontend
-- Tuần 9-10: Báo cáo, demo, nộp bài và bảo vệ
+
+## 3. Kế hoạch tuần tới
+
+| Thành viên             | Công việc dự kiến |
+|------------------------|-------------------|
+| Trần Khánh An          | wireframes        |
+| Nguyễn Ngọc Khiết Băng | thiết kế database |
+| Phùng Thị Kim Ngân     | phân tích use case|
+
+
+## 4. Khó khăn / Cần hỗ trợ
+
+- [ ] [Mô tả khó khăn nếu có]  
+- [ ] [Câu hỏi cần GV giải đáp nếu có]  
+
+---
+
+*Ngày nộp: 8/3/2026*  
+*Xác nhận của Nhóm trưởng: [Trần Khánh An]*

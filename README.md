@@ -21,14 +21,14 @@
 
 <!-- Hướng dẫn cài đặt -->
 <!-- Clone project -->
-git clone https://github.com/TranKhanhAn68/Library_Management_Nhom10_KTPM_IM2301.git
+git clone https://github.com/TranKhanhAn68/Library_Management_Nhom10_KTPM_IM2301.git  
 cd Library_Management
 
 
  <!-- Cài đặt Backend (Django) -->
-1. Di chuyển vào thư mục backend
+1. Di chuyển vào thư mục backend  
 cd backend
-2. Tạo môi trường ảo (Virtual Environment)
+2. Tạo môi trường ảo (Virtual Environment)  
 python -m venv venv
 
 Kích hoạt môi trường:

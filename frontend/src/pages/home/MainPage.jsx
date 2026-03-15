@@ -1,20 +1,43 @@
 import React from 'react';
-import Navbar from '../../components/header/Header';
-import Carousel from '../../components/Carousel/Carousel';
-import FastLink from '../../components/fast_link/FastLink';
-import { Outlet } from 'react-router-dom';
+import Card from '../../components/card/Card'
+import './main_page.scss'
 const MainPage = () => {
     return (
-        <>
-            <Navbar />
-            <Carousel />
-            <div className='container-fluid d-md-flex d-block justify-content-around'>
-                <FastLink />
-                <Outlet />
-            </div>
-            {/* <Footer /> */}
-        </>
+        <div className='book-container '>
+            <div className='d-flex justify-content-center gap-4  book-container-header p-3'>
+                <div className="dropdown">
+                    <button type="button" className="btn dropdown-toggle" data-bs-toggle="dropdown">
+                        Tìm kiếm theo thể loại sách
+                    </button>
+                    <ul className="dropdown-menu">
+                        <li><a className="dropdown-item" href="#">Link 1</a></li>
+                        <li><a className="dropdown-item" href="#">Link 2</a></li>
+                        <li><a className="dropdown-item" href="#">Link 3</a></li>
+                    </ul>
+                </div>
 
+
+                <div className="dropdown">
+                    <button type="button" className="btn dropdown-toggle" data-bs-toggle="dropdown">
+                        Tìm kiếm theo tác giả
+                    </button>
+                    <ul className="dropdown-menu">
+                        <li><a className="dropdown-item" href="#">Link 1</a></li>
+                        <li><a className="dropdown-item" href="#">Link 2</a></li>
+                        <li><a className="dropdown-item" href="#">Link 3</a></li>
+                    </ul>
+                </div>
+            </div>
+
+            <div className='d-flex gap-3 flex-wrap p-3 justify-content-center'>
+                <Card />
+                <Card />
+                <Card />
+                <Card />
+                <Card />
+                <Card />
+            </div>
+        </div>
     );
 }
 

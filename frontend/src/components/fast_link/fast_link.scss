@@ -1,15 +1,19 @@
 * {
-    font-size: 1.2rem;
-    font-weight: 500;
     font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-    color: white;
-    font-weight: 500;
 }
 
 div.left {
     background-color: #007a65;
     height: 400px;
+    width: 20%;
     padding: 20px 30px 20px 30px;
+    font-size: 1.2rem;
+    font-weight: 500;
+    color: white;
+    
+    .title-fast-link {
+        font-size: 1.8rem;
+    }
 
     ul.list-group  {
         list-style: none;

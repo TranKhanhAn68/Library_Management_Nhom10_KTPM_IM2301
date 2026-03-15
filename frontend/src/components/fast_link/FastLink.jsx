@@ -4,7 +4,7 @@ import './fast_link.scss'
 const FastLink = () => {
     return (
         <div className='left d-block'>
-            <h2 className='title-fast-link'>Liên Kết Nhanh</h2>
+            <div className='title-fast-link mb-3'>Liên Kết Nhanh</div>
             <ul className='list-group'>
                 <li>
                     <Link className='d-flex gap-2 align-items-center fast-link' to='/'>

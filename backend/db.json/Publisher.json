@@ -1,0 +1,58 @@
+[
+    {
+        "model": "library_management.publisher",
+        "pk": 1,
+        "fields": {
+            "name": "Penguin Random House"
+        }
+    },
+    {
+        "model": "library_management.publisher",
+        "pk": 2,
+        "fields": {
+            "name": "HarperCollins"
+        }
+    },
+    {
+        "model": "library_management.publisher",
+        "pk": 3,
+        "fields": {
+            "name": "Simon & Schuster"
+        }
+    },
+    {
+        "model": "library_management.publisher",
+        "pk": 4,
+        "fields": {
+            "name": "Nhà Xuất Bản Trẻ"
+        }
+    },
+    {
+        "model": "library_management.publisher",
+        "pk": 5,
+        "fields": {
+            "name": "Nhà Xuất Bản Kim Đồng"
+        }
+    },
+    {
+        "model": "library_management.publisher",
+        "pk": 6,
+        "fields": {
+            "name": "Nhà Xuất Bản Giáo Dục Việt Nam"
+        }
+    },
+    {
+        "model": "library_management.publisher",
+        "pk": 7,
+        "fields": {
+            "name": "NXB Hội Nhà Văn"
+        }
+    },
+    {
+        "model": "library_management.publisher",
+        "pk": 8,
+        "fields": {
+            "name": "Vintage Books"
+        }
+    }
+]

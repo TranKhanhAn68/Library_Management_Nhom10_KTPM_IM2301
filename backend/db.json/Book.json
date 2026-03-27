@@ -1,0 +1,562 @@
+[
+    {
+        "model": "library_management.book",
+        "pk": 1,
+        "fields": {
+            "name": "Chiến tranh và Hòa bình",
+            "description": "Tiểu thuyết kinh điển của Leo Tolstoy.",
+            "author": 1,
+            "category": 1,
+            "publisher": 1,
+            "created_at": "2026-03-17T13:00:00Z",
+            "updated_at": "2026-03-17T13:00:00Z",
+            "active": true
+        }
+    },
+    {
+        "model": "library_management.book",
+        "pk": 2,
+        "fields": {
+            "name": "Rừng Na Uy",
+            "description": "Tác phẩm nổi tiếng của Haruki Murakami.",
+            "author": 2,
+            "category": 2,
+            "publisher": 2,
+            "created_at": "2026-03-17T13:00:00Z",
+            "updated_at": "2026-03-17T13:00:00Z",
+            "active": true
+        }
+    },
+    {
+        "model": "library_management.book",
+        "pk": 3,
+        "fields": {
+            "name": "Trăm năm cô đơn",
+            "description": "Kiệt tác của Gabriel García Márquez.",
+            "author": 3,
+            "category": 3,
+            "publisher": 3,
+            "created_at": "2026-03-17T13:00:00Z",
+            "updated_at": "2026-03-17T13:00:00Z",
+            "active": true
+        }
+    },
+    {
+        "model": "library_management.book",
+        "pk": 4,
+        "fields": {
+            "name": "Chí Phèo",
+            "description": "Tác phẩm nổi tiếng của Nam Cao.",
+            "author": 4,
+            "category": 4,
+            "publisher": 4,
+            "created_at": "2026-03-17T13:00:00Z",
+            "updated_at": "2026-03-17T13:00:00Z",
+            "active": true
+        }
+    },
+    {
+        "model": "library_management.book",
+        "pk": 5,
+        "fields": {
+            "name": "Án mạng trên chuyến tàu tốc hành phương Đông",
+            "description": "Truyện trinh thám của Agatha Christie.",
+            "author": 5,
+            "category": 5,
+            "publisher": 1,
+            "created_at": "2026-03-17T13:00:00Z",
+            "updated_at": "2026-03-17T13:00:00Z",
+            "active": true
+        }
+    },
+    {
+        "model": "library_management.book",
+        "pk": 6,
+        "fields": {
+            "name": "Foundation",
+            "description": "Tác phẩm khoa học viễn tưởng của Isaac Asimov.",
+            "author": 6,
+            "category": 6,
+            "publisher": 2,
+            "created_at": "2026-03-17T13:00:00Z",
+            "updated_at": "2026-03-17T13:00:00Z",
+            "active": true
+        }
+    },
+    {
+        "model": "library_management.book",
+        "pk": 7,
+        "fields": {
+            "name": "Chúa tể những chiếc nhẫn",
+            "description": "Tác phẩm fantasy nổi tiếng của Tolkien.",
+            "author": 7,
+            "category": 7,
+            "publisher": 1,
+            "created_at": "2026-03-17T13:00:00Z",
+            "updated_at": "2026-03-17T13:00:00Z",
+            "active": true
+        }
+    },
+    {
+        "model": "library_management.book",
+        "pk": 8,
+        "fields": {
+            "name": "It",
+            "description": "Tiểu thuyết kinh dị của Stephen King.",
+            "author": 8,
+            "category": 8,
+            "publisher": 2,
+            "created_at": "2026-03-17T13:00:00Z",
+            "updated_at": "2026-03-17T13:00:00Z",
+            "active": true
+        }
+    },
+    {
+        "model": "library_management.book",
+        "pk": 9,
+        "fields": {
+            "name": "The Notebook",
+            "description": "Tiểu thuyết tình cảm của Nicholas Sparks.",
+            "author": 9,
+            "category": 9,
+            "publisher": 3,
+            "created_at": "2026-03-17T13:00:00Z",
+            "updated_at": "2026-03-17T13:00:00Z",
+            "active": true
+        }
+    },
+    {
+        "model": "library_management.book",
+        "pk": 10,
+        "fields": {
+            "name": "Charlie và nhà máy sô-cô-la",
+            "description": "Truyện thiếu nhi nổi tiếng.",
+            "author": 10,
+            "category": 10,
+            "publisher": 5,
+            "created_at": "2026-03-17T13:00:00Z",
+            "updated_at": "2026-03-17T13:00:00Z",
+            "active": true
+        }
+    },
+    {
+        "model": "library_management.book",
+        "pk": 11,
+        "fields": {
+            "name": "Becoming",
+            "description": "Hồi ký của Michelle Obama.",
+            "author": 11,
+            "category": 11,
+            "publisher": 3,
+            "created_at": "2026-03-17T13:00:00Z",
+            "updated_at": "2026-03-17T13:00:00Z",
+            "active": true
+        }
+    },
+    {
+        "model": "library_management.book",
+        "pk": 12,
+        "fields": {
+            "name": "Đắc nhân tâm",
+            "description": "Sách kỹ năng nổi tiếng của Dale Carnegie.",
+            "author": 12,
+            "category": 12,
+            "publisher": 4,
+            "created_at": "2026-03-17T13:00:00Z",
+            "updated_at": "2026-03-17T13:00:00Z",
+            "active": true
+        }
+    },
+    {
+        "model": "library_management.book",
+        "pk": 13,
+        "fields": {
+            "name": "Cha giàu cha nghèo",
+            "description": "Sách tài chính cá nhân.",
+            "author": 13,
+            "category": 13,
+            "publisher": 2,
+            "created_at": "2026-03-17T13:00:00Z",
+            "updated_at": "2026-03-17T13:00:00Z",
+            "active": true
+        }
+    },
+    {
+        "model": "library_management.book",
+        "pk": 14,
+        "fields": {
+            "name": "Sapiens: Lược sử loài người",
+            "description": "Sách lịch sử nổi tiếng.",
+            "author": 14,
+            "category": 14,
+            "publisher": 1,
+            "created_at": "2026-03-17T13:00:00Z",
+            "updated_at": "2026-03-17T13:00:00Z",
+            "active": true
+        }
+    },
+    {
+        "model": "library_management.book",
+        "pk": 15,
+        "fields": {
+            "name": "Lược sử thời gian",
+            "description": "Sách khoa học phổ thông.",
+            "author": 15,
+            "category": 15,
+            "publisher": 1,
+            "created_at": "2026-03-17T13:00:00Z",
+            "updated_at": "2026-03-17T13:00:00Z",
+            "active": true
+        }
+    },
+    {
+        "model": "library_management.book",
+        "pk": 16,
+        "fields": {
+            "name": "Anna Karenina",
+            "description": "Tiểu thuyết nổi tiếng của Leo Tolstoy về tình yêu và xã hội Nga.",
+            "author": 1,
+            "category": 1,
+            "publisher": 1,
+            "created_at": "2026-03-17T13:00:00Z",
+            "updated_at": "2026-03-17T13:00:00Z",
+            "active": true
+        }
+    },
+    {
+        "model": "library_management.book",
+        "pk": 17,
+        "fields": {
+            "name": "Kafka trên bờ biển",
+            "description": "Tác phẩm nổi bật của Haruki Murakami, kết hợp hiện thực và siêu thực.",
+            "author": 2,
+            "category": 2,
+            "publisher": 2,
+            "created_at": "2026-03-17T13:00:00Z",
+            "updated_at": "2026-03-17T13:00:00Z",
+            "active": true
+        }
+    },
+    {
+        "model": "library_management.book",
+        "pk": 18,
+        "fields": {
+            "name": "Tình yêu thời thổ tả",
+            "description": "Một trong những truyện ngắn xuất sắc của Gabriel García Márquez.",
+            "author": 3,
+            "category": 3,
+            "publisher": 3,
+            "created_at": "2026-03-17T13:00:00Z",
+            "updated_at": "2026-03-17T13:00:00Z",
+            "active": true
+        }
+    },
+    {
+        "model": "library_management.book",
+        "pk": 19,
+        "fields": {
+            "name": "Sống mòn",
+            "description": "Truyện ngắn phản ánh hiện thực xã hội của Nam Cao.",
+            "author": 4,
+            "category": 4,
+            "publisher": 4,
+            "created_at": "2026-03-17T13:00:00Z",
+            "updated_at": "2026-03-17T13:00:00Z",
+            "active": true
+        }
+    },
+    {
+        "model": "library_management.book",
+        "pk": 20,
+        "fields": {
+            "name": "Mười người da đen nhỏ",
+            "description": "Truyện trinh thám kinh điển của Agatha Christie.",
+            "author": 5,
+            "category": 5,
+            "publisher": 1,
+            "created_at": "2026-03-17T13:00:00Z",
+            "updated_at": "2026-03-17T13:00:00Z",
+            "active": true
+        }
+    },
+    {
+        "model": "library_management.book",
+        "pk": 21,
+        "fields": {
+            "name": "Robot Dreams",
+            "description": "Tác phẩm khoa học viễn tưởng của Isaac Asimov về robot và trí tuệ nhân tạo.",
+            "author": 6,
+            "category": 6,
+            "publisher": 2,
+            "created_at": "2026-03-17T13:00:00Z",
+            "updated_at": "2026-03-17T13:00:00Z",
+            "active": true
+        }
+    },
+    {
+        "model": "library_management.book",
+        "pk": 22,
+        "fields": {
+            "name": "The Hobbit",
+            "description": "Tiểu thuyết fantasy nổi tiếng của J. R. R. Tolkien.",
+            "author": 7,
+            "category": 7,
+            "publisher": 1,
+            "created_at": "2026-03-17T13:00:00Z",
+            "updated_at": "2026-03-17T13:00:00Z",
+            "active": true
+        }
+    },
+    {
+        "model": "library_management.book",
+        "pk": 23,
+        "fields": {
+            "name": "Cujo",
+            "description": "Tiểu thuyết kinh dị nổi tiếng của Stephen King.",
+            "author": 8,
+            "category": 8,
+            "publisher": 2,
+            "created_at": "2026-03-17T13:00:00Z",
+            "updated_at": "2026-03-17T13:00:00Z",
+            "active": true
+        }
+    },
+    {
+        "model": "library_management.book",
+        "pk": 24,
+        "fields": {
+            "name": "Nơi tình yêu bắt đầu",
+            "description": "Tiểu thuyết tình cảm của Nicholas Sparks.",
+            "author": 9,
+            "category": 9,
+            "publisher": 3,
+            "created_at": "2026-03-17T13:00:00Z",
+            "updated_at": "2026-03-17T13:00:00Z",
+            "active": true
+        }
+    },
+    {
+        "model": "library_management.book",
+        "pk": 25,
+        "fields": {
+            "name": "Matilda",
+            "description": "Truyện thiếu nhi nổi tiếng của Roald Dahl.",
+            "author": 10,
+            "category": 10,
+            "publisher": 5,
+            "created_at": "2026-03-17T13:00:00Z",
+            "updated_at": "2026-03-17T13:00:00Z",
+            "active": true
+        }
+    },
+    {
+        "model": "library_management.book",
+        "pk": 26,
+        "fields": {
+            "name": "War and Peace: Volume II",
+            "description": "Phần tiếp theo của Chiến tranh và Hòa bình, tiếp tục hành trình các nhân vật.",
+            "author": 1,
+            "category": 1,
+            "publisher": 1,
+            "created_at": "2026-03-17T13:00:00Z",
+            "updated_at": "2026-03-17T13:00:00Z",
+            "active": true
+        }
+    },
+    {
+        "model": "library_management.book",
+        "pk": 27,
+        "fields": {
+            "name": "Hear the Wind Sing",
+            "description": "Tác phẩm đầu tay của Haruki Murakami, mở đầu phong cách siêu thực.",
+            "author": 2,
+            "category": 2,
+            "publisher": 2,
+            "created_at": "2026-03-17T13:00:00Z",
+            "updated_at": "2026-03-17T13:00:00Z",
+            "active": true
+        }
+    },
+    {
+        "model": "library_management.book",
+        "pk": 28,
+        "fields": {
+            "name": "Love in the Time of Cholera",
+            "description": "Tiểu thuyết nổi tiếng của Gabriel García Márquez về tình yêu bền lâu.",
+            "author": 3,
+            "category": 3,
+            "publisher": 3,
+            "created_at": "2026-03-17T13:00:00Z",
+            "updated_at": "2026-03-17T13:00:00Z",
+            "active": true
+        }
+    },
+    {
+        "model": "library_management.book",
+        "pk": 29,
+        "fields": {
+            "name": "Lão Hạc",
+            "description": "Truyện ngắn kinh điển của Nam Cao, phản ánh hiện thực làng quê Việt Nam.",
+            "author": 4,
+            "category": 4,
+            "publisher": 4,
+            "created_at": "2026-03-17T13:00:00Z",
+            "updated_at": "2026-03-17T13:00:00Z",
+            "active": true
+        }
+    },
+    {
+        "model": "library_management.book",
+        "pk": 30,
+        "fields": {
+            "name": "The Mysterious Affair at Styles",
+            "description": "Truyện trinh thám đầu tiên của Agatha Christie.",
+            "author": 5,
+            "category": 5,
+            "publisher": 1,
+            "created_at": "2026-03-17T13:00:00Z",
+            "updated_at": "2026-03-17T13:00:00Z",
+            "active": true
+        }
+    },
+    {
+        "model": "library_management.book",
+        "pk": 31,
+        "fields": {
+            "name": "I, Robot",
+            "description": "Tập truyện về robot và trí tuệ nhân tạo của Isaac Asimov.",
+            "author": 6,
+            "category": 6,
+            "publisher": 2,
+            "created_at": "2026-03-17T13:00:00Z",
+            "updated_at": "2026-03-17T13:00:00Z",
+            "active": true
+        }
+    },
+    {
+        "model": "library_management.book",
+        "pk": 32,
+        "fields": {
+            "name": "The Fellowship of the Ring",
+            "description": "Phần đầu của Chúa tể những chiếc nhẫn, viết bởi Tolkien.",
+            "author": 7,
+            "category": 7,
+            "publisher": 1,
+            "created_at": "2026-03-17T13:00:00Z",
+            "updated_at": "2026-03-17T13:00:00Z",
+            "active": true
+        }
+    },
+    {
+        "model": "library_management.book",
+        "pk": 33,
+        "fields": {
+            "name": "The Shining",
+            "description": "Tiểu thuyết kinh dị nổi tiếng của Stephen King.",
+            "author": 8,
+            "category": 8,
+            "publisher": 2,
+            "created_at": "2026-03-17T13:00:00Z",
+            "updated_at": "2026-03-17T13:00:00Z",
+            "active": true
+        }
+    },
+    {
+        "model": "library_management.book",
+        "pk": 34,
+        "fields": {
+            "name": "The Lucky One",
+            "description": "Tiểu thuyết tình cảm của Nicholas Sparks, kể chuyện tình lãng mạn và may mắn.",
+            "author": 9,
+            "category": 9,
+            "publisher": 3,
+            "created_at": "2026-03-17T13:00:00Z",
+            "updated_at": "2026-03-17T13:00:00Z",
+            "active": true
+        }
+    },
+    {
+        "model": "library_management.book",
+        "pk": 35,
+        "fields": {
+            "name": "James and the Giant Peach",
+            "description": "Truyện thiếu nhi nổi tiếng của Roald Dahl.",
+            "author": 10,
+            "category": 10,
+            "publisher": 5,
+            "created_at": "2026-03-17T13:00:00Z",
+            "updated_at": "2026-03-17T13:00:00Z",
+            "active": true
+        }
+    },
+    {
+        "model": "library_management.book",
+        "pk": 36,
+        "fields": {
+            "name": "Becoming: Part II",
+            "description": "Phần tiếp theo của hồi ký Michelle Obama.",
+            "author": 11,
+            "category": 11,
+            "publisher": 3,
+            "created_at": "2026-03-17T13:00:00Z",
+            "updated_at": "2026-03-17T13:00:00Z",
+            "active": true
+        }
+    },
+    {
+        "model": "library_management.book",
+        "pk": 37,
+        "fields": {
+            "name": "How to Win Friends and Influence People: New Edition",
+            "description": "Phiên bản cập nhật sách kỹ năng nổi tiếng của Dale Carnegie.",
+            "author": 12,
+            "category": 12,
+            "publisher": 4,
+            "created_at": "2026-03-17T13:00:00Z",
+            "updated_at": "2026-03-17T13:00:00Z",
+            "active": true
+        }
+    },
+    {
+        "model": "library_management.book",
+        "pk": 38,
+        "fields": {
+            "name": "Rich Dad's Guide to Investing",
+            "description": "Sách tài chính và đầu tư của Robert Kiyosaki.",
+            "author": 13,
+            "category": 13,
+            "publisher": 2,
+            "created_at": "2026-03-17T13:00:00Z",
+            "updated_at": "2026-03-17T13:00:00Z",
+            "active": true
+        }
+    },
+    {
+        "model": "library_management.book",
+        "pk": 39,
+        "fields": {
+            "name": "Homo Deus",
+            "description": "Tác phẩm tiếp theo của Yuval Noah Harari về tương lai loài người.",
+            "author": 14,
+            "category": 14,
+            "publisher": 1,
+            "created_at": "2026-03-17T13:00:00Z",
+            "updated_at": "2026-03-17T13:00:00Z",
+            "active": true
+        }
+    },
+    {
+        "model": "library_management.book",
+        "pk": 40,
+        "fields": {
+            "name": "A Brief History of Time: Updated Edition",
+            "description": "Phiên bản cập nhật sách khoa học phổ thông của Stephen Hawking.",
+            "author": 15,
+            "category": 15,
+            "publisher": 1,
+            "created_at": "2026-03-17T13:00:00Z",
+            "updated_at": "2026-03-17T13:00:00Z",
+            "active": true
+        }
+    }
+]

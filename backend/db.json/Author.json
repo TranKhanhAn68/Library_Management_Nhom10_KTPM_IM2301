@@ -1,0 +1,167 @@
+[
+    {
+        "model": "library_management.author",
+        "pk": 1,
+        "fields": {
+            "name": "Leo Tolstoy",
+            "date_of_birth": "1828-09-09",
+            "date_of_death": "1910-11-20",
+            "biography": "Nhà văn Nga nổi tiếng với các tác phẩm kinh điển như Chiến tranh và Hòa bình.",
+            "description": "Tác giả tiêu biểu của tiểu thuyết kinh điển."
+        }
+    },
+    {
+        "model": "library_management.author",
+        "pk": 2,
+        "fields": {
+            "name": "Haruki Murakami",
+            "date_of_birth": "1949-01-12",
+            "date_of_death": null,
+            "biography": "Nhà văn Nhật Bản nổi tiếng với phong cách siêu thực và hiện đại.",
+            "description": "Đại diện tiêu biểu cho tiểu thuyết hiện đại."
+        }
+    },
+    {
+        "model": "library_management.author",
+        "pk": 3,
+        "fields": {
+            "name": "Gabriel García Márquez",
+            "date_of_birth": "1927-03-06",
+            "date_of_death": "2014-04-17",
+            "biography": "Nhà văn Colombia, người tiên phong của chủ nghĩa hiện thực huyền ảo.",
+            "description": "Đại diện văn học nước ngoài."
+        }
+    },
+    {
+        "model": "library_management.author",
+        "pk": 4,
+        "fields": {
+            "name": "Nam Cao",
+            "date_of_birth": "1915-10-29",
+            "date_of_death": "1951-11-30",
+            "biography": "Nhà văn Việt Nam nổi tiếng với các tác phẩm hiện thực phê phán.",
+            "description": "Đại diện văn học Việt Nam."
+        }
+    },
+    {
+        "model": "library_management.author",
+        "pk": 5,
+        "fields": {
+            "name": "Agatha Christie",
+            "date_of_birth": "1890-09-15",
+            "date_of_death": "1976-01-12",
+            "biography": "Nữ hoàng trinh thám với hàng loạt tác phẩm nổi tiếng.",
+            "description": "Tác giả tiêu biểu thể loại trinh thám."
+        }
+    },
+    {
+        "model": "library_management.author",
+        "pk": 6,
+        "fields": {
+            "name": "Isaac Asimov",
+            "date_of_birth": "1920-01-02",
+            "date_of_death": "1992-04-06",
+            "biography": "Nhà văn khoa học viễn tưởng nổi tiếng với series Foundation.",
+            "description": "Đại diện khoa học viễn tưởng."
+        }
+    },
+    {
+        "model": "library_management.author",
+        "pk": 7,
+        "fields": {
+            "name": "J. R. R. Tolkien",
+            "date_of_birth": "1892-01-03",
+            "date_of_death": "1973-09-02",
+            "biography": "Tác giả của Chúa tể những chiếc nhẫn.",
+            "description": "Đại diện thể loại fantasy."
+        }
+    },
+    {
+        "model": "library_management.author",
+        "pk": 8,
+        "fields": {
+            "name": "Stephen King",
+            "date_of_birth": "1947-09-21",
+            "date_of_death": null,
+            "biography": "Nhà văn Mỹ nổi tiếng với các tác phẩm kinh dị.",
+            "description": "Ông hoàng truyện kinh dị."
+        }
+    },
+    {
+        "model": "library_management.author",
+        "pk": 9,
+        "fields": {
+            "name": "Nicholas Sparks",
+            "date_of_birth": "1965-12-31",
+            "date_of_death": null,
+            "biography": "Tác giả nổi tiếng với các tiểu thuyết tình cảm.",
+            "description": "Đại diện thể loại lãng mạn."
+        }
+    },
+    {
+        "model": "library_management.author",
+        "pk": 10,
+        "fields": {
+            "name": "Roald Dahl",
+            "date_of_birth": "1916-09-13",
+            "date_of_death": "1990-11-23",
+            "biography": "Nhà văn nổi tiếng với truyện thiếu nhi như Charlie và nhà máy sô-cô-la.",
+            "description": "Tác giả sách thiếu nhi."
+        }
+    },
+    {
+        "model": "library_management.author",
+        "pk": 11,
+        "fields": {
+            "name": "Michelle Obama",
+            "date_of_birth": "1964-01-17",
+            "date_of_death": null,
+            "biography": "Cựu Đệ nhất phu nhân Mỹ, tác giả hồi ký Becoming.",
+            "description": "Đại diện hồi ký - tự truyện."
+        }
+    },
+    {
+        "model": "library_management.author",
+        "pk": 12,
+        "fields": {
+            "name": "Dale Carnegie",
+            "date_of_birth": "1888-11-24",
+            "date_of_death": "1955-11-01",
+            "biography": "Tác giả sách kỹ năng nổi tiếng.",
+            "description": "Đại diện sách kỹ năng sống."
+        }
+    },
+    {
+        "model": "library_management.author",
+        "pk": 13,
+        "fields": {
+            "name": "Robert Kiyosaki",
+            "date_of_birth": "1947-04-08",
+            "date_of_death": null,
+            "biography": "Tác giả Cha giàu Cha nghèo.",
+            "description": "Đại diện sách kinh doanh."
+        }
+    },
+    {
+        "model": "library_management.author",
+        "pk": 14,
+        "fields": {
+            "name": "Yuval Noah Harari",
+            "date_of_birth": "1976-02-24",
+            "date_of_death": null,
+            "biography": "Nhà sử học nổi tiếng với Sapiens.",
+            "description": "Đại diện sách lịch sử."
+        }
+    },
+    {
+        "model": "library_management.author",
+        "pk": 15,
+        "fields": {
+            "name": "Stephen Hawking",
+            "date_of_birth": "1942-01-08",
+            "date_of_death": "2018-03-14",
+            "biography": "Nhà vật lý lý thuyết nổi tiếng.",
+            "description": "Đại diện sách khoa học phổ thông."
+        }
+    }
+]

@@ -40,10 +40,14 @@ INSTALLED_APPS = [
     'library_management',
     "rest_framework",
     "corsheaders",
-    'cloudinary',
     'ckeditor',
-    'ckeditor_uploader'
+    'ckeditor_uploader',
+    'rest_framework.authtoken',
+    'drf_yasg'
 ]
+
+CKEDITOR_UPLOAD_PATH = "images/ckeditors/"
+
 
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
@@ -60,11 +64,12 @@ MIDDLEWARE = [
 # Rest Framework
 from rest_framework import permissions
 REST_FRAMEWORK = {
-    # Use Django's standard `django.contrib.auth` permissions,
-    # or allow read-only access for unauthenticated users.
-    "DEFAULT_PERMISSION_CLASSES": [
-        "rest_framework.permissions.IsAuthenticatedOrReadOnly"
-    ]
+    'DEFAULT_AUTHENTICATION_CLASSES': [
+        'rest_framework.authentication.TokenAuthentication'
+    ],
+    # 'DEFAULT_PERMISSION_CLASSES': [
+    #     'rest_framework.permissions.IsAuthenticated',
+    # ]
 }
 
 CORS_ORIGIN_ALLOW_ALL = True
@@ -86,6 +91,9 @@ TEMPLATES = [
     },
 ]
 
+# TimeZone
+TIME_ZONE = 'Asia/Ho_Chi_Minh'
+USE_TZ = True
 
 
 WSGI_APPLICATION = 'src.wsgi.application'
@@ -156,3 +164,5 @@ USE_TZ = True
 # https://docs.djangoproject.com/en/6.0/howto/static-files/
 
 STATIC_URL = 'static/'
+
+DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'

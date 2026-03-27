@@ -6,7 +6,7 @@ from django.db.models import Count
 from django.template.response import TemplateResponse
 from django.utils.safestring import mark_safe
 from django import forms
-from .models import Category, Book
+from .models import Category, Book, User
 from ckeditor_uploader.widgets import CKEditorUploadingWidget
 from django.urls import path
 
@@ -40,3 +40,4 @@ admin_site = MyAdminSite()
 # Register your models here.
 admin_site.register(Category)
 admin_site.register(Book, BookAdmin)
+admin_site.register(User)

@@ -1,0 +1,152 @@
+[
+    {
+        "model": "library_management.category",
+        "pk": 1,
+        "fields": {
+            "name": "Tiểu thuyết kinh điển",
+            "created_at": "2026-03-17T13:00:00Z",
+            "updated_at": "2026-03-17T13:00:00Z",
+            "active": true
+        }
+    },
+    {
+        "model": "library_management.category",
+        "pk": 2,
+        "fields": {
+            "name": "Tiểu thuyết hiện đại",
+            "created_at": "2026-03-17T13:00:00Z",
+            "updated_at": "2026-03-17T13:00:00Z",
+            "active": true
+        }
+    },
+    {
+        "model": "library_management.category",
+        "pk": 3,
+        "fields": {
+            "name": "Văn học nước ngoài",
+            "created_at": "2026-03-17T13:00:00Z",
+            "updated_at": "2026-03-17T13:00:00Z",
+            "active": true
+        }
+    },
+    {
+        "model": "library_management.category",
+        "pk": 4,
+        "fields": {
+            "name": "Văn học Việt Nam",
+            "created_at": "2026-03-17T13:00:00Z",
+            "updated_at": "2026-03-17T13:00:00Z",
+            "active": true
+        }
+    },
+    {
+        "model": "library_management.category",
+        "pk": 5,
+        "fields": {
+            "name": "Trinh thám - hình sự",
+            "created_at": "2026-03-17T13:00:00Z",
+            "updated_at": "2026-03-17T13:00:00Z",
+            "active": true
+        }
+    },
+    {
+        "model": "library_management.category",
+        "pk": 6,
+        "fields": {
+            "name": "Khoa học viễn tưởng",
+            "created_at": "2026-03-17T13:00:00Z",
+            "updated_at": "2026-03-17T13:00:00Z",
+            "active": true
+        }
+    },
+    {
+        "model": "library_management.category",
+        "pk": 7,
+        "fields": {
+            "name": "Giả tưởng (Fantasy)",
+            "created_at": "2026-03-17T13:00:00Z",
+            "updated_at": "2026-03-17T13:00:00Z",
+            "active": true
+        }
+    },
+    {
+        "model": "library_management.category",
+        "pk": 8,
+        "fields": {
+            "name": "Kinh dị",
+            "created_at": "2026-03-17T13:00:00Z",
+            "updated_at": "2026-03-17T13:00:00Z",
+            "active": true
+        }
+    },
+    {
+        "model": "library_management.category",
+        "pk": 9,
+        "fields": {
+            "name": "Tình cảm - lãng mạn",
+            "created_at": "2026-03-17T13:00:00Z",
+            "updated_at": "2026-03-17T13:00:00Z",
+            "active": true
+        }
+    },
+    {
+        "model": "library_management.category",
+        "pk": 10,
+        "fields": {
+            "name": "Sách thiếu nhi",
+            "created_at": "2026-03-17T13:00:00Z",
+            "updated_at": "2026-03-17T13:00:00Z",
+            "active": true
+        }
+    },
+    {
+        "model": "library_management.category",
+        "pk": 11,
+        "fields": {
+            "name": "Hồi ký - tự truyện",
+            "created_at": "2026-03-17T13:00:00Z",
+            "updated_at": "2026-03-17T13:00:00Z",
+            "active": true
+        }
+    },
+    {
+        "model": "library_management.category",
+        "pk": 12,
+        "fields": {
+            "name": "Sách kỹ năng sống",
+            "created_at": "2026-03-17T13:00:00Z",
+            "updated_at": "2026-03-17T13:00:00Z",
+            "active": true
+        }
+    },
+    {
+        "model": "library_management.category",
+        "pk": 13,
+        "fields": {
+            "name": "Sách kinh doanh",
+            "created_at": "2026-03-17T13:00:00Z",
+            "updated_at": "2026-03-17T13:00:00Z",
+            "active": true
+        }
+    },
+    {
+        "model": "library_management.category",
+        "pk": 14,
+        "fields": {
+            "name": "Sách lịch sử",
+            "created_at": "2026-03-17T13:00:00Z",
+            "updated_at": "2026-03-17T13:00:00Z",
+            "active": true
+        }
+    },
+    {
+        "model": "library_management.category",
+        "pk": 15,
+        "fields": {
+            "name": "Sách khoa học phổ thông",
+            "created_at": "2026-03-17T13:00:00Z",
+            "updated_at": "2026-03-17T13:00:00Z",
+            "active": true
+        }
+    }
+]

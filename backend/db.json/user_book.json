@@ -1,0 +1,58 @@
+[
+    {
+        "model": "library_management.user_book",
+        "pk": 1,
+        "fields": {
+            "user": 2,
+            "book": 1,
+            "borrowing_book_date": "2026-03-15",
+            "returning_book_date": "2026-03-18",
+            "due_date": "2026-03-20",
+            "borrowing_quantity": 1,
+            "status": "RETURNED",
+            "note": null
+        }
+    },
+    {
+        "model": "library_management.user_book",
+        "pk": 2,
+        "fields": {
+            "user": 3,
+            "book": 2,
+            "borrowing_book_date": "2026-03-15",
+            "returning_book_date": "2026-03-25",
+            "due_date": "2026-03-20",
+            "borrowing_quantity": 1,
+            "status": "RETURNED",
+            "note": null
+        }
+    },
+    {
+        "model": "library_management.user_book",
+        "pk": 3,
+        "fields": {
+            "user": 1,
+            "book": 2,
+            "borrowing_book_date": "2026-03-20",
+            "returning_book_date": null,
+            "due_date": "2026-03-28",
+            "borrowing_quantity": 1,
+            "status": "BORROWING",
+            "note": null
+        }
+    },
+    {
+        "model": "library_management.user_book",
+        "pk": 4,
+        "fields": {
+            "user": 2,
+            "book": 2,
+            "borrowing_book_date": "2026-03-10",
+            "returning_book_date": null,
+            "due_date": "2026-03-15",
+            "borrowing_quantity": 1,
+            "status": "OVERDUE",
+            "note": null
+        }
+    }
+]

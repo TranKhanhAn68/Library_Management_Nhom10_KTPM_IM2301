@@ -1,0 +1,42 @@
+[
+    {
+        "model": "library_management.user_book_detail_fine",
+        "pk": 1,
+        "fields": {
+            "user_book": 1,
+            "late_dates": 0,
+            "total_fine_overdue": 0.00,
+            "setting": 1
+        }
+    },
+    {
+        "model": "library_management.user_book_detail_fine",
+        "pk": 2,
+        "fields": {
+            "user_book": 2,
+            "late_dates": 5,
+            "total_fine_overdue": 25000.00,
+            "setting": 1
+        }
+    },
+    {
+        "model": "library_management.user_book_detail_fine",
+        "pk": 3,
+        "fields": {
+            "user_book": 3,
+            "late_dates": 0,
+            "total_fine_overdue": 0.00,
+            "setting": 1
+        }
+    },
+    {
+        "model": "library_management.user_book_detail_fine",
+        "pk": 4,
+        "fields": {
+            "user_book": 4,
+            "late_dates": 0,
+            "total_fine_overdue": 0.00,
+            "setting": 1
+        }
+    }
+]

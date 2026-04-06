@@ -1,0 +1,56 @@
+[
+    {
+        "model": "library_management.user",
+        "pk": 1,
+        "fields": {
+            "password": "pbkdf2_sha256$600000$test$abc123abc123abc123abc123abc123abc123abc123abc123abc123abc123",
+            "last_login": null,
+            "is_superuser": false,
+            "username": "user1",
+            "first_name": "Le",
+            "last_name": "Duong",
+            "email": "user1@gmail.com",
+            "is_staff": false,
+            "is_active": true,
+            "date_joined": "2026-03-17T13:00:00Z",
+            "image": null,
+            "phone_number": null
+        }
+    },
+    {
+        "model": "library_management.user",
+        "pk": 2,
+        "fields": {
+            "password": "pbkdf2_sha256$600000$test$abc123abc123abc123abc123abc123abc123abc123abc123abc123abc123",
+            "last_login": null,
+            "is_superuser": false,
+            "username": "user2",
+            "first_name": "Nguyen",
+            "last_name": "Anh",
+            "email": "user2@gmail.com",
+            "is_staff": false,
+            "is_active": true,
+            "date_joined": "2026-03-17T13:00:00Z",
+            "image": null,
+            "phone_number": "0901234567"
+        }
+    },
+    {
+        "model": "library_management.user",
+        "pk": 3,
+        "fields": {
+            "password": "pbkdf2_sha256$600000$test$abc123abc123abc123abc123abc123abc123abc123abc123abc123abc123",
+            "last_login": null,
+            "is_superuser": false,
+            "username": "user3",
+            "first_name": "Tran",
+            "last_name": "Binh",
+            "email": "user3@gmail.com",
+            "is_staff": false,
+            "is_active": true,
+            "date_joined": "2026-03-17T13:00:00Z",
+            "image": null,
+            "phone_number": "0912345678"
+        }
+    }
+]

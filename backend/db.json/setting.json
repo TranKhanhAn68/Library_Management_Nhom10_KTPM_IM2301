@@ -1,0 +1,10 @@
+[
+    {
+        "model": "library_management.setting",
+        "pk": 1,
+        "fields": {
+            "borrowing_days": 7,
+            "borrowing_overdue_fine": 5000.00
+        }
+    }
+]

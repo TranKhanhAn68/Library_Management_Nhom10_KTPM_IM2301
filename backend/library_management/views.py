@@ -198,7 +198,6 @@ class BorrowViewSet(viewsets.GenericViewSet, mixins.ListModelMixin, mixins.Retri
     @action(methods=['POST'], detail=False, url_path='cart')
     @authentication_classes([TokenAuthentication])
     def borrow_books(self, request):
-        # Lấy dữ liệu request lên trả về dưới dạng dict
         user = request.user
         books = request.data.get("books", []) 
         

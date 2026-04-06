@@ -2,8 +2,9 @@ from django.db import models
 from django.contrib.auth.models import AbstractUser
 from ckeditor.fields import RichTextField
 from cloudinary.models import CloudinaryField
-
-
+from django.db.models import Sum
+from datetime import date, timedelta
+from django.db import IntegrityError
 # Create your models here.
 class User(AbstractUser):
     phone_number = models.CharField(max_length=15, null=True)
@@ -61,7 +62,6 @@ class Book(BaseView):
     book_id = models.CharField(max_length=10, null=True, unique=True)
     name = models.CharField(max_length=255, null=False)
     total_quantity = models.IntegerField(default=1)
-    available_quantity = models.IntegerField(default=1)
     image = CloudinaryField(
         'image',
         folder='books',
@@ -73,6 +73,13 @@ class Book(BaseView):
     publisher = models.ForeignKey(Publisher, on_delete=models.CASCADE)
     description = RichTextField(null=True)
     
+    def available_quantity(self):
+        borrowed = self.user_book_set.filter(
+            status__in=["BORROWING", "OVERDUE"]
+        ).aggregate(total=Sum('borrowing_quantity'))['total'] or 0
+
+        return self.total_quantity - borrowed
+    
 class User_Book(models.Model):
     class BorrowStatus(models.TextChoices):
         PENDING = "PENDING", "Pending"        
@@ -81,7 +88,6 @@ class User_Book(models.Model):
         RETURNED = "RETURNED", "Returned"             
         OVERDUE = "OVERDUE", "Overdue"   
         CANCELLED = "CANCELLED", "Cancelled"
-        EXPIRED = "EXPIRED", "Expired"
 
     user = models.ForeignKey(User, on_delete=models.CASCADE)
     book = models.ForeignKey(Book, on_delete=models.PROTECT)
@@ -93,15 +99,24 @@ class User_Book(models.Model):
     status = models.CharField(max_length=20, choices=BorrowStatus.choices, default=BorrowStatus.PENDING)
     note = models.CharField(max_length=255, null=True)
     
+    def set_due_date(self, borrowing_days):
+        self.due_date =  self.borrowing_book_date + timedelta(days=borrowing_days) 
+    
+    
 class User_Book_Detail_Fine(models.Model):
     user_book = models.OneToOneField(User_Book, on_delete=models.CASCADE, primary_key=True)
-    late_dates = models.IntegerField()
-    total_fine_overdue = models.DecimalField(max_digits=10, decimal_places=2)
+    late_dates = models.IntegerField(null=True)
     setting = models.ForeignKey("Setting", on_delete=models.PROTECT)
+    
+    def total_fine(self):
+        return self.late_dates * self.setting.borrowing_overdue_fine
+         
         
 class Setting(models.Model):
     borrowing_days = models.IntegerField()
+    borrowing_fee = models.DecimalField(max_digits=10, decimal_places=2)
     borrowing_overdue_fine = models.DecimalField(max_digits=10, decimal_places=2)
+    active = models.BooleanField(default=True)
 
 class Reservation(models.Model):
     class ReservationStatus(models.TextChoices):

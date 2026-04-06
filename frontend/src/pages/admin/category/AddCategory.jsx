@@ -1,16 +1,26 @@
-import React, { act, useState } from 'react';
+import React, { act, useContext, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
+import { PostCategory } from '../../../services/CategoryAPI';
+import { AuthContent } from '../../../utils/AuthContext';
 
-const AddCategory = ({ onAdd, categoryID }) => {
-    const [name, setName] = useState("");
-    const [active, setActive] = useState(true);
-    const navigate = useNavigate();
-    const handleSubmit = (e) => {
+const AddCategory = () => {
+    const { token } = useContext(AuthContent)
+    const [name, setName] = useState("")
+    const [active, setActive] = useState(true)
+    const navigate = useNavigate()
+    const handleSubmit = async (e) => {
         e.preventDefault();
         if (name.trim() === "")
-            return alert("Name can not be empty");
-        onAdd({ id: categoryID + 1, categoryID, name, active, created_at: new Date().toISOString().split("T")[0] })
-        navigate("/dashboard/categories")
+            return alert("Không được để trống");
+        try {
+            const postCategory = await PostCategory(name, active, token)
+            if (postCategory) {
+                alert("Tạo thành công")
+            }
+            navigate("/dashboard/categories")
+        } catch (err) {
+            console.error("Lỗi", err)
+        }
     }
     return (
         <div className='tw-p-6 tw-max-w-md tw-mx-auto tw-bg-yellow-100 tw-rounded-2xl tw-shadow-lg'>
@@ -23,7 +33,7 @@ const AddCategory = ({ onAdd, categoryID }) => {
                     className='tw-border tw-border-gray-400 tw-p-3 tw-rounded-lg focus:tw-outline-none focus:tw-ring-2 focus:tw-ring-blue-500'
                 />
                 <label className='tw-flex tw-items-center tw-gap-2'>
-                    <input type='checkbox' checked={active} onChange={e => setActive(e.target.value)} className='tw-w-5 tw-h-5' />
+                    <input type='checkbox' checked={active} onChange={(e) => setActive(e.target.checked)} className='tw-w-5 tw-h-5' />
                     Active
                 </label>
 

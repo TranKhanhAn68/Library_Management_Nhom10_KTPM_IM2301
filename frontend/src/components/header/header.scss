@@ -1,5 +1,4 @@
 * {
-    font-size: 1.2rem;
     font-weight: 500;
     font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
 }
@@ -48,7 +47,7 @@
         transition: width 0.3s ease;
     }
 
-    .nav-link:nth-child(2)::after { 
+    .nav-link-dropdown::after { 
         content: ""; 
         position: absolute; 
         width: 0; 
@@ -63,7 +62,7 @@
         border-bottom: 0px; 
     } 
 
-    .nav-link:nth-last-child(1) { 
+    .nav-link-checkin { 
         margin-left: 2rem; 
         color: blue 
     }

@@ -1,15 +1,46 @@
 import React from 'react';
+import { Link } from 'react-router-dom';
+import { AddToCart } from '../../utils/CartAction';
 
-const Card = () => {
+const Card = ({ book }) => {
+
+
+    const handleAddToCart = () => {
+        // localStorage.removeItem("cart")
+        AddToCart(book);
+        alert(`${book.name} đã được thêm vào giỏ hàng!`);
+        console.log(localStorage.getItem("cart"))
+    }
+
     return (
-        <div class="card w-20">
-            <img class="card-img-top" src="img_avatar1.png" alt="Card image" />
-            <div class="card-body">
-                <h4 class="card-title">John Doe</h4>
-                <p class="card-text">Some example text.</p>
-                <a href="#" class="btn btn-primary">See Profile</a>
+        <div className='col'>
+            <div className="card h-100 shadow-sm">
+
+                <div ckassName="card-header">
+                    <img
+                        src={book.image}
+                        className="card-img-top "
+                        alt={book.name}
+                        style={{ objectFit: 'cover' }}
+                    />
+                </div>
+                <div className="card-body">
+                    <h5 className="card-title text-truncate-2">{book.name}</h5>
+                    <p className="card-text">Mô tả ngắn gọn về cuốn sách.</p>
+                    <small className='text-end w-100 d-block'>5 sao</small>
+                </div>
+                <div className='d-flex justify-content-between gap-1 px-2 py-1 card-footer'>
+                    <Link to={`detail-book/${book.id}`} className="btn btn-primary ">
+                        <small>Xem thông tin</small>
+                    </Link>
+
+                    <button onClick={handleAddToCart} className="btn btn-primary">
+                        <small>Thêm vào giỏ hàng</small>
+                    </button>
+                </div>
             </div>
         </div>
+
     );
 }
 

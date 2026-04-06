@@ -42,7 +42,9 @@ class IsStaffPermission(BasePermission):
 class CategoryViewSet(viewsets.GenericViewSet, 
                       mixins.ListModelMixin, 
                       mixins.CreateModelMixin,
-                      mixins.DestroyModelMixin):
+                      mixins.DestroyModelMixin,
+                      mixins.RetrieveModelMixin,
+                      mixins.UpdateModelMixin):
     queryset = Category.objects.all()
     serializer_class = CategorySerializer
     permission_classes = [IsAdminPermission]
@@ -62,11 +64,15 @@ class BookViewSet(viewsets.GenericViewSet, mixins.ListModelMixin, mixins.Retriev
         
         if q:
             query = query.filter(name__icontains=q)
-        
+            
         cate_id = self.request.query_params.get('category_id')
-        
         if cate_id:
             query = query.filter(category_id=cate_id)
+        
+        author_id = self.request.query_params.get('author_id')
+        if author_id:
+            query = query.filter(author_id = author_id)
+
         return query
     
 
@@ -85,7 +91,7 @@ class UserViewSet(viewsets.GenericViewSet,
         elif self.action == 'update':
             return [IsOwner()]
         elif self.action == 'list':
-            return [IsStaffPermission()]
+            return [IsAdminPermission()]
         return [IsAuthenticated()]
     
     def get_queryset(self):
@@ -100,36 +106,55 @@ class UserViewSet(viewsets.GenericViewSet,
         obj = get_object_or_404(queryset, pk=pk)
         self.check_object_permissions(self.request, obj)
         return obj
+    
+    print()
         
 
 class LoginAPIView(APIView):
     def post(self, request):
         data = request.data
         serializer = LoginSerializer(data=data)
-        if not serializer.is_valid():
-            return Response({
-                "status": False,
-                "data": serializer.errors
-            })
-            
-        username = serializer.data['username']
-        password = serializer.data['password']
-        user = authenticate(username=username, password=password)
+        serializer.is_valid(raise_exception=True)
+        
+        user = serializer.validated_data['user']            
+        
         
         if user:
             token, is_create = Token.objects.get_or_create(user=user)
             
             return Response({
-                'status': True,
-                'token': token.key
-            })
-            
+            'status': True,
+            'token': token.key,
+            'user': {
+                'username': user.username,
+                'email': user.email,
+                'image': user.image.url,
+                'first_name': user.first_name,
+                'last_name': user.last_name,
+                'is_superuser': user.is_superuser
+            }})
             
         return Response({
             'status': False,
             'data': {},
             'message': 'Invalid credentials'
         })
+        
+class RegisterViewSet(APIView):
+    def post(self, request):
+        data = request.data
+        serializer = RegisterSerializer(data=data)
+        
+        serializer.is_valid(raise_exception=True)
+        user = serializer.save()
+        
+        return Response({
+            "status": True,
+            "message": "Created succeed",
+            "data": user.username
+        }, status=status.HTTP_201_CREATED)
+        
+        
 
 class LogoutAPIView(APIView):
     permission_classes = [IsAuthenticated]
@@ -219,7 +244,7 @@ class BorrowViewSet(viewsets.GenericViewSet, mixins.ListModelMixin, mixins.Retri
             user=user, 
             returning_book_date__isnull=True, 
             status__in=[User_Book.BorrowStatus.BORROWING, User_Book.BorrowStatus.OVERDUE]
-        ).aggregate(total=models.Sum('borrowing_quantity'))['total'] or 0
+        ).aggregate(total=Sum('borrowing_quantity'))['total'] or 0
         
         check_amount_book = (current_borrowing_book + total_books_in_cart) <= 5
         
@@ -242,9 +267,15 @@ class BorrowViewSet(viewsets.GenericViewSet, mixins.ListModelMixin, mixins.Retri
         }, status=status.HTTP_200_OK)
 
 
-class ReservationViewSet(viewsets.GenericViewSet, mixins.ListModelMixin, mixins.RetrieveModelMixin):
+class ReservationViewSet(viewsets.GenericViewSet, 
+                      mixins.ListModelMixin, 
+                      mixins.CreateModelMixin,
+                      mixins.DestroyModelMixin,
+                      mixins.RetrieveModelMixin,
+                      mixins.UpdateModelMixin):
     serializer_class = ReservationSerializer
-    
+    queryset = Reservation.objects.all()
+    authentication_classes = [TokenAuthentication]
     def get_queryset(self):
         queryset = Reservation.objects.all()
         
@@ -258,14 +289,39 @@ class ReservationViewSet(viewsets.GenericViewSet, mixins.ListModelMixin, mixins.
         return queryset
 
 
-class AuthorViewSet(viewsets.GenericViewSet, mixins.ListModelMixin):
+class AuthorViewSet(viewsets.GenericViewSet, 
+                      mixins.ListModelMixin, 
+                      mixins.CreateModelMixin,
+                      mixins.DestroyModelMixin,
+                      mixins.RetrieveModelMixin,
+                      mixins.UpdateModelMixin):
     queryset = Author.objects.all()
     serializer_class = AuthorSerializer
     permission_classes = [IsAdminPermission]
 
-class PublisherViewSet(viewsets.GenericViewSet, mixins.ListModelMixin):
+class PublisherViewSet(viewsets.GenericViewSet, 
+                      mixins.ListModelMixin, 
+                      mixins.CreateModelMixin,
+                      mixins.DestroyModelMixin,
+                      mixins.RetrieveModelMixin,
+                      mixins.UpdateModelMixin
+                      ):
     queryset = Publisher.objects.all()
     serializer_class = PublisherSerializer
     permission_classes = [IsAdminPermission]
+    authentication_classes = [TokenAuthentication]
+    
+class SettingViewSet(viewsets.GenericViewSet, 
+                      mixins.ListModelMixin, 
+                      mixins.CreateModelMixin,
+                      mixins.DestroyModelMixin,
+                      mixins.RetrieveModelMixin,
+                      mixins.UpdateModelMixin
+                      ):
+    queryset = Setting.objects.all()
+    serializer_class = SettingSerializer
+    permission_classes = [IsAdminPermission]
+    authentication_classes = [TokenAuthentication]
+
 
     

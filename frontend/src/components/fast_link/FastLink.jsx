@@ -3,7 +3,7 @@ import { Link } from 'react-router-dom'
 import './fast_link.scss'
 const FastLink = () => {
     return (
-        <div className='left d-block'>
+        <div className='left mx-auto my-2 d-block ' style={{ minWidth: "300px", height: "fit-content" }}>
             <div className='title-fast-link mb-3'>Liên Kết Nhanh</div>
             <ul className='list-group'>
                 <li>

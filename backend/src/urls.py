@@ -32,6 +32,7 @@ router.register('authors', views.AuthorViewSet)
 router.register('publishers', views.PublisherViewSet)
 router.register('borrowing-books',views.BorrowViewSet, basename='borrowing-books')
 router.register('reservations', views.ReservationViewSet, basename='reservations')
+router.register('settings', views.SettingViewSet, basename='settings')
 schema_view = get_schema_view(
     openapi.Info(
         title="Course API",
@@ -60,6 +61,7 @@ urlpatterns = [
     path('admin/', admin_site.urls),
     path('', include(router.urls)),
     path('borrowing-books/<int:pk>/edit-status/', views.UpdateBorrowStatusAPIView.as_view()),
+    path('account/register/', views.RegisterViewSet.as_view(), name='register_user'),
     path('account/login/', views.LoginAPIView.as_view(), name='login_user'),
     path('account/logout/', views.LogoutAPIView.as_view(), name='logout_user'),
     path('api/token/', obtain_auth_token),

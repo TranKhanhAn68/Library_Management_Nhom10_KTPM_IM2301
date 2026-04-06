@@ -1,49 +1,54 @@
-import React from 'react';
-import { Link } from 'react-router-dom';
+import React, { useContext } from 'react';
+import { Link, useLocation } from 'react-router-dom';
+import { AuthContent } from '../../utils/AuthContext';
 
 const SideBar = () => {
+    const location = useLocation();
+    const { user } = useContext(AuthContent)
+    const menuAdmin = [
+        { link: '/dashboard', label: "Dashboard", icon: 'fa-solid fa-house', exact: true },
+        { link: '/dashboard/users', label: "Quản lý User", icon: 'fa-solid fa-user' },
+        { link: '/dashboard/categories', label: "Quản lý loại sách", icon: 'fa-solid fa-layer-group' },
+        { link: '/dashboard/books', label: "Quản lý sách", icon: 'fa-solid fa-book' },
+        { link: '/dashboard/settings', label: "Cài đặt", icon: 'fa-solid fa-gear' }
+    ];
+
+    const menuEmployee = [
+        { link: '/dashboard', label: "Dashboard", icon: 'fa-solid fa-house', exact: true },
+        { link: '/dashboard/employee/transactions', label: "Quản lý sách mượn", icon: 'fa-solid fa-book-open-reader' },
+        { link: '/dashboard/employee/orders', label: "Quản lý đặt trước sách", icon: 'fa-solid fa-bookmark' }
+    ]
+
+    const menu = user?.is_superuser ? menuAdmin : menuEmployee
     return (
-        <div>
-            <aside className='tw-fixed tw-top-0 tw-left-0 tw-h-screen tw-w-64 tw-bg-white tw-border-r tw-p-4'>
-                <h2 className='tw-text-2xl tw-font-bold tw-text-blue-600 tw-mb-8'>My Dashboard</h2>
-                <nav>
-                    <ul className='tw-space-y-4 tw-text-gray-700'>
-                        <li>
-                            <Link to='/dashboard' className='tw-block tw-hover:text-blue-500'>
-                                <i className="fa-solid fa-house tw-text-red-500 tw-mr-2"></i>
-                                <span>Dashboard</span>
-                            </Link>
-                        </li>
-                        <li>
-                            <Link to='/dashboard/users' className='tw-block tw-hover:text-blue-500'>
-                                <i class="fa-solid fa-user tw-text-red-500 tw-mr-2"></i>
-                                <span>Quản lý User</span>
-                            </Link>
-                        </li>
-                        <li>
-                            <Link to='/dashboard/categories' className='tw-block tw-hover:text-blue-500'>
-                                <i class="fa-solid fa-layer-group tw-text-red-500 tw-mr-2"></i>
-                                <span>Quản lý đầu sách</span>
-                            </Link>
-                        </li>
-                        <li>
-                            <Link to='/dashboard/books' className='tw-block tw-hover:text-blue-500'>
-                                <i class='fa-solid fa-book tw-text-red-500 tw-mr-2'></i>
-                                <span>Quản lý sách</span>
+        <aside className='tw-fixed tw-top-0 tw-left-0 tw-h-screen tw-w-64 tw-bg-white tw-border-r'>
+            <h2 className='tw-text-2xl tw-font-bold tw-text-blue-600 tw-p-6'>Admin Panel</h2>
+            <nav className='tw-px-4'>
+                <ul className='tw-space-y-2 tw-text-gray-700 tw-text-lg'>
+                    {menu && menu.map((item, index) => {
 
-                            </Link>
-                        </li>
+                        const isActive = item.exact
+                            ? location.pathname === item.link
+                            : location.pathname.startsWith(item.link);
 
-                        <li>
-                            <Link to='dashboard/settings' className='tw-block tw-hover:text-blue-500'>
-                                <i class="fa-solid fa-gear tw-text-red-500 tw-mr-2"></i>
-                                <span>Cài đặt</span>
-                            </Link>
-                        </li>
-                    </ul>
-                </nav>
-            </aside>
-        </div>
+                        return (
+                            <li key={index}>
+                                <Link
+                                    to={item.link}
+                                    className={`tw-flex tw-items-center tw-py-3 tw-px-4 tw-gap-2 tw-rounded-xl tw-transition-all ${isActive
+                                        ? "tw-bg-blue-50 tw-text-blue-600 tw-font-bold"
+                                        : "hover:tw-bg-gray-200 tw-text-gray-600"
+                                        }`}
+                                >
+                                    <i className={`${item.icon} tw-w-8 ${isActive ? 'tw-text-blue-600' : 'tw-text-gray-400'}`}></i>
+                                    <span>{item.label}</span>
+                                </Link>
+                            </li>
+                        );
+                    })}
+                </ul>
+            </nav>
+        </aside>
     );
 }
 

@@ -167,7 +167,7 @@ class LogoutAPIView(APIView):
     
 def check_stock_and_create(user, book):
     book_obj = get_object_or_404(Book, pk=book["id"])
-    if book['borrowing_quantity'] > book_obj.available_quantity:
+    if book['borrowing_quantity'] > book_obj.available_quantity():
         raise ValueError(f"Book {book_obj.name} only has {book_obj.available_quantity} copies left")
     User_Book.objects.create(user=user, book=book_obj, status=User_Book.BorrowStatus.PENDING)
     return book_obj.name

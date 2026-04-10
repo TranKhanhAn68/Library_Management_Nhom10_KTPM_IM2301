@@ -4,7 +4,8 @@ from django.db import IntegrityError
 
 from library_management.models import (
     Category, Author, Publisher, Book,
-    User_Book, Like)
+    User_Book, Like
+)
 
 from library_management.views import check_stock_and_create
 
@@ -45,7 +46,7 @@ def test_user_book_default_status():
 
     book = Book.objects.create(
         name="Python",
-        available_quantity=10,
+        total_quantity=10,  
         category=category,
         author=author,
         publisher=publisher
@@ -66,7 +67,7 @@ def test_like_unique_constraint():
 
     book = Book.objects.create(
         name="Python",
-        available_quantity=10,
+        total_quantity=10,  
         category=category,
         author=author,
         publisher=publisher
@@ -90,7 +91,7 @@ def test_check_stock_and_create_success():
 
     book = Book.objects.create(
         name="Python",
-        available_quantity=10,
+        total_quantity=10,  
         category=category,
         author=author,
         publisher=publisher
@@ -115,7 +116,7 @@ def test_check_stock_and_create_fail():
     book = Book.objects.create(
         book_id="B001",
         name="Python",
-        available_quantity=1,
+        total_quantity=1,  
         category=category,
         author=author,
         publisher=publisher

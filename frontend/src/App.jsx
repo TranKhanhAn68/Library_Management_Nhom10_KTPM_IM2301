@@ -11,8 +11,6 @@ import DashboardLayout from "./layout/DashboardLayout"
 import Category from "./pages/admin/category/CategoryDashboard"
 import AddCategory from "./pages/admin/category/AddCategory"
 import EditCategory from "./pages/admin/category/EditCategory"
-import BookData from './data/BookData'
-import CartData from './data/CartData'
 import DetailBook from './pages/home/DetailBook'
 import Books from './components/books/Books'
 import CartPage from './pages/home/CartPage'
@@ -29,42 +27,15 @@ import Page403 from './components/Page403'
 import Transaction from './pages/admin/transaction/Transaction'
 import Order from './pages/admin/order/Order'
 import { AuthContent } from './utils/AuthContext'
+import AuthorsPage from './pages/home/AuthorsPage'
+import DetailAuthorPage from './pages/home/DetailAuthorPage'
+import { PERMISSIONS } from './config'
+import UserDashboard from './pages/admin/user/UserDashBoard'
+import EditUser from './pages/admin/user/EditUser'
+import AddUser from './pages/admin/user/AddUser'
+import AddSetting from './pages/admin/setting/AddSetting'
 function App() {
-
   const { user } = useContext(AuthContent)
-  const [categories, setCategories] = useState(CategoryData || [])
-
-  const handleAdd = (addCate) => {
-    setCategories([...categories, addCate])
-  }
-  const handleEdit = (updateCate) => {
-    setCategories(categories.map(c => c.id === updateCate.id ? updateCate : c))
-  }
-
-  const handleDelete = (deleteCate) => {
-    const confirmDelete = window.confirm("Are you sure you want to delete?");
-    if (confirmDelete)
-      setCategories(categories.filter(c => c.id !== deleteCate.id))
-  }
-
-
-  // User Login
-  const [users, setUsers] = useState(UserData || [])
-  useEffect(() => {
-    if (!localStorage.getItem("users")) {
-      localStorage.setItem("users", JSON.stringify(users))
-    }
-  }, [])
-
-  const IsSuperUser = () => {
-    return user.is_superuser
-  }
-
-  const IsStaff = () => {
-    return user.is_staff && !user.is_superuser
-  }
-
-
   const router = createBrowserRouter([
     {
       path: "/login",
@@ -92,14 +63,16 @@ function App() {
           ]
         },
         { path: "shopping-cart", element: <CartPage /> },
-        { path: "detail-book/:id/", element: <DetailBook books={BookData} /> }
+        { path: "detail-book/:id/", element: <DetailBook /> },
+        { path: "authors", element: <AuthorsPage /> },
+        { path: "authors/:id/:name", element: <DetailAuthorPage /> }
       ]
     },
 
     {
       path: '/dashboard',
       element: (
-        <ProtectedRoute allowRoles={IsSuperUser}>
+        <ProtectedRoute allowRoles={PERMISSIONS.CAN_VIEW_DASHBOARD}>
           <DashboardLayout />
         </ProtectedRoute>
       ),
@@ -107,7 +80,7 @@ function App() {
         {
           index: true,
           element: (
-            <ProtectedRoute allowRoles={IsSuperUser}>
+            <ProtectedRoute>
               <Dashboard />
             </ProtectedRoute>
           )
@@ -116,24 +89,24 @@ function App() {
         {
           path: 'categories',
           element: (
-            <ProtectedRoute allowRoles={IsSuperUser}>
-              <Category categories={categories} onDelete={handleDelete} />
+            <ProtectedRoute allowRoles={PERMISSIONS.CAN_MANAGE_ALL}>
+              <Category />
             </ProtectedRoute>
           )
         },
         {
           path: 'categories/add-category',
           element: (
-            <ProtectedRoute allowRoles={IsSuperUser}>
-              <AddCategory onAdd={handleAdd} categoryID={categories.length} />
+            <ProtectedRoute allowRoles={PERMISSIONS.CAN_MANAGE_ALL}>
+              <AddCategory />
             </ProtectedRoute>
           )
         },
         {
           path: 'categories/edit-category/:id',
           element: (
-            <ProtectedRoute allowRoles={IsSuperUser}>
-              <EditCategory categories={categories} />
+            <ProtectedRoute allowRoles={PERMISSIONS.CAN_MANAGE_ALL}>
+              <EditCategory />
             </ProtectedRoute>
           )
         },
@@ -141,7 +114,7 @@ function App() {
         {
           path: 'books',
           element: (
-            <ProtectedRoute allowRoles={IsSuperUser}>
+            <ProtectedRoute allowRoles={PERMISSIONS.CAN_MANAGE_ALL}>
               <Book />
             </ProtectedRoute>
           )
@@ -149,7 +122,7 @@ function App() {
         {
           path: 'books/add-book',
           element: (
-            <ProtectedRoute allowRoles={IsSuperUser}>
+            <ProtectedRoute allowRoles={PERMISSIONS.CAN_MANAGE_ALL}>
               <AddBook />
             </ProtectedRoute>
           )
@@ -157,8 +130,8 @@ function App() {
         {
           path: 'books/edit-book/:id',
           element: (
-            <ProtectedRoute allowRoles={IsSuperUser}>
-              <EditBook books={BookData} />
+            <ProtectedRoute allowRoles={PERMISSIONS.CAN_MANAGE_ALL}>
+              <EditBook />
             </ProtectedRoute>
           )
         },
@@ -166,8 +139,44 @@ function App() {
         {
           path: 'settings',
           element: (
-            <ProtectedRoute allowRoles={IsSuperUser}>
+            <ProtectedRoute allowRoles={PERMISSIONS.CAN_MANAGE_ALL}>
               <SettingDashboard />
+            </ProtectedRoute>
+          )
+        },
+
+        {
+          path: 'settings/add-setting',
+          element: (
+            <ProtectedRoute allowRoles={PERMISSIONS.CAN_MANAGE_ALL}>
+              <AddSetting />
+            </ProtectedRoute>
+          )
+        },
+
+        {
+          path: 'users',
+          element: (
+            <ProtectedRoute allowRoles={PERMISSIONS.CAN_MANAGE_ALL}>
+              <UserDashboard />
+            </ProtectedRoute>
+          )
+        },
+
+        {
+          path: 'users/edit-user/:id',
+          element: (
+            <ProtectedRoute allowRoles={PERMISSIONS.CAN_MANAGE_ALL}>
+              <EditUser />
+            </ProtectedRoute>
+          )
+        },
+
+        {
+          path: 'users/add-user',
+          element: (
+            <ProtectedRoute allowRoles={PERMISSIONS.CAN_MANAGE_ALL}>
+              <AddUser />
             </ProtectedRoute>
           )
         },
@@ -175,7 +184,7 @@ function App() {
         {
           path: 'employee/transactions',
           element: (
-            <ProtectedRoute allowRoles={IsStaff}>
+            <ProtectedRoute allowRoles={PERMISSIONS.CAN_HANDLE_ORDERS}>
               <Transaction />
             </ProtectedRoute>
           )
@@ -183,11 +192,13 @@ function App() {
         {
           path: 'employee/orders',
           element: (
-            <ProtectedRoute allowRoles={IsStaff}>
+            <ProtectedRoute allowRoles={PERMISSIONS.CAN_HANDLE_ORDERS}>
               <Order />
             </ProtectedRoute>
           )
-        }
+        },
+
+
       ]
     },
 

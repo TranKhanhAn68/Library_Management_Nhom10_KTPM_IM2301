@@ -6,12 +6,14 @@ import Header from '../../components/header/Header';
 const MainPage = () => {
     const {
         books,
+        authors,
         currentPage,
         dataBooks,
         goSearch,
         goPage,
         goSearchToCategory,
-        goSearchToAuthor
+        goSearchToAuthor,
+        setCart
     } = useOutletContext();
     return (
         <div className='container mx-auto'>
@@ -20,12 +22,14 @@ const MainPage = () => {
                 <FastLink />
                 <Outlet context={{
                     books,
+                    authors,
                     currentPage,
                     dataBooks,
                     goSearch,
                     goPage,
                     goSearchToCategory,
-                    goSearchToAuthor
+                    goSearchToAuthor,
+                    setCart
                 }} />
             </div>
         </div>

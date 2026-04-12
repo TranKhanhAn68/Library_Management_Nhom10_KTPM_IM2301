@@ -1,11 +1,21 @@
 import { useEffect, useState } from "react";
 
 const CATE_URL = "http://127.0.0.1:8000/categories"
-export const CategoryListAPI = () => {
+export const CategoryListAPI = (token, reload) => {
     const [categories, setCategories] = useState([])
     const fetchData = async () => {
         try {
-            const res = await fetch(`${CATE_URL}/`);
+            const res = await fetch(`${CATE_URL}/`, {
+                method: 'GET',
+                headers: {
+                    'Content-Type': 'application/json',
+                    ...(token && { Authorization: `Token ${token}` })
+                },
+            });
+
+            if (!res.ok) {
+                throw new Error('Fetch failed');
+            }
             const data = await res.json();
             setCategories(data);
         } catch (err) {
@@ -15,16 +25,25 @@ export const CategoryListAPI = () => {
 
     useEffect(() => {
         fetchData();
-    }, []);
+    }, [token, reload]);
 
     return [categories, setCategories];
 };
 
-export const CategoryByIDAPI = (cate_id) => {
+export const CategoryByIDAPI = (cate_id, token) => {
     const [category, setCategory] = useState(null)
     const fetchData = async () => {
         try {
-            const res = await fetch(`${CATE_URL}/${cate_id}/`);
+            const res = await fetch(`${CATE_URL}/${cate_id}/`, {
+                method: 'GET',
+                headers: {
+                    'Content-Type': 'application/json',
+                    ...(token && { Authorization: `Token ${token}` })
+                },
+            });
+            if (!res.ok) {
+                throw new Error('Fetch failed');
+            }
             const data = await res.json();
             setCategory(data);
         } catch (err) {
@@ -33,82 +52,62 @@ export const CategoryByIDAPI = (cate_id) => {
     }
     useEffect(() => {
         fetchData()
-    }, [cate_id])
+    }, [cate_id, token])
 
     return [category, setCategory]
 }
 
 
 export const PostCategory = async (name, active, token) => {
-    try {
-        const res = await fetch(`${CATE_URL}/`, {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/json',
-                'Authorization': `Token ${token}`
-            },
-            body: JSON.stringify({
-                name: name,
-                active: active
-            })
-        });
+    const res = await fetch(`${CATE_URL}/`, {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json',
+            ...(token && { Authorization: `Token ${token}` })
+        },
+        body: JSON.stringify({
+            name: name,
+            active: active
+        })
+    });
+    const data = await res.json();
+    console.log(data)
+    if (!res.ok) throw data;
 
-        if (!res.ok) throw new Error(`Lỗi: ${res.status}`);
-
-        console.log("Tạo mới thành công")
-        const data = await res.json();
-        return data;
-
-    } catch (err) {
-        console.error("Error creating category:", err);
-        return null;
-    }
+    return data;
 };
 
 export const UpdateCategory = async (category_id, name, active, token) => {
-    try {
-        const res = await fetch(`${CATE_URL}/${category_id}/`, {
-            method: 'PATCH',
-            headers: {
-                'Content-Type': 'application/json',
-                'Authorization': `Token ${token}`
-            },
-            body: JSON.stringify({
-                name: name,
-                active: active
-            })
-        });
+    const res = await fetch(`${CATE_URL}/${category_id}/`, {
+        method: 'PATCH',
+        headers: {
+            'Content-Type': 'application/json',
+            ...(token && { Authorization: `Token ${token}` })
+        },
+        body: JSON.stringify({
+            name: name,
+            active: active
+        })
+    });
 
-        if (!res.ok) throw new Error(`Lỗi: ${res.status}`);
+    if (!res.ok) throw new Error(`Lỗi: ${res.status}`);
 
-        console.log("Cập nhật thành công")
-        const data = await res.json();
-        return data;
-
-    } catch (err) {
-        console.error("Error creating category:", err);
-        return null;
-    }
+    console.log("Cập nhật thành công")
+    const data = await res.json();
+    return data;
 };
 
 export const DeleteCategory = async (id, token) => {
-    try {
-        const res = await fetch(`${CATE_URL}/${id}/`, {
-            method: 'DELETE',
-            headers: {
-                'Content-Type': 'application/json',
-                'Authorization': `Token ${token}`
-            },
-        });
+    const res = await fetch(`${CATE_URL}/${id}/`, {
+        method: 'DELETE',
+        headers: {
+            'Content-Type': 'application/json',
+            ...(token && { Authorization: `Token ${token}` })
+        },
+    });
 
-        if (!res.ok) throw new Error(`Lỗi: ${res.status}`);
+    if (!res.ok) throw new Error(`Lỗi: ${res.status}`);
 
-        console.log("Xóa thành công")
-        const data = await res.json();
-        return true;
-
-    } catch (err) {
-        console.error("Error creating category:", err);
-        return false;
-    }
+    const data = await res.json();
+    return data;
 }

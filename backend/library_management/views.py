@@ -2,64 +2,79 @@ from rest_framework import viewsets, mixins, parsers, status
 from rest_framework.views import APIView, Response
 from rest_framework.authentication import TokenAuthentication
 from rest_framework.decorators import action, authentication_classes, permission_classes
+from rest_framework.permissions import AllowAny, IsAuthenticated, IsAdminUser
 from django.utils import timezone
 from . models import *
 from .models import *
 from .serializers import *
 from django.shortcuts import get_object_or_404
-from django.contrib.auth import authenticate
 from library_management import paginators
-from rest_framework.permissions import AllowAny, BasePermission, IsAuthenticated
 from rest_framework.authtoken.models import Token
+from library_management import perms
+from django.db import transaction
 
-class IsAdminPermission(BasePermission):
-    def has_permission(self, request, view):
-        if request.method == 'GET':
-            return True
-        return request.user.is_superuser
 
-    def has_object_permission(self, request, view, obj):
-        if request.method == 'GET':
-            return True
-        return request.user.is_superuser
-
-class IsOwner(BasePermission):
-    def has_object_permission(self, request, view, obj):
-        return request.user == obj.user or request.user.is_superuser
-
-class IsStaffPermission(BasePermission):
-    def has_permission(self, request, view):
-        if request.user.is_staff:
-            return True
-        return False
+class BaseViewSet(viewsets.GenericViewSet,
+                    mixins.ListModelMixin, 
+                    mixins.CreateModelMixin,
+                    mixins.DestroyModelMixin,
+                    mixins.RetrieveModelMixin,
+                    mixins.UpdateModelMixin):
+    authentication_classes = [TokenAuthentication]
+    def get_queryset(self):
+        query = super().get_queryset()
+        if hasattr(query.model, 'active') or hasattr(query.model, 'is_active'):
+            if not self.request.user.is_authenticated or not self.request.user.is_superuser:
+                query = query.filter(active=True)
+        return query
     
-    def has_object_permission(self, request, view, obj):
-        if request.user.is_staff:
-            return True
-        return False
-            
+    def create(self, request, *args, **kwargs):
+        serializer = self.get_serializer(data=request.data)
+        serializer.is_valid(raise_exception=True)
 
-class CategoryViewSet(viewsets.GenericViewSet, 
-                      mixins.ListModelMixin, 
-                      mixins.CreateModelMixin,
-                      mixins.DestroyModelMixin,
-                      mixins.RetrieveModelMixin,
-                      mixins.UpdateModelMixin):
+        self.perform_create(serializer)
+
+        return Response({
+            "message": "Tạo thành công",
+            "data": serializer.data
+        },status=status.HTTP_201_CREATED)            
+    
+    def update(self, request, *args, **kwargs):
+        instance = self.get_object()
+        serializer = self.get_serializer(instance, data=request.data, partial=True)
+        serializer.is_valid(raise_exception=True)
+        self.perform_update(serializer)
+        
+        return Response({
+            "message": "Cập nhật thành công"
+        }, status=status.HTTP_200_OK)
+    
+    def destroy(self, request, *args, **kwargs):
+        instance = self.get_object()
+        self.perform_destroy(instance)
+
+        return Response({
+                "message": "Xóa thành công",
+                "name": instance.name
+        },status=status.HTTP_200_OK)
+        
+    
+
+class CategoryViewSet(BaseViewSet):
     queryset = Category.objects.all()
     serializer_class = CategorySerializer
-    permission_classes = [IsAdminPermission]
+    permission_classes = [perms.SimplePermission]
     
     
-class BookViewSet(viewsets.GenericViewSet, mixins.ListModelMixin, mixins.RetrieveModelMixin):
-    queryset = Book.objects.filter(active=True)    
+class BookViewSet(BaseViewSet):
+    queryset = Book.objects.all()    
     serializer_class = BookSerializer
     pagination_class = paginators.ItemPaginator
-    permission_classes = [IsAdminPermission]
-    
+    permission_classes = [perms.SimplePermission]
     
     def get_queryset(self):
-        query = self.queryset
-        
+        query = super().get_queryset()
+        query = query.select_related('author', 'publisher', 'category')
         q = self.request.query_params.get('q')
         
         if q:
@@ -76,38 +91,43 @@ class BookViewSet(viewsets.GenericViewSet, mixins.ListModelMixin, mixins.Retriev
         return query
     
 
-class UserViewSet(viewsets.GenericViewSet, 
-                  mixins.CreateModelMixin, 
-                  mixins.RetrieveModelMixin, 
-                  mixins.ListModelMixin, 
-                  mixins.UpdateModelMixin):
+class UserViewSet(BaseViewSet):
+    queryset = User.objects.all()
     serializer_class = UserSerializer
-    authentication_classes = [TokenAuthentication]
-    parser_classes = [parsers.MultiPartParser, parsers.JSONParser]
+    parser_classes = [parsers.MultiPartParser, parsers.JSONParser, parsers.FormParser]
+    pagination_class = paginators.UserPaginator
     
     def get_permissions(self):
-        if self.action == 'create':
-            return [AllowAny()]
-        elif self.action == 'update':
-            return [IsOwner()]
-        elif self.action == 'list':
-            return [IsAdminPermission()]
-        return [IsAuthenticated()]
-    
-    def get_queryset(self):
-        queryset = User.objects.filter(is_active=True)
-        return queryset
+        if self.action in ['current_user', 'borrowing_list', 'orders_list']:
+            return [IsAuthenticated()]
+        return [perms.AdminPermission()]        
         
-    def get_object(self):
-        queryset = self.get_queryset()
-        pk = self.kwargs.get('pk')
-        if not self.request.user.is_superuser:
-            pk = self.request.user.pk
-        obj = get_object_or_404(queryset, pk=pk)
-        self.check_object_permissions(self.request, obj)
-        return obj
+    @action(methods=['GET', 'PATCH'], url_path='current_user', detail=False,
+        authentication_classes=[TokenAuthentication])
+    def current_user(self, request):
+        u = request.user
+        if request.method.__eq__('PATCH'):
+            serializer = SimpleUserSerializer(u, data=request.data, partial=True)
+            serializer.is_valid(raise_exception=True)
+            u = serializer.save()
+
+        return Response(SimpleUserSerializer(u).data, status=status.HTTP_200_OK)
     
-    print()
+    @action(methods=['GET'], url_path='current_user/borrowing_list', detail=False,
+            authentication_classes=[TokenAuthentication])
+    def borrowing_list(self, request):
+        user = request.user
+        borrowing = user.user_book_set.select_related('user').all()
+        return Response(BorrowSerializer(borrowing, many=True).data, status=status.HTTP_200_OK)
+    
+    @action(methods=["GET"], url_path='current_user/orders', detail=False,
+            authentication_classes=[TokenAuthentication])
+    def orders_list(self, request):
+        user = request.user
+        orders = user.reservation_set.select_related('user').all()
+        return Response(ReservationSerializer(orders, many=True).data, status=status.HTTP_200_OK)
+
+    
         
 
 class LoginAPIView(APIView):
@@ -131,14 +151,15 @@ class LoginAPIView(APIView):
                 'image': user.image.url,
                 'first_name': user.first_name,
                 'last_name': user.last_name,
-                'is_superuser': user.is_superuser
-            }})
+                'is_superuser': user.is_superuser,
+                'is_staff': user.is_staff
+            }}, status=status.HTTP_200_OK)
             
         return Response({
             'status': False,
             'data': {},
             'message': 'Invalid credentials'
-        })
+        }, status=status.HTTP_400_BAD_REQUEST)
         
 class RegisterViewSet(APIView):
     def post(self, request):
@@ -164,47 +185,9 @@ class LogoutAPIView(APIView):
             return Response({'message': 'Successfully logged out.'}, status=status.HTTP_200_OK)
         except Exception as e:
             return Response({'error': str(e)}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
-    
-def check_stock_and_create(user, book):
-    book_obj = get_object_or_404(Book, pk=book["id"])
-    if book['borrowing_quantity'] > book_obj.available_quantity:
-        raise ValueError(f"Book {book_obj.name} only has {book_obj.available_quantity} copies left")
-    User_Book.objects.create(user=user, book=book_obj, status=User_Book.BorrowStatus.PENDING)
-    return book_obj.name
 
-class UpdateBorrowStatusAPIView(APIView):
-    permission_classes = [IsStaffPermission]
-    authentication_classes = [TokenAuthentication]
-    
-    def put(self, request, pk):
-        borrow_obj = get_object_or_404(User_Book, pk=pk)
-        new_status = request.data.get('status')
-        
-        
-        if new_status not in User_Book.BorrowStatus.values:
-            return Response({
-                'message': 'Invalid Status'
-            }, status=status.HTTP_400_BAD_REQUEST)
-            
-        if borrow_obj.status == User_Book.BorrowStatus.RETURNED:
-            return Response({
-                {'message': 'Cannot update returned book'}
-            },status=status.HTTP_400_BAD_REQUEST)
-         
-        
-        if new_status == User_Book.BorrowStatus.BORROWING:
-            borrow_obj.borrowing_book_date = timezone.now()
-        elif new_status == User_Book.BorrowStatus.RETURNED:
-            borrow_obj.returning_book_date = timezone.now()
-        
-        borrow_obj.status = new_status
-        borrow_obj.save()
-        
-        return Response({
-            'message': 'Status update successful'
-        }, status=status.HTTP_200_OK)
 
-class BorrowViewSet(viewsets.GenericViewSet, mixins.ListModelMixin, mixins.RetrieveModelMixin):
+class BorrowViewSet(BaseViewSet):
     serializer_class = BorrowSerializer
     
     def get_queryset(self):
@@ -220,63 +203,93 @@ class BorrowViewSet(viewsets.GenericViewSet, mixins.ListModelMixin, mixins.Retri
         return queryset
     
     # -----------------------Action POST Mượn sách từ giỏ hàng----------------------- #
-    @action(methods=['POST'], detail=False, url_path='cart')
-    @authentication_classes([TokenAuthentication])
-    def borrow_books(self, request):
-        # Lấy dữ liệu request lên trả về dưới dạng dict
+    @action(methods=['POST'], detail=False, url_path='cart',
+            permission_classes=[IsAuthenticated], 
+            authentication_classes=[TokenAuthentication])
+    def borrowing_books(self, request):
         user = request.user
-        books = request.data.get("books", []) 
-        
-        if not books:
+        cart = request.data.get("cart", []) 
+        if not cart:
             return Response({
-                "error": "No books in your cart",
-            }, status=status.HTTP_400_BAD_REQUEST)
+                    "success": False,
+                    "error": "Không có sách trong giỏ hàng"
+                }, status=status.HTTP_400_BAD_REQUEST)
         
-        if User_Book.objects.filter(user=user, status=User_Book.BorrowStatus.PENDING).count() > 0:
+        if User_Book.objects.filter(user=user, status=User_Book.BorrowStatus.PENDING).exists():
             return Response({
-                'Message': 'Your request is currently processed. Please do not send anything!'
-            }, status=status.HTTP_400_BAD_REQUEST)
-            
-            
+                    'success': False,
+                    'error': 'Yêu cầu của bạn đang được xử lý. Không thể gửi thêm yêu cầu!'
+                },status=status.HTTP_400_BAD_REQUEST)
+        
         max_borrowing_books = 5
-        total_books_in_cart = sum(book['borrowing_quantity'] for book in books)
-            
+        total_books_in_cart = sum(item['borrowing_quantity'] for item in cart)
+        
         current_borrowing_book = User_Book.objects.filter(
             user=user, 
             returning_book_date__isnull=True, 
             status__in=[User_Book.BorrowStatus.BORROWING, User_Book.BorrowStatus.OVERDUE]
         ).aggregate(total=Sum('borrowing_quantity'))['total'] or 0
         
-        check_amount_book = (current_borrowing_book + total_books_in_cart) <= 5
-        
-        if not check_amount_book:
+        if current_borrowing_book + total_books_in_cart > max_borrowing_books:
             return Response({
-                'error': f'You cannot borrow up to {max_borrowing_books} books at the same time'
-            }, status=status.HTTP_400_BAD_REQUEST)
+                    'success': False,
+                    'error': f'Bạn không thể mượn quá {max_borrowing_books} 5 sách từ thư viện'
+                },status=status.HTTP_400_BAD_REQUEST)
         
         borrowing_books = []
-        for book in books:
-            try:
-                book_obj = check_stock_and_create(user,book)
-                borrowing_books.append(book_obj)
-            except ValueError as e:
-                return Response({
-                    'message': str(e)
-                }, status=status.HTTP_400_BAD_REQUEST)
+        with transaction.atomic():
+            for item in cart:
+                book_obj = Book.objects.get(id=item['book_id'])
+                
+                if book_obj.available_quantity() < item['borrowing_quantity']:
+                    return Response({
+                        'success': False,
+                        'error': 'Số lượng sách không còn đủ'
+                    }, status=status.HTTP_400_BAD_REQUEST)
+                serializer = CartItemSerializer(data=item, context={'request': request})
+                serializer.is_valid(raise_exception=True)
+                borrowing_book = serializer.save()
+                borrowing_books.append(borrowing_book)
+        
         return Response({
-            'message': "Successful borrowing"
-        }, status=status.HTTP_200_OK)
+            'success': True,
+            'message': "Đặt sách thành công",
+        }, status=status.HTTP_201_CREATED)
+    
+# -----------------------Action PATCH Mượn sách từ giỏ hàng----------------------- #
+    @authentication_classes([TokenAuthentication])
+    @permission_classes([perms.StaffPermission])
+    def partial_update(self, request, pk=None):
+        borrow_obj = get_object_or_404(User_Book, pk=pk)
+        new_status = request.data.get('status')
+        
+        
+        if not new_status or new_status not in User_Book.BorrowStatus.values:            
+            return Response({
+                'message': 'Trạng thái không hợp lệ!'
+            }, status=status.HTTP_400_BAD_REQUEST)
+            
+        if borrow_obj.status == User_Book.BorrowStatus.RETURNED:
+            return Response({
+                'message': 'Không thể update sách đã được trả'
+            },status=status.HTTP_400_BAD_REQUEST)
+         
+        
+        if new_status == User_Book.BorrowStatus.BORROWING:
+            borrow_obj.borrowing_book_date = timezone.now()
+        elif new_status == User_Book.BorrowStatus.RETURNED:
+            borrow_obj.returning_book_date = timezone.now()
+        
+        borrow_obj.status = new_status
+        borrow_obj.save()
+        
+        return Response({
+            'message': 'Cập nhật trạng thái thành công'
+        }, status=status.HTTP_202_ACCEPTED)
 
-
-class ReservationViewSet(viewsets.GenericViewSet, 
-                      mixins.ListModelMixin, 
-                      mixins.CreateModelMixin,
-                      mixins.DestroyModelMixin,
-                      mixins.RetrieveModelMixin,
-                      mixins.UpdateModelMixin):
+class ReservationViewSet(BaseViewSet):
     serializer_class = ReservationSerializer
     queryset = Reservation.objects.all()
-    authentication_classes = [TokenAuthentication]
     def get_queryset(self):
         queryset = Reservation.objects.all()
         
@@ -289,40 +302,40 @@ class ReservationViewSet(viewsets.GenericViewSet,
             queryset = queryset.filter(book_id=book_id)
         return queryset
 
-
-class AuthorViewSet(viewsets.GenericViewSet, 
-                      mixins.ListModelMixin, 
-                      mixins.CreateModelMixin,
-                      mixins.DestroyModelMixin,
-                      mixins.RetrieveModelMixin,
-                      mixins.UpdateModelMixin):
+    @action(methods=['POST'], detail=False, url_path='order',
+            permission_classes=[IsAuthenticated], 
+            authentication_classes=[TokenAuthentication])
+    def ordering_book(self, request):
+        user = request.user
+        if Reservation.objects.filter(user=user, status=Reservation.ReservationStatus.WAITING).exists():
+            return Response({
+                'message': 'Không thể gửi thêm yêu cầu đơn đặt trước của bạn đang được xử lý.'
+            }, status=status.HTTP_400_BAD_REQUEST)
+        serializer = OrderItemSerializer(data=request.data)
+        serializer.is_valid(raise_exception=True)
+        reservation = serializer.save(user=user)
+        
+        return Response({
+            'message': "Đặt trước sách thành công",
+            'data': OrderItemSerializer(reservation).data
+        }, status=status.HTTP_201_CREATED)
+    
+class AuthorViewSet(BaseViewSet):
     queryset = Author.objects.all()
     serializer_class = AuthorSerializer
-    permission_classes = [IsAdminPermission]
+    permission_classes = [perms.SimplePermission]
 
-class PublisherViewSet(viewsets.GenericViewSet, 
-                      mixins.ListModelMixin, 
-                      mixins.CreateModelMixin,
-                      mixins.DestroyModelMixin,
-                      mixins.RetrieveModelMixin,
-                      mixins.UpdateModelMixin
-                      ):
+class PublisherViewSet(BaseViewSet):
     queryset = Publisher.objects.all()
-    serializer_class = PublisherSerializer
-    permission_classes = [IsAdminPermission]
-    authentication_classes = [TokenAuthentication]
+    serializer_class = PublisherSerializer  
+    permission_classes = [perms.SimplePermission]
     
-class SettingViewSet(viewsets.GenericViewSet, 
-                      mixins.ListModelMixin, 
-                      mixins.CreateModelMixin,
-                      mixins.DestroyModelMixin,
-                      mixins.RetrieveModelMixin,
-                      mixins.UpdateModelMixin
-                      ):
+class SettingViewSet(BaseViewSet):
     queryset = Setting.objects.all()
     serializer_class = SettingSerializer
-    permission_classes = [IsAdminPermission]
-    authentication_classes = [TokenAuthentication]
+    permission_classes = [perms.SimplePermission]
+    
+    
 
 
     

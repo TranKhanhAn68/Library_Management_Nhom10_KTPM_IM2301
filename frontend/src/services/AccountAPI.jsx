@@ -23,8 +23,7 @@ export const LoginUserAPI = async (username, password) => {
         }
 
         else {
-            console.error("Login thất bại: ")
-            return null
+            console.error("Login thất bại: ", data.message)
         }
     } catch (error) {
         console.log("Lỗi kết nối", error)

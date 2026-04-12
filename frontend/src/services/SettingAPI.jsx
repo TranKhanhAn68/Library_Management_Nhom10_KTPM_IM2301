@@ -1,11 +1,23 @@
 import { useEffect, useState } from "react";
 
 const SETTING_URL = "http://127.0.0.1:8000/settings"
-export const SettingListAPI = () => {
+export const SettingListAPI = (token, reload) => {
     const [settings, setSettings] = useState([])
     const fetchData = async () => {
         try {
-            const res = await fetch(`${SETTING_URL}/`);
+            const res = await fetch(`${SETTING_URL}/`, {
+                method: 'GET',
+                headers: {
+                    'Content-Type': 'application/json',
+                    ...(token && { Authorization: `Token ${token}` })
+                },
+
+            });
+
+            if (!res.ok) {
+                throw new Error('Fetch failed');
+            }
+
             const data = await res.json();
             setSettings(data);
         } catch (err) {
@@ -15,16 +27,22 @@ export const SettingListAPI = () => {
 
     useEffect(() => {
         fetchData();
-    }, []);
+    }, [token, reload]);
 
-    return [settings]
+    return [settings, setSettings]
 };
 
 export const SettingByIDAPI = (setting_id) => {
     const [setting, setSetting] = useState(null)
     const fetchData = async () => {
         try {
-            const res = await fetch(`${SETTING_URL}/${setting_id}/`);
+            const res = await fetch(`${SETTING_URL}/${setting_id}/,`, {
+                method: 'GET',
+                headers: {
+                    'Content-Type': 'application/json',
+                    ...(token && { Authorization: `Token ${token}` })
+                },
+            });
             const data = await res.json();
             setSetting(data);
         } catch (err) {
@@ -40,31 +58,23 @@ export const SettingByIDAPI = (setting_id) => {
 
 
 export const PostSetting = async (borrowing_days, borrowing_fee, borrowing_overdue_fine, active, token) => {
-    try {
-        const res = await fetch(`${SETTING_URL}/`, {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/json',
-                'Authorization': `Token ${token}`
-            },
-            body: JSON.stringify({
-                borrowing_days: borrowing_days,
-                borrowing_fee: borrowing_fee,
-                borrowing_overdue_fine: borrowing_overdue_fine,
-                active: active
-            })
-        });
+    const res = await fetch(`${SETTING_URL}/`, {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json',
+            ...(token && { Authorization: `Token ${token}` })
+        },
+        body: JSON.stringify({
+            borrowing_days: borrowing_days,
+            borrowing_fee: borrowing_fee,
+            borrowing_overdue_fine: borrowing_overdue_fine,
+            active: active
+        })
+    });
 
-        if (!res.ok) throw new Error(`Lỗi: ${res.status}`);
-
-        console.log("Tạo mới thành công")
-        const data = await res.json();
-        return data;
-
-    } catch (err) {
-        console.error("Error creating setting:", err);
-        return null;
-    }
+    const data = await res.json();
+    if (!res.ok) throw data;
+    return data;
 };
 
 export const UpdateSetting = async (setting_id, active, token) => {

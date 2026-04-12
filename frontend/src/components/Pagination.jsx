@@ -1,6 +1,6 @@
 import React from 'react';
 
-const Pagination = ({ currentPage, totalPages, books, goPage }) => {
+const Pagination = ({ currentPage, totalPages, item, goPage }) => {
     const customPagination = () => {
         const displayDistance = 1 // Khoảng cách hiện trang quanh phần tử trung tâm
         const range = []
@@ -39,7 +39,7 @@ const Pagination = ({ currentPage, totalPages, books, goPage }) => {
 
     const pages = customPagination();
 
-    if (books.length <= 0)
+    if (item?.length <= 0)
         return (
             <div className="position-absolute top-50 start-50 translate-middle">
                 <small className="text-dark">Không có dữ liệu</small>

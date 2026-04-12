@@ -112,8 +112,8 @@ DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.mysql',
         'NAME': 'library_managementdb',
-        'USER': 'kimngan',
-        'PASSWORD': 'KimNgan@1808',
+        'USER': 'root',
+        'PASSWORD': '35715982',
         'HOST': '127.0.0.1'
     }
 }

@@ -74,7 +74,7 @@ class Book(BaseView):
     description = RichTextField(null=True)
     
     def available_quantity(self):
-        borrowed = self.user_book_set.filter(
+        borrowed =  self.user_book_set.filter(
             status__in=["BORROWING", "OVERDUE"]
         ).aggregate(total=Sum('borrowing_quantity'))['total'] or 0
 
@@ -91,11 +91,13 @@ class User_Book(models.Model):
 
     user = models.ForeignKey(User, on_delete=models.CASCADE)
     book = models.ForeignKey(Book, on_delete=models.PROTECT)
-    created_at = models.DateTimeField(auto_now_add=True, null=True)
+    created_at = models.DateTimeField(auto_now_add=True)
+    updated_at = models.DateTimeField(auto_now=True)
     borrowing_book_date = models.DateField(auto_now_add=True)
     returning_book_date = models.DateField(null=True)
     due_date = models.DateField(null=True)
     borrowing_quantity = models.IntegerField(default=1)
+    price = models.DecimalField(max_digits=10, decimal_places=2, default=0)
     status = models.CharField(max_length=20, choices=BorrowStatus.choices, default=BorrowStatus.PENDING)
     note = models.CharField(max_length=255, null=True)
     
@@ -131,6 +133,7 @@ class Reservation(models.Model):
     status = models.CharField( max_length=20,
         choices=ReservationStatus.choices,
         default=ReservationStatus.WAITING)
+    created_at = models.DateTimeField(auto_now=True)
     
 class Interaction(BaseView):
     user = models.ForeignKey(User, on_delete=models.CASCADE)

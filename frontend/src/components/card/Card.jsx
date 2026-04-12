@@ -2,21 +2,23 @@ import React from 'react';
 import { Link } from 'react-router-dom';
 import { AddToCart } from '../../utils/CartAction';
 
-const Card = ({ book }) => {
+const Card = ({ book, defaultSetting, setCart }) => {
 
 
-    const handleAddToCart = () => {
-        // localStorage.removeItem("cart")
-        AddToCart(book);
+    const handleAddToCart = (e) => {
+
+        e.preventDefault()
+
+        AddToCart(book, defaultSetting, 1, setCart);
         alert(`${book.name} đã được thêm vào giỏ hàng!`);
-        console.log(localStorage.getItem("cart"))
+        console.log(JSON.parse(localStorage.getItem('cart')))
     }
 
     return (
         <div className='col'>
             <div className="card h-100 shadow-sm">
 
-                <div ckassName="card-header">
+                <div className="card-header">
                     <img
                         src={book.image}
                         className="card-img-top "

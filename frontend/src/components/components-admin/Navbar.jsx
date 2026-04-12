@@ -17,7 +17,7 @@ const Navbar = () => {
     }
 
     return (
-        <header className='tw-fixed tw-top-0 tw-left-64 tw-right-0 tw-h-16 tw-bg-white tw-border-b tw-flex 
+        <header className='tw-fixed tw-z-10 tw-top-0 tw-left-64 tw-right-0 tw-h-16 tw-bg-white tw-border-b tw-flex 
                     tw-items-center tw-justify-between tw-px-6 tw-shadown-sm z-10'>
             <h1 className='tw-text-xl tw-font-semibold tw-text-gray-700'>Admin Page</h1>
 

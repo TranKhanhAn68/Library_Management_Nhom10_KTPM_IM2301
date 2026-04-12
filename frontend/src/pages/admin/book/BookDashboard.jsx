@@ -1,26 +1,79 @@
-import React, { useState } from 'react';
+import React, { useContext, useEffect, useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
-import BookData from '../../../data/BookData';
 import BaseModal from '../../../components/BaseModal';
+import { BookListAPI, DeleteBook } from '../../../services/BookAPI';
+import { AuthContent } from '../../../utils/AuthContext';
+import Pagination from '../../../components/Pagination';
+import Loading from '../../../components/Loading';
+import { getError } from '../../../utils/GetError';
 const Book = () => {
-    const navigate = useNavigate()
-
-    const [books, setBooks] = useState(BookData || [])
-    const [selectedBook, setSelectedBook] = useState(null)
+    const { token } = useContext(AuthContent)
+    const [reload, setReload] = useState(false) //Biến cờ cập nhật dữ liệu book lại khi xóa
     const [currentPage, setCurrentPage] = useState(1)
-    const pageSize = 4
-    const totalPages = Math.ceil(books.length / pageSize)
-    const pageItems = books.slice(
-        (currentPage - 1) * pageSize,
-        currentPage * pageSize
-    )
+    const dataBooks = BookListAPI(currentPage, "", "", "", token, reload)
+    const books = dataBooks?.results || []
+    const [selectedBook, setSelectedBook] = useState(null)
+    const [selectedBookByID, setSelectedBookByID] = useState("")
+    const totalPages = Math.ceil((dataBooks?.count || 0) / 8)
 
+    const [loading, setLoading] = useState(true)
+    const [message, setMessage] = useState("")
+    const [isSuccess, setIsSuccess] = useState(false)
     const [openModal, setOpenModal] = useState(false)
+    const [openModalNotification, setOpenModalNotification] = useState(false)
+    const [openModalMsg, setOpenModalMsg] = useState("")
+
+    useEffect(() => {
+        setLoading(false)
+    }, [books])
 
     const handleSelected = (book) => {
         setSelectedBook(book)
         setOpenModal(true)
+
     }
+
+    const goPage = (page) => {
+        setCurrentPage(page)
+    }
+
+    const handleDelete = async (e, id) => {
+        e.preventDefault()
+        try {
+            setLoading(true)
+            const result = await DeleteBook(id, token)
+            if (result) {
+                setMessage(result?.message)
+                setOpenModalMsg(true)
+                setIsSuccess(true)
+                setReload(prev => !prev)
+            }
+        } catch (err) {
+            const error = getError(err)
+            setMessage(error)
+        } finally {
+            handleClose()
+            setLoading(false)
+        }
+    }
+
+    const handleClose = () => {
+        if (openModal) {
+            setOpenModal(false)
+            setSelectedBook(null)
+        }
+        if (openModalNotification) {
+            setOpenModalNotification(false)
+            setSelectedBookByID('')
+        }
+        if (openModalMsg) {
+            setOpenModalMsg(false)
+            setMessage('')
+            setIsSuccess(false)
+        }
+    }
+    if (loading) return <Loading loading={loading} />
+
     return (
         <div className='tw-p-6'>
             <div className='tw-flex tw-justify-between tw-items-center tw-mb-6'>
@@ -39,6 +92,7 @@ const Book = () => {
                     <tr className='tw-bg-blue-200 tw-text-center tw-text-red-500'>
                         <th className='tw-p-3'>ID</th>
                         <th className='tw-p-3'>Name</th>
+                        <th className='tw-p-3'>Total quantity</th>
                         <th className='tw-p-3'>Available quantity</th>
                         <th className='tw-p-3'>Active</th>
                         <th className='tw-p-3'>Detail</th>
@@ -47,15 +101,22 @@ const Book = () => {
                 </thead>
 
                 <tbody>
-                    {pageItems.map(book => (
+                    {books.length === 0 ? (
+                        <tr>
+                            <td colSpan="7" className="tw-text-center tw-p-4 tw-text-gray-500 tw-text-sm">
+                                <small className='tw-text-center tw-text-gray-500 '>Không có dữ liệu</small>
+                            </td>
+                        </tr>
+                    ) : (books.map(book => (
                         <tr key={book.id} className='border-b tw-text-center '>
-                            <td className='tw-p-3'>{book.book_id}</td>
+                            <td className='tw-p-3'>{book.id}</td>
                             <td className='tw-flex tw-gap-3 tw-p-3 tw-items-center'>
                                 <img src={book.image} alt={book.name} className="tw-w-16 tw-h-20 tw-object-cover " />
                                 <div>
                                     {book.name}
                                 </div>
                             </td>
+                            <td>{book.total_quantity}</td>
                             <td>{book.available_quantity}</td>
                             <td className='tw-p-3'>
                                 {book.active ? (
@@ -89,15 +150,18 @@ const Book = () => {
 
                                     <button
                                         className='tw-text-blue-600 hover:tw-text-pink-500'
-                                        onClick={() => onDelete(book)}
+                                        onClick={() => {
+                                            setOpenModalNotification(true)
+                                            setSelectedBookByID(book.id)
+                                        }}
                                     >
-                                        <i className='fa fa-trash' />
+                                        <i className='fa fa-trash tw-text-red-600' />
                                     </button>
                                 </div>
                             </td>
                         </tr>
 
-                    ))}
+                    )))}
 
 
                 </tbody>
@@ -105,102 +169,114 @@ const Book = () => {
 
             </table>
             {/* pagination */}
-            <div className="tw-flex tw-justify-center tw-items-center tw-gap-2 tw-mt-5">
+            <Pagination currentPage={currentPage}
+                totalPages={totalPages}
+                item={books}
+                goPage={goPage}
 
-                <button
-                    className="tw-px-4 tw-py-2 tw-rounded tw-bg-blue-500 tw-text-white hover:tw-bg-blue-700 disabled:tw-bg-gray-300"
-                    disabled={currentPage === 1}
-                    onClick={() => setCurrentPage(prev => prev - 1)}
-                >
-                    Prev
-                </button>
-
-                {Array.from({ length: totalPages }, (_, index) => {
-                    const page = index + 1
-                    return (
-                        <button
-                            key={index}
-                            onClick={() => setCurrentPage(page)}
-                            className={`tw-px-3 tw-py-1 tw-border tw-rounded tw-transition-all
-                                    hover:tw-bg-gray-200 tw-duration-200
-                                    ${currentPage === page
-                                    ? "tw-bg-blue-500 tw-text-white tw-border-blue-500"
-                                    : "tw-bg-white"}
-                                `}
-                        >
-                            {page}
-                        </button>
-                    );
-                })}
-
-                {/* Next */}
-                <button
-                    className="tw-px-4 tw-py-2 tw-rounded tw-bg-blue-500 tw-text-white hover:tw-bg-blue-700 disabled:tw-bg-gray-300"
-                    disabled={currentPage === totalPages}
-                    onClick={() => setCurrentPage(prev => prev + 1)}
-                >
-                    Next
-                </button>
-
-            </div>
+            />
 
             {
-                selectedBook && <BaseModal open={openModal} close={() => setOpenModal(false)}>
-                    <div className="tw-flex tw-justify-between tw-items-center tw-mb-4">
-                        <h2 className="tw-text-xl tw-font-bold">Chi tiết sách</h2>
-                        <button onClick={() => setOpenModal(false)} className="tw-text-gray-500 hover:tw-text-black">
-                            ✕
-                        </button>
-                    </div>
+                selectedBook && <BaseModal open={openModal} close={handleClose}>
+                    <div className='container'>
+                        <div className="tw-flex tw-justify-between tw-items-center tw-mb-4">
+                            <h2 className="tw-text-xl tw-font-bold">Chi tiết sách</h2>
+                            <button onClick={handleClose} className="tw-text-gray-500 hover:tw-text-black">
+                                ✕
+                            </button>
+                        </div>
 
-                    <div className="tw-flex tw-gap-4">
+                        <div className="tw-flex tw-gap-4">
 
-                        <img
-                            src={selectedBook.image}
-                            alt={selectedBook.name}
-                            className="tw-w-40 tw-h-56 tw-object-cover tw-rounded-lg tw-border"
-                        />
+                            <img
+                                src={selectedBook.image}
+                                alt={selectedBook.name}
+                                className="tw-w-40 tw-h-56 tw-object-cover tw-rounded-lg tw-border"
+                            />
 
-                        {/* Info */}
-                        <div className="tw-flex-1 tw-space-y-2 tw-text-sm">
+                            {/* Info */}
+                            <div className="tw-flex-1 tw-space-y-2 tw-text-sm">
 
-                            <p><b>Tên sách:</b> {selectedBook.name}</p>
-                            <p><b>Mã sách:</b> {selectedBook.selectedBook_id}</p>
-                            <p><b>Danh mục:</b> {selectedBook.category_id}</p>
+                                <p><b>Tên sách:</b> {selectedBook.name}</p>
+                                <p><b>Mã sách:</b> {selectedBook.book_id}</p>
+                                <p><b>Danh mục:</b> {selectedBook.category_id}</p>
 
-                            <p>
-                                <b>Trạng thái:</b>{" "}
-                                <span className={selectedBook.active ? "tw-text-green-600" : "tw-text-red-500"}>
-                                    {selectedBook.active ? "Hoạt động" : "Ngừng"}
-                                </span>
+                                <p>
+                                    <b>Trạng thái: </b>
+                                    <span className={selectedBook.active ? "tw-text-green-600" : "tw-text-red-500"}>
+                                        {selectedBook.active ? "Hoạt động" : "Ngừng"}
+                                    </span>
+                                </p>
+
+                                <p>
+                                    <b>Tác giả: </b>
+                                    <span>{selectedBook.author.name}</span>
+                                </p>
+
+                                <p>
+                                    <b>Nhà xuất bản: </b>
+                                    <span>{selectedBook.publisher.name}</span>
+                                </p>
+
+                                <p><b>Số lượng còn:</b> {selectedBook.available_quantity}</p>
+                                <p><b>Tổng số lượng:</b> {selectedBook.total_quantity}</p>
+
+                                <p>
+                                    <b>Ngày tạo:</b>{" "}
+                                    {new Date(selectedBook.created_at).toLocaleString()}
+                                </p>
+
+                                <p>
+                                    <b>Cập nhật:</b>{" "}
+                                    {new Date(selectedBook.updated_at).toLocaleString()}
+                                </p>
+
+                            </div>
+                        </div>
+
+                        <div className="tw-mt-4">
+                            <p className="tw-font-semibold">Mô tả:</p>
+                            <p className="tw-text-gray-600 tw-text-sm tw-mt-1">
+                                {selectedBook.description}
                             </p>
-
-                            <p><b>Số lượng còn:</b> {selectedBook.available_quantity}</p>
-                            <p><b>Tổng số lượng:</b> {selectedBook.total_quantity}</p>
-
-                            <p>
-                                <b>Ngày tạo:</b>{" "}
-                                {new Date(selectedBook.created_at).toLocaleString()}
-                            </p>
-
-                            <p>
-                                <b>Cập nhật:</b>{" "}
-                                {new Date(selectedBook.updated_at).toLocaleString()}
-                            </p>
-
                         </div>
                     </div>
 
-                    <div className="tw-mt-4">
-                        <p className="tw-font-semibold">Mô tả:</p>
-                        <p className="tw-text-gray-600 tw-text-sm tw-mt-1">
-                            {selectedBook.description}
-                        </p>
-                    </div>
+                </BaseModal>
 
+            }
+            {selectedBookByID &&
+                <BaseModal open={openModalNotification} close={handleClose}>
+                    <div className="p-3">
+                        <h5>Xác nhận xóa?</h5>
+                        <p>Bạn có chắc chắn muốn xóa sản phẩm này khỏi giỏ hàng?</p>
+                        <div className="d-flex justify-content-end gap-2 mt-3">
+                            <button className="btn btn-secondary" onClick={handleClose}>Hủy</button>
+                            <button
+                                className="btn btn-danger"
+                                onClick={(e) => handleDelete(e, selectedBookByID)}
+                            >
+                                Xóa
+                            </button>
+                        </div>
+                    </div>
                 </BaseModal>
             }
-        </div >
+
+            {message
+                && <BaseModal open={openModalMsg} close={handleClose}>
+                    <div className="tw-p-3 tw-flex tw-items-center tw-justify-center tw-gap-3" style={{ width: "300px" }}>
+                        {isSuccess ?
+                            <i className="fa-solid fa-circle-check tw-text-green-500 tw-text-lg"></i> :
+                            <i class="fa-solid fa-circle-xmark tw-text-red-500 tw-text-lg"></i>
+                        }
+                        <div>
+                            {typeof (message) === "string" && message.trim().length > 0 && message}
+                        </div>
+                    </div>
+                </BaseModal>
+            }
+        </div>
 
 
     );

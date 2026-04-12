@@ -1,12 +1,18 @@
 import { useEffect, useState } from "react";
-const CATE_URL = "http://127.0.0.1:8000/authors"
-export const AuthorListAPI = () => {
-    const [authors, setauthors] = useState([])
+const AUTHOR_URL = "http://127.0.0.1:8000/authors"
+export const AuthorListAPI = (token) => {
+    const [authors, setAuthors] = useState([])
     const fetchData = async () => {
         try {
-            const res = await fetch(`${CATE_URL}/`);
+            const res = await fetch(`${AUTHOR_URL}/`, {
+                method: 'GET',
+                headers: {
+                    'Content-Type': 'application/json',
+                    ...(token && { Authorization: `Token ${token}` })
+                },
+            });
             const data = await res.json();
-            setauthors(data);
+            setAuthors(data);
         } catch (err) {
             console.error(err);
         }
@@ -14,16 +20,22 @@ export const AuthorListAPI = () => {
 
     useEffect(() => {
         fetchData();
-    }, []);
+    }, [token]);
 
-    return [authors, setauthors];
+    return [authors, setAuthors];
 };
 
-export const AuthorByIDAPI = (author_id) => {
-    const [Author, setAuthor] = useState(null)
+export const AuthorByIDAPI = (author_id, token) => {
+    const [author, setAuthor] = useState(null)
     const fetchData = async () => {
         try {
-            const res = await fetch(`${CATE_URL}/${cate_id}/`);
+            const res = await fetch(`${AUTHOR_URL}/${author_id}/`, {
+                method: 'GET',
+                headers: {
+                    'Content-Type': 'application/json',
+                    ...(token && { Authorization: `Token ${token}` })
+                },
+            })
             const data = await res.json();
             setAuthor(data);
         } catch (err) {
@@ -32,7 +44,7 @@ export const AuthorByIDAPI = (author_id) => {
     }
     useEffect(() => {
         fetchData()
-    }, [author_id])
+    }, [author_id, token])
 
-    return [category, setCategory]
+    return [author, setAuthor]
 }

@@ -2,41 +2,53 @@ import React, { useContext, useEffect, useState } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
 import { CategoryByIDAPI, UpdateCategory } from '../../../services/CategoryAPI';
 import { AuthContent } from '../../../utils/AuthContext';
-
+import Loading from '../../../components/Loading';
+import BaseModal from '../../../components/BaseModal';
 const EditCategory = () => {
     const { token } = useContext(AuthContent)
+    const [loading, setLoading] = useState(true)
+    const [message, setMessage] = useState("")
+    const [openModal, setOpenModal] = useState(false)
     const { id } = useParams();
     const [name, setName] = useState("");
     const [active, setActive] = useState(false);
-    const [cate] = CategoryByIDAPI(id);
+    const [cate] = CategoryByIDAPI(id, token);
     const navigate = useNavigate();
 
+    const [isSuccess, setIsSuccess] = useState(false)
     useEffect(() => {
         if (cate) {
             setName(cate.name);
             setActive(cate.active);
+            setLoading(false)
         }
     }, [cate]);
 
     const handleSubmit = async (e) => {
         e.preventDefault();
-        if (name.trim() === "")
-            return alert("Không được để trống");
+        if (name.trim() === "") {
+            setMessage("Không được để trống")
+            setOpenModal(true)
+            return
+        }
+        setOpenModal(true)
         try {
+            setLoading(true)
             const updateCategory = await UpdateCategory(id, name, active, token)
             if (updateCategory) {
-                alert("Thay đổi thành công")
+                setMessage("Cập nhật thành công")
+                setIsSuccess(true)
             }
-            navigate("/dashboard/categories")
         } catch (err) {
-            console.error("Lỗi", err)
+            const error = getError(err)
+            setMessage(error)
+        } finally {
+            setLoading(false)
         }
     }
 
-    if (!cate) {
-        return <div className="tw-text-center tw-mt-10">Đang tải dữ liệu...</div>;
-    }
 
+    if (loading) return <Loading loading={loading} />
     return (
         <div>
             <div className='tw-p-6 tw-max-w-md tw-mx-auto tw-bg-yellow-100 tw-rounded-2xl tw-shadow-lg'>
@@ -54,14 +66,14 @@ const EditCategory = () => {
                         className='tw-border tw-border-gray-400 tw-p-3 tw-rounded-lg focus:tw-outline-none focus:tw-ring-2 focus:tw-ring-blue-500'
                     />
 
-                    <label className='tw-flex tw-items-center tw-gap-2 tw-cursor-pointer'>
+                    <label className="tw-flex tw-items-center tw-p-4 tw-border tw-rounded-xl tw-cursor-pointer">
                         <input
-                            type='checkbox'
+                            type="checkbox"
                             checked={active}
-                            onChange={e => setActive(e.target.checked)}
-                            className='tw-w-5 tw-h-5'
+                            onChange={(e) => setActive(e.target.checked)}
+                            className="tw-w-4 tw-h-4"
                         />
-                        <span className="tw-font-medium">Kích hoạt (Active)</span>
+                        <span className="tw-ml-3 tw-text-sm">Kích hoạt</span>
                     </label>
 
                     <button
@@ -80,6 +92,24 @@ const EditCategory = () => {
                     </button>
                 </form>
             </div>
+            {message &&
+                <BaseModal open={openModal} close={() => {
+                    setOpenModal(false)
+                    setMessage("")
+                    if (isSuccess)
+                        navigate('/dashboard/categories')
+                }}
+                >
+                    <div className="tw-p-3 tw-flex tw-items-center tw-justify-center tw-gap-3" style={{ width: "300px" }}>
+                        {isSuccess ?
+                            <i className="fa-solid fa-circle-check tw-text-green-500 tw-text-lg"></i> :
+                            <i class="fa-solid fa-circle-xmark tw-text-red-500 tw-text-lg"></i>
+                        }
+                        <div>
+                            {message.trim().length > 0 && message}
+                        </div>
+                    </div>
+                </BaseModal>}
         </div>
     );
 }

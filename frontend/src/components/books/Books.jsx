@@ -1,24 +1,49 @@
-import React, { useEffect, useState } from 'react';
+import React, { useContext, useEffect, useState } from 'react';
 import Card from '../card/Card'
 import './books.scss'
-import { data, Link, useOutletContext } from 'react-router-dom';
-import AuthorData from '../../data/AuthorData';
+import { Link, useOutletContext } from 'react-router-dom';
 import { CategoryListAPI } from '../../services/CategoryAPI';
 import Pagination from '../Pagination';
-import { AuthorListAPI } from '../../services/AuthorAPI';
+import { SettingListAPI } from '../../services/SettingAPI';
+import Loading from '../Loading';
+import { AuthContent } from '../../utils/AuthContext';
 const Books = () => {
+    const { token } = useContext(AuthContent)
     const { books,
+        authors,
         currentPage,
         dataBooks,
         goPage,
         goSearchToCategory,
-        goSearchToAuthor
+        goSearchToAuthor,
+        setCart
     } = useOutletContext();
-    const [authors] = AuthorListAPI()
-    const [categories] = CategoryListAPI()
+    const [settings] = SettingListAPI(token)
+    const [loading, setLoading] = useState(false)
+    const [categories] = CategoryListAPI(token)
     const [searchAuthor, setSearchAuthor] = useState("")
     const [filteredAuthor, setFilteredAuthor] = useState([])
-    const totalPages = Math.ceil((dataBooks?.count || 0) / 4)
+    const totalPages = Math.ceil((dataBooks?.count || 0) / 8)
+    const [defaultSetting, setDefaultSetting] = useState(null)
+
+    useEffect(() => {
+        if (!books || books.length === 0) {
+            setLoading(true);
+
+            const timer = setTimeout(() => {
+                setLoading(false);
+            }, 1500);
+
+            return () => clearTimeout(timer);
+        }
+        else {
+            setLoading(false)
+        }
+    }, [books]);
+
+    useEffect(() => {
+        setDefaultSetting(settings[0])
+    }, [settings])
 
     useEffect(() => {
         setFilteredAuthor(authors)
@@ -46,11 +71,13 @@ const Books = () => {
         e.preventDefault()
         goSearchToCategory(id)
     }
-
-
+    console.log(settings)
     return (
-        <div className='book-container mx-auto '>
+        <div className='book-container mx-auto position-relative'>
+            {loading && <Loading loading={loading} />}
+
             <div className='d-flex justify-content-center gap-4  book-container-header p-3'>
+
                 <div className="dropdown">
                     <button
                         type="button"
@@ -64,7 +91,6 @@ const Books = () => {
                     <ul className="dropdown-menu dropdown-menu-light shadow-lg border-0">
                         <div className="custom-scroll" style={{ maxHeight: "150px", overflowY: "auto" }}>
                             <ul className="list-unstyled mb-0">
-                                {!categories && (<div>Loading...</div>)}
                                 {categories &&
                                     categories.map(cate => (
                                         <li key={cate.id}>
@@ -106,9 +132,6 @@ const Books = () => {
 
                         <div className="custom-scroll" style={{ maxHeight: "150px", overflowY: "auto" }}>
                             <ul className="list-unstyled mb-0">
-                                {!authors && (
-                                    <div>Loading...</div>
-                                )}
                                 {filteredAuthor &&
                                     filteredAuthor.map(author => (
                                         <li key={author.id}>
@@ -129,16 +152,15 @@ const Books = () => {
                 </div>
             </div>
             <div className='position-relative' style={{ minHeight: "150px" }}>
-                {!dataBooks && (<div>Loading...</div>)}
                 <div className="row row-cols-2 row-cols-md-4 g-2 p-1">
                     {books.map(book => (
-                        <Card key={book.id} book={book} />
+                        <Card key={book.id} book={book} setCart={setCart} defaultSetting={defaultSetting} />
                     ))}
                 </div>
 
                 <Pagination currentPage={currentPage}
                     totalPages={totalPages}
-                    books={books}
+                    item={books}
                     goPage={goPage}
 
                 />

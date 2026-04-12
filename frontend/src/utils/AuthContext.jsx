@@ -6,7 +6,9 @@ export const AuthContent = createContext()
 export const AuthProvider = ({ children }) => {
     const [user, setUser] = useState(null)
     const [status, setStatus] = useState(false)
-    const [token, setToken] = useState("")
+    const [token, setToken] = useState(null)
+    const [loading, setLoading] = useState(true);
+
     useEffect(() => {
         const saveUser = localStorage.getItem("authUser")
         if (saveUser) {
@@ -15,7 +17,21 @@ export const AuthProvider = ({ children }) => {
             setUser(parsed.user)
             setStatus(parsed.status)
         }
+        setLoading(false);
+
     }, [])
+
+    useEffect(() => {
+
+
+        window.addEventListener("storage", (e) => {
+            if (e.key === "authUser" && e.newValue === null) {
+                logout();
+            }
+        });
+
+        return () => window.removeEventListener("storage", logout);
+    }, []);
 
     const login = async (username, password) => {
         const data = await LoginUserAPI(username, password)
@@ -31,7 +47,7 @@ export const AuthProvider = ({ children }) => {
     return (
         <AuthContent.Provider
             value={{
-                user, setUser, status, setStatus, token, setToken, login, logout
+                user, setUser, status, setStatus, token, setToken, login, logout, loading
             }}
         >
             {children}

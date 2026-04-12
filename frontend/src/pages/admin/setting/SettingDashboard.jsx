@@ -1,17 +1,25 @@
 import React, { useContext, useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
-import BaseModal from '../../../components/BaseModal';
 import { SettingListAPI, UpdateSetting } from '../../../services/SettingAPI';
 import { AuthContent } from '../../../utils/AuthContext';
+import Loading from '../../../components/Loading';
+import BaseModal from '../../../components/BaseModal';
 const SettingDashboard = () => {
     const { token } = useContext(AuthContent)
-    const [settings] = SettingListAPI()
-    const [openModal, setOpenModal] = useState(false)
+    const [reload, setReload] = useState(false)
+    const [settings, setSettings] = SettingListAPI(token, reload)
     const [selectedItem, setSelectedItem] = useState(null)
-    const [listActiveSettings, setListActiveSettings] = useState([
+    const [listActiveSettings, setListActiveSettings] = useState([])
 
-    ])
+    const [loading, setLoading] = useState(true)
+    const [message, setMessage] = useState("")
+    const [openModal, setOpenModal] = useState(false)
+    const [openModalMsg, setOpenModalMsg] = useState(false)
+    const [isSuccess, setIsSuccess] = useState(false)
 
+    useEffect(() => {
+        setLoading(false)
+    }, [])
     useEffect(() => {
         setListActiveSettings(
             settings.filter(item => item.active)
@@ -19,24 +27,32 @@ const SettingDashboard = () => {
     }, [settings])
 
     const handleChangeActive = async (item) => {
-        const changeSetting = await UpdateSetting(item.id, !item.active, token)
+        setOpenModalMsg(true)
+        try {
+            setLoading(true)
 
-        if (changeSetting) {
-            setListActiveSettings(prev => {
-                if (changeSetting.active)
-                    return [...prev.filter(s => s.id !== changeSetting.id), changeSetting];
-                else
-                    return prev.filter(s => s.id !== changeSetting.id)
-            })
+            const changeSetting = await UpdateSetting(item.id, !item.active, token)
+
+            if (changeSetting) {
+                setSettings(prev => prev.map(s => s.id === changeSetting.id ? changeSetting : s))
+                setMessage(changeSetting?.message)
+                setIsSuccess(true)
+                setReload(prev => !prev)
+            }
+
+        } catch (err) {
+            const error = getError(err)
+            setMessage(error)
+        } finally {
+            setLoading(false)
         }
-        console.log(changeSetting)
     }
 
     const handleOpenModal = (item) => {
         setOpenModal(true)
         setSelectedItem(item)
     }
-
+    if (loading) return <Loading loading={loading} />
     return (
         <div className='tw-p-6'>
             <div className='tw-flex tw-items-center tw-justify-between tw-mb-6'>
@@ -52,23 +68,27 @@ const SettingDashboard = () => {
                 </Link>
 
             </div>
-            <div className='tw-w-full'>
+            <div className={`tw-p-6 ${loading ? 'tw-opacity-50 tw-pointer-events-none' : ''}`}>
                 <ul className='tw-flex tw-justify-center tw-gap-4 tw-bg-gray-300 tw-px-4 tw-py-2 tw tw-flex-wrap'>
-
-                    {settings.map(item => (
-                        <li key={item.id} className='tw-bg-white tw-shadow-lg tw-px-4 tw-py-2 tw-w-64 tw-rounded-lg'>
-                            <label className='tw-flex tw-items-center tw-gap-2'>
-                                <input
-                                    type='checkbox'
-                                    checked={item.active}
-                                    onChange={() => handleChangeActive(item)}
-                                />
-                                <button className='tw-w-full tw-text-left ' onClick={() => handleOpenModal(item)}>
-                                    {item.borrowing_days}, {item.borrowing_fee}, {item.borrowing_overdue_fine}
-                                </button>
-                            </label>
-                        </li>
-                    ))}
+                    {settings.length === 0 ? (
+                        <small className='tw-text-center tw-text-gray-500'>Không có dữ liệu</small>
+                    ) : (
+                        settings.map(item => (
+                            <li key={item.id} className='tw-bg-white tw-shadow-lg tw-px-4 tw-py-2 tw-w-64 tw-rounded-lg'>
+                                <label className='tw-flex tw-items-center tw-gap-2'>
+                                    <input
+                                        type='checkbox'
+                                        checked={item.active}
+                                        onChange={() => handleChangeActive(item)}
+                                        disabled={loading}
+                                    />
+                                    <button className='tw-w-full tw-text-left ' onClick={() => handleOpenModal(item)}>
+                                        {item.borrowing_days}, {item.borrowing_fee}, {item.borrowing_overdue_fine}
+                                    </button>
+                                </label>
+                            </li>
+                        ))
+                    )}
 
                 </ul>
                 <div className='tw-w-full tw-bg-gray-300 tw-rounded-lg tw-mt-4 gap-3 tw-px-4 tw-py-2'>
@@ -92,9 +112,11 @@ const SettingDashboard = () => {
                 </div>
             </div>
 
-            {/* Modal */}
             {selectedItem && (
-                <BaseModal open={openModal} close={() => setOpenModal(false)}>
+                <BaseModal open={openModal} close={() => {
+                    setOpenModal(false)
+                    setSelectedItem(null)
+                }}>
                     <div className="tw-p-4 tw-w-[300px]">
                         <div className="tw-flex tw-justify-end tw-items-center tw-mb-4">
                             <button onClick={() => setOpenModal(false)} className="tw-text-gray-500 hover:tw-text-black">
@@ -139,6 +161,22 @@ const SettingDashboard = () => {
                 </BaseModal>
             )}
 
+            {message.trim().length > 0 &&
+                <BaseModal open={openModalMsg} close={() => {
+                    setOpenModalMsg(false)
+                    setMessage("")
+                }}>
+                    <div className="tw-p-3 tw-flex tw-items-center tw-justify-center tw-gap-3" style={{ width: "300px" }}>
+                        {isSuccess ?
+                            <i className="fa-solid fa-circle-check tw-text-green-500 tw-text-lg"></i> :
+                            <i class="fa-solid fa-circle-xmark tw-text-red-500 tw-text-lg"></i>
+                        }
+                        <div>
+                            {typeof (message) === "string" && message.trim().length > 0 && message}
+                        </div>
+                    </div>
+                </BaseModal>
+            }
         </div>
     );
 }

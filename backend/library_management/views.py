@@ -185,9 +185,47 @@ class LogoutAPIView(APIView):
             return Response({'message': 'Successfully logged out.'}, status=status.HTTP_200_OK)
         except Exception as e:
             return Response({'error': str(e)}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
+    
+def check_stock_and_create(user, book):
+    book_obj = get_object_or_404(Book, pk=book["id"])
+    if book['borrowing_quantity'] > book_obj.available_quantity:
+        raise ValueError(f"Book {book_obj.name} only has {book_obj.available_quantity} copies left")
+    User_Book.objects.create(user=user, book=book_obj, status=User_Book.BorrowStatus.PENDING)
+    return book_obj.name
 
+class UpdateBorrowStatusAPIView(APIView):
+    permission_classes = [IsStaffPermission]
+    authentication_classes = [TokenAuthentication]
+    
+    def put(self, request, pk):
+        borrow_obj = get_object_or_404(User_Book, pk=pk)
+        new_status = request.data.get('status')
+        
+        
+        if new_status not in User_Book.BorrowStatus.values:
+            return Response({
+                'message': 'Invalid Status'
+            }, status=status.HTTP_400_BAD_REQUEST)
+            
+        if borrow_obj.status == User_Book.BorrowStatus.RETURNED:
+            return Response({
+                {'message': 'Cannot update returned book'}
+            },status=status.HTTP_400_BAD_REQUEST)
+         
+        
+        if new_status == User_Book.BorrowStatus.BORROWING:
+            borrow_obj.borrowing_book_date = timezone.now()
+        elif new_status == User_Book.BorrowStatus.RETURNED:
+            borrow_obj.returning_book_date = timezone.now()
+        
+        borrow_obj.status = new_status
+        borrow_obj.save()
+        
+        return Response({
+            'message': 'Status update successful'
+        }, status=status.HTTP_200_OK)
 
-class BorrowViewSet(BaseViewSet):
+class BorrowViewSet(viewsets.GenericViewSet, mixins.ListModelMixin, mixins.RetrieveModelMixin):
     serializer_class = BorrowSerializer
     
     def get_queryset(self):
@@ -203,10 +241,10 @@ class BorrowViewSet(BaseViewSet):
         return queryset
     
     # -----------------------Action POST Mượn sách từ giỏ hàng----------------------- #
-    @action(methods=['POST'], detail=False, url_path='cart',
-            permission_classes=[IsAuthenticated], 
-            authentication_classes=[TokenAuthentication])
-    def borrowing_books(self, request):
+    @action(methods=['POST'], detail=False, url_path='cart')
+    @authentication_classes([TokenAuthentication])
+    def borrow_books(self, request):
+        # Lấy dữ liệu request lên trả về dưới dạng dict
         user = request.user
         cart = request.data.get("cart", []) 
         if not cart:

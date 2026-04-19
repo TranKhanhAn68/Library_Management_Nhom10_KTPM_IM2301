@@ -1,3 +1,5 @@
+import { useEffect, useState } from "react";
+
 const BORROWING_URL = 'http://127.0.0.1:8000/borrowing'
 export const BorrowingBookAPI = async (cart, token) => {
     try {
@@ -19,11 +21,10 @@ export const BorrowingBookAPI = async (cart, token) => {
     }
 }
 
-export const BorrowListAPI = (token) => {
+export const BorrowListAPI = (page, token, reload) => {
     const [data, setData] = useState({})
     const fetchData = async () => {
         try {
-
             const res = await fetch(`${BORROWING_URL}/`, {
                 method: 'GET',
                 headers: {
@@ -43,7 +44,7 @@ export const BorrowListAPI = (token) => {
 
     useEffect(() => {
         fetchData();
-    }, [page, q, category_id, author_id, token]);
+    }, [page, token, reload]);
 
     return data;
 }

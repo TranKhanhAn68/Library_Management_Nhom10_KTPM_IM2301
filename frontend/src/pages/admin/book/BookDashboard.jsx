@@ -58,19 +58,16 @@ const Book = () => {
     }
 
     const handleClose = () => {
-        if (openModal) {
-            setOpenModal(false)
+        setOpenModal(false)
+        setOpenModalNotification(false)
+        setOpenModalMsg(false)
+
+        setTimeout(() => {
             setSelectedBook(null)
-        }
-        if (openModalNotification) {
-            setOpenModalNotification(false)
             setSelectedBookByID('')
-        }
-        if (openModalMsg) {
-            setOpenModalMsg(false)
             setMessage('')
             setIsSuccess(false)
-        }
+        }, 200)
     }
     if (loading) return <Loading loading={loading} />
 
@@ -176,8 +173,9 @@ const Book = () => {
 
             />
 
-            {
-                selectedBook && <BaseModal open={openModal} close={handleClose}>
+            <BaseModal open={openModal} close={handleClose}>
+                {
+                    selectedBook &&
                     <div className='container'>
                         <div className="tw-flex tw-justify-between tw-items-center tw-mb-4">
                             <h2 className="tw-text-xl tw-font-bold">Chi tiết sách</h2>
@@ -242,9 +240,9 @@ const Book = () => {
                         </div>
                     </div>
 
-                </BaseModal>
+                }
+            </BaseModal>
 
-            }
             {selectedBookByID &&
                 <BaseModal open={openModalNotification} close={handleClose}>
                     <div className="p-3">

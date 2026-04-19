@@ -5,3 +5,4 @@ class ItemPaginator(pagination.PageNumberPagination):
     
 class UserPaginator(pagination.PageNumberPagination):
     page_size=5
+    

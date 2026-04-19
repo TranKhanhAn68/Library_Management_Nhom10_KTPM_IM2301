@@ -95,10 +95,7 @@ class BookSerializer(ItemSerializer):
         
         
 
-class BorrowSerializer(serializers.ModelSerializer):
-    class Meta:
-        model = User_Book
-        fields = "__all__"
+
         
 class SimpleUserSerializer(ItemSerializer):
     class Meta:
@@ -150,6 +147,14 @@ class UserSerializer(ItemSerializer):
             instance.set_password(password)
         instance.save()
         return instance
+
+
+class BorrowSerializer(serializers.ModelSerializer):
+    user = SimpleUserSerializer(read_only=True)
+    book = SimpleBookSerializer(read_only=True)
+    class Meta:
+        model = User_Book
+        fields = "__all__"
 
 class LoginSerializer(serializers.Serializer):
     username = serializers.CharField()

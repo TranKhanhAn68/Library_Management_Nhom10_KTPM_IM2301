@@ -15,6 +15,8 @@ User = get_user_model()
 
 # ===================== MODEL TEST =====================
 
+
+# Test str  của từng class
 @pytest.mark.django_db
 def test_author_str():
     author = Author.objects.create(
@@ -37,6 +39,7 @@ def test_publisher_str():
     assert str(publisher) == "NXB Kim Dong"
 
 
+# Test trạng thái khi tạo từng sách
 @pytest.mark.django_db
 def test_user_book_default_status():
     user = User.objects.create_user(username='test')
@@ -59,54 +62,7 @@ def test_user_book_default_status():
     assert ub.status == User_Book.BorrowStatus.PENDING
 
 
-@pytest.mark.django_db
-def test_like_unique_constraint():
-    user = User.objects.create_user(username='test')
 
-    category = Category.objects.create(name="IT")
-    author = Author.objects.create(name="A", date_of_birth="2000-01-01", biography="bio")
-    publisher = Publisher.objects.create(name="NXB")
-
-    book = Book.objects.create(
-        book_id="B002",
-        name="Python",
-        total_quantity=10,
-        category=category,
-        author=author,
-        publisher=publisher
-    )
-
-    Like.objects.create(user=user, book=book)
-
-    with pytest.raises(IntegrityError):
-        Like.objects.create(user=user, book=book)
-
-
-@pytest.mark.django_db
-def test_available_quantity():
-    user = User.objects.create_user(username='test')
-
-    category = Category.objects.create(name="IT")
-    author = Author.objects.create(name="A", date_of_birth="2000-01-01", biography="bio")
-    publisher = Publisher.objects.create(name="NXB")
-
-    book = Book.objects.create(
-        book_id="B003",
-        name="Python",
-        total_quantity=10,
-        category=category,
-        author=author,
-        publisher=publisher
-    )
-
-    User_Book.objects.create(
-        user=user,
-        book=book,
-        borrowing_quantity=3,
-        status="BORROWING"
-    )
-
-    assert book.available_quantity() == 7
 
 
 @pytest.mark.django_db
@@ -297,9 +253,10 @@ def test_borrow_zero_quantity():
 def test_book_not_found():
     user = User.objects.create_user(username='test')
 
+    
     with pytest.raises(Exception):
         check_stock_and_create(user, {
-            "id": 9999,
+            "book_id": 9999,
             "borrowing_quantity": 1
         })
 

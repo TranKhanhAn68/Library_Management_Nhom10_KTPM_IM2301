@@ -40,7 +40,7 @@ Các kỹ thuật kiểm thử được áp dụng trong hệ thống bao gồm:
 - Black-box testing: Test các tình huống sau:
     + Nếu sách còn thì cho mượn 
     + Nếu sách hết thì không mượn được 
-    + 1 user mượn nhiều hơn 3 sách thì không được 
+    + 1 user mượn nhiều hơn 5 sách thì không được 
 - White-box testing: Phân tích logic xử lý bên trong hệ thống, đảm bảo:
     + Có kiểm tra số lượng sách còn lại 
     + Có kiểm tra số sách người dùng đã mượn 

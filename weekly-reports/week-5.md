@@ -22,7 +22,7 @@
 | Docker                | Chưa bắt đầu |  0%   |
 | Testing               | Chưa bắt đầu |  0%   | 
 
-**Tổng tiến độ: *43%*
+**Tổng tiến độ: *57%*
 
 
 ## 3. Kế hoạch tuần tới

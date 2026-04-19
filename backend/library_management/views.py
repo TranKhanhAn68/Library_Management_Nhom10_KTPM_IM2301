@@ -186,18 +186,13 @@ class LogoutAPIView(APIView):
         except Exception as e:
             return Response({'error': str(e)}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
     
-def check_stock_and_create(user, book):
-    book_obj = get_object_or_404(Book, pk=book["id"])
-    if book['borrowing_quantity'] > book_obj.available_quantity:
-        raise ValueError(f"Book {book_obj.name} only has {book_obj.available_quantity} copies left")
-    User_Book.objects.create(user=user, book=book_obj, status=User_Book.BorrowStatus.PENDING)
-    return book_obj.name
+
 
 class UpdateBorrowStatusAPIView(APIView):
-    permission_classes = [IsStaffPermission]
+    permission_classes = [perms.StaffPermission]
     authentication_classes = [TokenAuthentication]
     
-    def put(self, request, pk):
+    def patch(self, request, pk):
         borrow_obj = get_object_or_404(User_Book, pk=pk)
         new_status = request.data.get('status')
         
@@ -227,6 +222,11 @@ class UpdateBorrowStatusAPIView(APIView):
 
 class BorrowViewSet(viewsets.GenericViewSet, mixins.ListModelMixin, mixins.RetrieveModelMixin):
     serializer_class = BorrowSerializer
+    pagination_class = paginators.ItemPaginator
+    def get_permissions(self):
+        if self.action == 'borrow_books':
+            return [IsAuthenticated()]
+        return [perms.StaffPermission()]
     
     def get_queryset(self):
         queryset = User_Book.objects.all()
@@ -311,7 +311,11 @@ class BorrowViewSet(viewsets.GenericViewSet, mixins.ListModelMixin, mixins.Retri
             return Response({
                 'message': 'Không thể update sách đã được trả'
             },status=status.HTTP_400_BAD_REQUEST)
-         
+        
+        if new_status == borrow_obj.status:
+            return Response({
+                'message': f'Trạng thái hiện tại đã là {new_status}'
+            }, status=status.HTTP_400_BAD_REQUEST)
         
         if new_status == User_Book.BorrowStatus.BORROWING:
             borrow_obj.borrowing_book_date = timezone.now()

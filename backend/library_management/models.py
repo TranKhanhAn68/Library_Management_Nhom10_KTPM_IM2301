@@ -68,17 +68,22 @@ class Book(BaseView):
         null=True,
         blank=True, 
     )
-    category = models.ForeignKey(Category, on_delete=models.CASCADE)
-    author = models.ForeignKey(Author, on_delete=models.CASCADE)
-    publisher = models.ForeignKey(Publisher, on_delete=models.CASCADE)
+    category = models.ForeignKey(Category, on_delete=models.SET_NULL, null=True)
+    author = models.ForeignKey(Author, on_delete=models.SET_NULL, null=True)
+    publisher = models.ForeignKey(Publisher, on_delete=models.SET_NULL, null=True)
     description = RichTextField(null=True)
     
     def available_quantity(self):
         borrowed =  self.user_book_set.filter(
-            status__in=["BORROWING", "OVERDUE"]
+            status__in=[
+                User_Book.BorrowStatus.BORROWING,
+                User_Book.BorrowStatus.OVERDUE,
+                User_Book.BorrowStatus.CONFIRMED,
+            ]
         ).aggregate(total=Sum('borrowing_quantity'))['total'] or 0
 
         return self.total_quantity - borrowed
+    
     
 class User_Book(models.Model):
     class BorrowStatus(models.TextChoices):
@@ -93,7 +98,7 @@ class User_Book(models.Model):
     book = models.ForeignKey(Book, on_delete=models.PROTECT)
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
-    borrowing_book_date = models.DateField(auto_now_add=True)
+    borrowing_book_date = models.DateField(null=True)
     returning_book_date = models.DateField(null=True)
     due_date = models.DateField(null=True)
     borrowing_quantity = models.IntegerField(default=1)
@@ -102,8 +107,34 @@ class User_Book(models.Model):
     note = models.CharField(max_length=255, null=True)
     
     def set_due_date(self, borrowing_days):
-        self.due_date =  self.borrowing_book_date + timedelta(days=borrowing_days) 
+        valid_statuses = [
+            User_Book.BorrowStatus.CONFIRMED,
+            User_Book.BorrowStatus.BORROWING,
+        ]
+
+        if self.status not in valid_statuses:
+            raise ValueError(f"Trạng thái không phù hợp: {self.status}")
+
+        if not self.borrowing_book_date:
+            raise ValueError("Chưa có ngày mượn")
+
+        self.due_date = self.borrowing_book_date + timedelta(days=borrowing_days)
+            
+    def is_overdue(self):
+        if not self.due_date:
+            return False
+        return date.today() > self.due_date
     
+    def check_stock(self):
+        if not self.book:
+            raise ValueError("Thông tin sách không hợp lệ hoặc sách không tồn tại trong hệ thống!")
+        if self.book.available_quantity() == 0:
+            raise ValueError(f"Sách {self.book.name} hiện không còn!")
+        if self.borrowing_quantity <= 0:
+            raise ValueError(f"Số lượng mượn phải lớn hơn 0")
+        if self.borrowing_quantity > self.book.available_quantity():
+            raise ValueError(f"Sách {self.book.name} chỉ còn {self.book.available_quantity()} bản!")
+        return True    
     
 class User_Book_Detail_Fine(models.Model):
     user_book = models.OneToOneField(User_Book, on_delete=models.CASCADE, primary_key=True)
@@ -111,6 +142,8 @@ class User_Book_Detail_Fine(models.Model):
     setting = models.ForeignKey("Setting", on_delete=models.PROTECT)
     
     def total_fine(self):
+        if not self.late_dates:
+            return 0
         return self.late_dates * self.setting.borrowing_overdue_fine
          
         
@@ -128,36 +161,36 @@ class Reservation(models.Model):
         CANCELLED = "CANCELLED", "Cancelled"
         EXPIRED = "EXPIRED", "Expired"
     user = models.ForeignKey(User, on_delete=models.CASCADE)
-    book = models.ForeignKey(Book, on_delete=models.CASCADE)
+    book = models.ForeignKey(Book, on_delete=models.PROTECT)
     reservation_date = models.DateTimeField(auto_now_add=True)
     status = models.CharField( max_length=20,
         choices=ReservationStatus.choices,
         default=ReservationStatus.WAITING)
     created_at = models.DateTimeField(auto_now=True)
     
-class Interaction(BaseView):
-    user = models.ForeignKey(User, on_delete=models.CASCADE)
-    book = models.ForeignKey(Book, on_delete=models.CASCADE)
-    class Meta:
-        abstract = True
+# class Interaction(BaseView):
+#     user = models.ForeignKey(User, on_delete=models.CASCADE)
+#     book = models.ForeignKey(Book, on_delete=models.CASCADE)
+#     class Meta:
+#         abstract = True
 
 
-class Comment(Interaction):
-    content = models.CharField(max_length=255)
+# class Comment(Interaction):
+#     content = models.CharField(max_length=255)
 
-class Like(Interaction):
-    is_like = models.BooleanField(default=0)
-    class Meta:
-        unique_together = ('book', 'user')
+# class Like(Interaction):
+#     is_like = models.BooleanField(default=0)
+#     class Meta:
+#         unique_together = ('book', 'user')
         
-class Activity_Log(models.Model):
-    class TargetType(models.TextChoices):
-        BOOK = "BOOK", "Book"
-        RESERVATION = "RESERVATION", "Reservation"
-        COMMENT = "COMMENT", "Comment" 
-    user = models.ForeignKey(User, on_delete=models.CASCADE)
-    action = models.CharField(max_length=100)
-    target_type = models.CharField(max_length=20, choices=TargetType.choices)
-    target_id = models.IntegerField()
-    created_at = models.DateTimeField(auto_now_add=True)
+# class Activity_Log(models.Model):
+#     class TargetType(models.TextChoices):
+#         BOOK = "BOOK", "Book"
+#         RESERVATION = "RESERVATION", "Reservation"
+#         COMMENT = "COMMENT", "Comment" 
+#     user = models.ForeignKey(User, on_delete=models.CASCADE)
+#     action = models.CharField(max_length=100)
+#     target_type = models.CharField(max_length=20, choices=TargetType.choices)
+#     target_id = models.IntegerField()
+#     created_at = models.DateTimeField(auto_now_add=True)
 

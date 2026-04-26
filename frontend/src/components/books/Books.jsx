@@ -2,7 +2,6 @@ import React, { useContext, useEffect, useState } from 'react';
 import Card from '../card/Card'
 import './books.scss'
 import { Link, useOutletContext } from 'react-router-dom';
-import { CategoryListAPI } from '../../services/CategoryAPI';
 import Pagination from '../Pagination';
 import { SettingListAPI } from '../../services/SettingAPI';
 import Loading from '../Loading';
@@ -11,6 +10,7 @@ const Books = () => {
     const { token } = useContext(AuthContent)
     const { books,
         authors,
+        categories,
         currentPage,
         dataBooks,
         goPage,
@@ -20,7 +20,6 @@ const Books = () => {
     } = useOutletContext();
     const [settings] = SettingListAPI(token)
     const [loading, setLoading] = useState(false)
-    const [categories] = CategoryListAPI(token)
     const [searchAuthor, setSearchAuthor] = useState("")
     const [filteredAuthor, setFilteredAuthor] = useState([])
     const totalPages = Math.ceil((dataBooks?.count || 0) / 8)

@@ -7,6 +7,7 @@ const MainPage = () => {
     const {
         books,
         authors,
+        categories,
         currentPage,
         dataBooks,
         goSearch,
@@ -18,19 +19,33 @@ const MainPage = () => {
     return (
         <div className='container mx-auto'>
             <Carousel />
-            <div className='container d-md-flex gap-4 justify-content-between'>
-                <FastLink />
-                <Outlet context={{
-                    books,
-                    authors,
-                    currentPage,
-                    dataBooks,
-                    goSearch,
-                    goPage,
-                    goSearchToCategory,
-                    goSearchToAuthor,
-                    setCart
-                }} />
+            <div className="container">
+                <div className="row g-4">
+
+                    {/* Sidebar */}
+                    <div className="col-12 col-md-3">
+                        <FastLink />
+                    </div>
+
+                    {/* Content */}
+                    <div className="col-12 col-md-9">
+                        <Outlet
+                            context={{
+                                books,
+                                authors,
+                                categories,
+                                currentPage,
+                                dataBooks,
+                                goSearch,
+                                goPage,
+                                goSearchToCategory,
+                                goSearchToAuthor,
+                                setCart
+                            }}
+                        />
+                    </div>
+
+                </div>
             </div>
         </div>
     );

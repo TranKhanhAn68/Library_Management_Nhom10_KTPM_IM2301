@@ -93,14 +93,8 @@ TEMPLATES = [
     },
 ]
 
-# TimeZone
-TIME_ZONE = 'Asia/Ho_Chi_Minh'
-USE_TZ = True
-
 
 WSGI_APPLICATION = 'src.wsgi.application'
-
-
 
 
 # Database
@@ -168,3 +162,6 @@ USE_TZ = True
 STATIC_URL = 'static/'
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
+
+USE_TZ = True
+TIME_ZONE = 'Asia/Ho_Chi_Minh'

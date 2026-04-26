@@ -14,7 +14,7 @@ const EditBook = () => {
     const { token } = useContext(AuthContent)
     const { id } = useParams()
 
-    const book = BookIDAPI(id, token)
+    const { book, err } = BookIDAPI(id, token)
     const [authors] = AuthorListAPI(token)
     const [publishers] = PublisherListAPI(token)
     const [categories] = CategoryListAPI(token)

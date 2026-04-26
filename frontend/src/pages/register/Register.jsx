@@ -1,212 +1,214 @@
-import React, { useEffect, useRef, useState } from 'react';
-import { Link } from 'react-router-dom';
+import React, { useContext, useEffect, useRef, useState } from 'react';
+import { Link, useNavigate } from 'react-router-dom';
 import "./register.scss"
+import { AuthContent } from '../../utils/AuthContext';
+import Loading from '../../components/Loading';
+
 const EMAIL_REGEX = /^\S+@\S+\.\S+$/
 const USER_REGEX = /^[A-Za-z][0-9A-Za-z]{5,15}$/
 const PWD_REGEX = /^[A-Za-z](?=.*?[0-9])(?=.*?[A-Za-z]).{8,24}$/
+
 const Register = () => {
+  const { register } = useContext(AuthContent)
 
   const userRef = useRef()
   const errRef = useRef()
 
   const [firstname, setFirstname] = useState("")
   const [focusFirstname, setFocusFirstname] = useState(false)
+
   const [lastname, setLastname] = useState("")
   const [focusLastname, setFocusLastname] = useState(false)
 
-
   const [email, setEmail] = useState("")
   const [validEmail, setValidEmail] = useState(false)
-  const [emailFocus, setEmailFocus] = useState(false)
+  const [focusEmail, setFocusEmail] = useState(false)
 
   const [username, setUsername] = useState("")
   const [validName, setValidName] = useState(false)
-  const [userFocus, setUserFocus] = useState(false)
+  const [focusUsername, setFocusUsername] = useState(false)
 
   const [pwd, setPwd] = useState("")
   const [validPwd, setValidPwd] = useState(false)
-  const [pwdFocus, setPwdFocus] = useState(false)
+  const [focusPwd, setFocusPwd] = useState(false)
 
   const [matchPwd, setMatchPwd] = useState("")
   const [validMatch, setValidMatch] = useState(false)
-  const [matchFocus, setMatchFocus] = useState(false)
+  const [focusMatch, setFocusMatch] = useState(false)
 
-  const [errMsg, setErrMsg] = useState("")
-  const [success, setSuccess] = useState(false)
+  const [errMsg, setErrMsg] = useState(null)
+  const [done, setDone] = useState(false)
+
+  const [message, setMessage] = useState(null)
+  const [isSuccess, setIsSuccess] = useState(false)
+  const [loading, setLoading] = useState(false)
+  const navigate = useNavigate()
 
   useEffect(() => {
     userRef.current.focus()
   }, [])
 
   useEffect(() => {
-    const result = EMAIL_REGEX.test(email)
-    setValidEmail(result)
+    setValidEmail(EMAIL_REGEX.test(email))
   }, [email])
 
   useEffect(() => {
-    const result = USER_REGEX.test(username)
-    console.log(result)
-    console.log(username)
-    setValidName(result)
+    setValidName(USER_REGEX.test(username))
   }, [username])
 
   useEffect(() => {
-    const result = PWD_REGEX.test(pwd)
-    console.log(result)
-    console.log(pwd)
-    setValidPwd(result)
-    const match = pwd === matchPwd
-    setValidMatch(match)
+    const isValidPwd = PWD_REGEX.test(pwd)
+    setValidPwd(isValidPwd)
+
+    if (!isValidPwd) {
+      setErrMsg("Mật khẩu phải ≥ 8 ký tự, gồm chữ và số")
+      setValidMatch(false)
+    }
+    else {
+      const isMatch = pwd === matchPwd;
+      setValidMatch(isMatch)
+      if (!isMatch)
+        setErrMsg("Mật khẩu không khớp")
+      else
+        setErrMsg(null)
+    }
   }, [pwd, matchPwd])
 
-  useEffect(() => {
-    setErrMsg('')
-  }, [username, pwd, matchPwd])
+  const checkAllInput = () => {
+    if (!firstname || !lastname || !validEmail || !validName || !validPwd || !validMatch)
+      return true
+    return false
+  }
+
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+    // inputRef.current.focus();
+    setLoading(true)
+
+    try {
+      const data = await register(firstname, lastname, email, username, pwd);
+      setMessage(data.message)
+      setIsSuccess(data.success)
+      setTimeout(() => {
+        navigate('/login')
+      }, 1500);
+    } catch (err) {
+      setMessage(errw)
+    } finally {
+      setLoading(false)
+    }
+  }
+
 
   return (
-
     <div className="d-flex vh-100 bg-light justify-content-center align-items-center">
+      {loading && <Loading loading={loading} />}
       <div className="card p-4" style={{ width: '100%', maxWidth: '500px' }}>
         <div className="card-body">
+
           <h1 className="text-center display-6 fw-bold py-3">
-            Welcome to <span className="text-primary">Online Library</span>
+            Chào mừng đến với <span className="text-primary">Thư viện Online</span>
           </h1>
 
           <div className="mb-4">
-            <h2 className="h5 fw-semibold">Sign Up</h2>
-            <form className="d-flex flex-column gap-3" onSubmit="">
-              <div className="d-flex gap-2 personal">
+            <h2 className="h5 fw-semibold">Đăng ký</h2>
+
+            <form className="d-flex flex-column gap-3" onSubmit={handleSubmit}>
+
+              <div className="d-flex gap-2">
                 <input
                   type="text"
-                  placeholder="Enter first name"
+                  placeholder="Nhập tên"
                   ref={userRef}
                   onChange={(e) => setFirstname(e.target.value)}
                   onBlur={() => setFocusFirstname(true)}
-                  className={`
-                  form-control flex-grow-2
-                  ${focusFirstname ? firstname.trim().length > 0 ? "is-valid" : "is-invalid" : ""}
-                  ` }
+                  className={`form-control 
+                    ${focusFirstname ? (firstname.trim().length > 0 ? "is-valid" : "is-invalid") : ""}`}
                 />
+
                 <input
                   type="text"
-                  placeholder="Enter last name"
+                  placeholder="Nhập họ"
                   onChange={(e) => setLastname(e.target.value)}
                   onBlur={() => setFocusLastname(true)}
-                  className={`
-                    form-control flex-grow-1
-                    ${focusLastname ? lastname.trim.length > 0 ? "is-valid" : "is-invalid" : ""}
-                      `}
+                  className={`form-control 
+                    ${focusLastname ? (lastname.trim().length > 0 ? "is-valid" : "is-invalid") : ""}`}
                 />
               </div>
 
               <input
                 type="email"
-                placeholder="Enter the email"
-                className="form-control"
+                placeholder="Nhập email"
                 onChange={e => setEmail(e.target.value)}
-                onFocus={() => setEmailFocus(true)}
-                onBlur={() => set}
+                onBlur={() => setFocusEmail(true)}
+                className={`form-control 
+                    ${focusEmail ? (validEmail ? "is-valid" : "is-invalid") : ""}`}
               />
+
+              <p className={(focusEmail && !validEmail && email) ? "instructions" : "offscreen"}>
+                Sai định dạng email
+              </p>
 
               <input
                 type="text"
-                placeholder="Enter the username"
-                className={`form-control ${!username
-                  ? ''
-                  : validName
-                    ? 'is-valid'
-                    : 'is-invalid'
-                  }`}
-                id="username"
+                placeholder="Tên đăng nhập"
                 autoComplete="off"
                 onChange={(e) => setUsername(e.target.value)}
                 value={username}
-                required
-                aria-invalid={validName ? "false" : "true"}
-                onFocus={() => setUserFocus(true)}
-                onBlur={() => setUserFocus(false)}
+                onBlur={() => setFocusUsername(true)}
+                className={`form-control 
+                    ${focusUsername ? (validName ? "is-valid" : "is-invalid") : ""}`}
               />
-              <p
-                id="usnnote"
-                className={
-                  (userFocus && !validName && username) ? "instructions" : "offscreen"
-                }
-              >
-                <i className="fa-solid fa-circle-info" ></i>
-                6 to 16 characters.
-                Must begin with a letter.
-                Letters, numbers, underscores, hyphens allowed.
+
+              <p className={(focusUsername && !validName && username) ? "instructions" : "offscreen"}>
+                6–16 ký tự, bắt đầu bằng chữ cái.
               </p>
+
               <input
                 type="password"
-                placeholder="Enter the password"
-                className={`form-control ${!pwd ? '' : validPwd ? 'is-valid' : 'is-invalid'
-                  }`}
-                id="password"
+                placeholder="Mật khẩu"
                 onChange={(e) => setPwd(e.target.value)}
                 value={pwd}
-                required
-                aria-invalid={validPwd ? 'false' : 'true'}
-                aria-describedby="pwdnode"
-                onFocus={() => setPwdFocus(true)}
-                onBlur={() => setPwdFocus(false)}
+                onBlur={() => setFocusPwd(true)}
+                className={`form-control 
+                    ${focusPwd ? (validPwd ? "is-valid" : "is-invalid") : ""}`}
               />
-              <p
-                id="pwdnode"
-                className={
-                  (pwdFocus && !validPwd && pwd) ? "instructions" : "offscreen"
-                }
-              >
-                <i className="fa-solid fa-circle-info" ></i>
-                6 to 16 characters.
-                Must begin with a letter.
-                Letters, numbers, underscores, hyphens allowed.
+
+              <p className={(focusPwd && !validPwd && pwd) ? "instructions" : "offscreen"}>
+                8–24 ký tự, gồm chữ và số.
               </p>
+
               <input
                 type="password"
-                placeholder="Enter the password again"
-                className={`form-control ${!matchPwd ? '' : validMatch ? 'is-valid' : 'is-invalid'
-                  }`}
-                id="confirmPassword"
+                placeholder="Nhập lại mật khẩu"
                 onChange={(e) => setMatchPwd(e.target.value)}
                 value={matchPwd}
-                required
-                aria-invalid={validMatch ? 'false' : 'true'}
-                aria-describedby="confirmnote"
-                onFocus={() => setMatchFocus(true)}
-                onBlur={() => setMatchFocus(false)}
+                onBlur={() => setFocusMatch(true)}
+                className={`form-control 
+                    ${focusMatch ? (validMatch ? "is-valid" : "is-invalid") : ""}`}
               />
 
-              <p
-                id="confirmnote"
-                className={
-                  (matchFocus && matchPwd && matchPwd !== pwd) ? "instructions" : "offscreen"
-                }
-              >
-                <i className="fa-solid fa-circle-info" ></i>
-                Mật khẩu không khớp
+              <p className={(focusMatch && !validMatch && matchPwd) ? "instructions" : "offscreen"}>
+                {errMsg && errMsg}
               </p>
 
-              {/* Checkbox */}
-              <div className="form-check">
-                <input className="form-check-input" type="checkbox" id="remember" />
-                <label className="form-check-label small" htmlFor="remember">
-                  Remember Me
-                </label>
-              </div>
+              {message && (
+                <p className={`${isSuccess ? "bg-success" : "bg-danger"} text-white small p-2 rounded`}>{message}</p>
+              )}
 
-              <button type="submit" className="btn btn-primary fw-bold">
-                Sign Up
+              <button type="submit" className="btn btn-primary fw-bold" disabled={checkAllInput()}>
+                Đăng ký
               </button>
             </form>
           </div>
 
           <div className="text-center mt-3">
-            <span>Return login page </span>
+            <span>Đã có tài khoản? </span>
             <Link className="text-primary fw-bold" to="/login">
-              Login now
+              Đăng nhập ngay
             </Link>
           </div>
+
         </div>
       </div>
     </div>

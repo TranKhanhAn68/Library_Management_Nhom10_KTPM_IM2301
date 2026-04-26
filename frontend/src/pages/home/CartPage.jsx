@@ -16,8 +16,18 @@ const CartPage = () => {
     const totalPrice = cart?.reduce((sum, item) => sum + item.price, 0);
     const handleIncreaseQTy = (id) => {
         setCart(prev => prev.map(item => {
-            if (item.id === id) {
+            if (item.book_id === id) {
                 const qty = item.borrowing_quantity + 1
+                return { ...item, borrowing_quantity: qty, price: qty * Number(item.setting.borrowing_fee) };
+            }
+            return item;
+        }));
+    };
+
+    const handleDecreaseQTy = (id) => {
+        setCart(prev => prev.map(item => {
+            if (item.book_id === id && item.borrowing_quantity > 1) {
+                const qty = item.borrowing_quantity - 1
                 return { ...item, borrowing_quantity: qty, price: qty * Number(item.setting.borrowing_fee) };
             }
             return item;
@@ -43,18 +53,10 @@ const CartPage = () => {
             setOpenModal(false)
             setOpenResultModal(true)
             setIsLoading(false)
+            setCart(null)
         }
     }
 
-    const handleDecreaseQTy = (id) => {
-        setCart(prev => prev.map(item => {
-            if (item.id === id && item.borrowing_quantity > 1) {
-                const qty = item.borrowing_quantity - 1
-                return { ...item, borrowing_quantity: qty, price: qty * Number(item.setting.borrowing_fee) };
-            }
-            return item;
-        }));
-    };
 
     return (
         <div className='container'>
@@ -87,8 +89,8 @@ const CartPage = () => {
                             </div>
 
                             {cart.map(book => (
-                                <div key={book.id} className='d-flex justify-content-between align-items-center my-2'>
-                                    <div className="text-truncate" style={{ maxWidth: '180px' }}>{book.name}</div>
+                                <div key={book?.id} className='d-flex justify-content-between align-items-center my-2'>
+                                    <div className="text-truncate" style={{ maxWidth: '180px' }}>{book?.name}</div>
                                     <div className='fw-semibold '>{(book?.price || 0).toLocaleString()}đ</div>
                                 </div>
                             ))}
@@ -139,7 +141,7 @@ const CartPage = () => {
                     ></i>
 
                     <div>
-                        {data?.success ? data?.message : data?.error}
+                        {data?.message}
                     </div>
                 </div>
             </BaseModal>}

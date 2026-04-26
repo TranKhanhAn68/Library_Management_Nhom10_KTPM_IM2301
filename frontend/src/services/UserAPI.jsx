@@ -107,3 +107,66 @@ export const DeleteUser = async (id, token) => {
 }
 
 
+export const BorrowingListByUser = (token, status, page) => {
+    const [data, setData] = useState([])
+    const fetchData = async () => {
+        try {
+            const params = new URLSearchParams()
+            params.append("page", page)
+            if (status)
+                params.append("status", status)
+            const res = await fetch(`${USER_URL}/current_user/borrowing_list/?${params.toString()}`, {
+                method: 'GET',
+                headers: {
+                    'Content-Type': 'application/json',
+                    ...(token && { Authorization: `Token ${token}` })
+                },
+            })
+            if (!res.ok) {
+                throw new Error('Fetch failed');
+            }
+            const data = await res.json()
+            setData(data)
+
+        } catch (err) {
+            console.error(err)
+        }
+    }
+
+    useEffect(() => {
+        fetchData()
+    }, [page, token, status])
+
+    return data
+}
+
+
+export const OrderListByUser = (token, page) => {
+    const [data, setData] = useState([])
+    const fetchData = async () => {
+        try {
+            const res = await fetch(`${USER_URL}/current_user/orders/?page=${page}`, {
+                method: 'GET',
+                headers: {
+                    'Content-Type': 'application/json',
+                    ...(token && { Authorization: `Token ${token}` })
+                },
+            })
+            if (!res.ok)
+                throw new Error('Fetch failed');
+            const data = await res.json()
+            setData(data)
+
+        } catch (err) {
+            console.error(err)
+        }
+    }
+
+    useEffect(() => {
+        fetchData()
+    }, [page, token])
+
+    return data
+}
+
+

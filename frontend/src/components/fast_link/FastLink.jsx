@@ -7,51 +7,40 @@ const FastLink = () => {
             <div className='title-fast-link mb-3'>Liên Kết Nhanh</div>
             <ul className='list-group'>
                 <li>
-                    <Link className='d-flex gap-2 align-items-center fast-link' to='/'>
+                    <Link className=' fast-link' to='/'>
                         <i className="fa-solid fa-house"></i>
                         <span>Trang chủ</span>
                     </Link>
                 </li>
 
-                <li>
-                    <Link className='d-flex gap-2 align-items-center fast-link' to='/notification'>
-                        <i className="fa-solid fa-bell"></i>
-                        <span>Thông báo</span>
 
-                    </Link>
-                </li>
-                {/* <li>
-                    <Link className='d-flex gap-2 align-items-center fast-link' to='/notification'>
-                        <i className="fa-solid fa-bell"></i>
-                        <span>Thông báo</span>
-                    </Link>
-                </li>
                 <li>
-                    <Link className='d-flex gap-2 align-items-center fast-link' to='/borrow-history'>
+                    <Link className=' fast-link' to='current_user/borrowing-history'>
                         <i className="fa-solid fa-clock-rotate-left"></i>
                         <span>Lịch sử mượn</span>
                     </Link>
                 </li>
+
                 <li>
-                    <Link className='d-flex gap-2 align-items-center fast-link' to='/borrow-penalties'>
-                        <i className="fa-solid fa-money-bill"></i>
-                        <span>Xử phạt</span>
+                    <Link className=' fast-link' to='current_user/orders'>
+                        <i class="fa-solid fa-clock"></i>
+                        <span>Danh sách đặt trước</span>
                     </Link>
                 </li>
 
                 <li>
-                    <Link className='d-flex gap-2 align-items-center fast-link' to='/library-policies'>
+                    <Link className=' fast-link' to='library_rules'>
                         <i className="fa-solid fa-scale-balanced"></i>
                         <span>Quy tắc mượn sách tại thư viện</span>
                     </Link>
                 </li>
 
                 <li>
-                    <Link className='d-flex gap-2 align-items-center fast-link' to='/library-favorite-book'>
-                        <i className="fa-solid fa-heart"></i>
-                        <span>Sách yêu thích</span>
+                    <Link className='fast-link' to='authors'>
+                        <i className="fa-solid fa-user-pen"></i>
+                        <span>Danh sách tác giả</span>
                     </Link>
-                </li> */}
+                </li>
             </ul>
 
         </div>

@@ -4,7 +4,7 @@ import Loading from '../Loading';
 const Cart = ({ cart, setCart, handleIncreaseQTy, handleDecreaseQTy }) => {
     const [openModal, setOpenModal] = useState(false)
     const [selectedItem, setSelectedItem] = useState(null)
-    const [isLoading, setIsLoading] = useState(false)
+    const [loading, setLoading] = useState(false)
 
     const handleSelectedItem = (book) => {
         setOpenModal(true)
@@ -14,7 +14,7 @@ const Cart = ({ cart, setCart, handleIncreaseQTy, handleDecreaseQTy }) => {
     const handleRemoveItem = async () => {
         if (!selectedItem) return;
 
-        setIsLoading(true);
+        setLoading(true);
 
         try {
             await new Promise(resolve => setTimeout(resolve, 1000));
@@ -27,7 +27,7 @@ const Cart = ({ cart, setCart, handleIncreaseQTy, handleDecreaseQTy }) => {
             console.error("Lỗi khi xóa:", error);
             alert("Không thể xóa sản phẩm, vui lòng thử lại!");
         } finally {
-            setIsLoading(false);
+            setLoading(false);
         }
     };
 
@@ -84,7 +84,7 @@ const Cart = ({ cart, setCart, handleIncreaseQTy, handleDecreaseQTy }) => {
                                         <button
                                             className="btn btn-outline-secondary btn-warning"
                                             type="button"
-                                            onClick={() => handleDecreaseQTy(book.id)}
+                                            onClick={() => handleDecreaseQTy(book.book_id)}
                                             disabled={book.borrowing_quantity <= 1}
                                         >
                                             -
@@ -93,7 +93,7 @@ const Cart = ({ cart, setCart, handleIncreaseQTy, handleDecreaseQTy }) => {
                                         <button
                                             className="btn btn-outline-secondary btn-warning"
                                             type="button"
-                                            onClick={() => handleIncreaseQTy(book.id)}
+                                            onClick={() => handleIncreaseQTy(book.book_id)}
                                         >
                                             +
                                         </button>
@@ -115,19 +115,19 @@ const Cart = ({ cart, setCart, handleIncreaseQTy, handleDecreaseQTy }) => {
                 </tbody>
             </table>
 
-            {selectedItem && <BaseModal open={openModal} close={() => !isLoading && setOpenModal(false)}>
+            {selectedItem && <BaseModal open={openModal} close={() => !loading && setOpenModal(false)}>
                 <div className="p-3">
                     <h5>Xác nhận xóa?</h5>
                     <p>Bạn có chắc chắn muốn xóa sản phẩm này khỏi giỏ hàng?</p>
                     <div className="d-flex justify-content-end gap-2 mt-3">
-                        <button className="btn btn-secondary" disabled={isLoading} onClick={() => setOpenModal(false)}>Hủy</button>
+                        <button className="btn btn-secondary" disabled={loading} onClick={() => setOpenModal(false)}>Hủy</button>
                         <button
                             className="btn btn-danger"
-                            disabled={isLoading}
+                            disabled={loading}
                             onClick={handleRemoveItem}
                         >
-                            {isLoading ?
-                                (<Loading loading={isLoading} />)
+                            {loading ?
+                                (<Loading loading={loading} />)
                                 : (
                                     'Xóa'
                                 )}

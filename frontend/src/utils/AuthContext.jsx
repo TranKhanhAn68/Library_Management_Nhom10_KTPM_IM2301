@@ -1,5 +1,5 @@
 import React, { createContext, useEffect, useState } from 'react';
-import { LoginUserAPI } from '../services/AccountAPI';
+import { LoginUserAPI, RegisterUserAPI } from '../services/AccountAPI';
 
 export const AuthContent = createContext()
 
@@ -22,8 +22,6 @@ export const AuthProvider = ({ children }) => {
     }, [])
 
     useEffect(() => {
-
-
         window.addEventListener("storage", (e) => {
             if (e.key === "authUser" && e.newValue === null) {
                 logout();
@@ -38,6 +36,11 @@ export const AuthProvider = ({ children }) => {
         return data;
     }
 
+    const register = async (firstname, lastname, email, username, password) => {
+        const data = await RegisterUserAPI(firstname, lastname, email, username, password)
+        return data
+    }
+
     const logout = () => {
         setUser(null)
         setStatus(false)
@@ -47,7 +50,7 @@ export const AuthProvider = ({ children }) => {
     return (
         <AuthContent.Provider
             value={{
-                user, setUser, status, setStatus, token, setToken, login, logout, loading
+                user, setUser, status, setStatus, token, setToken, login, register, logout, loading
             }}
         >
             {children}

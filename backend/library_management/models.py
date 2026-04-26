@@ -14,7 +14,8 @@ class User(AbstractUser):
         null=True,
         blank=True, 
     )
-    
+    gender = models.CharField(max_length=15, null=True)
+    dob = models.DateField(null=True)
     
 class Employee(models.Model):
     user = models.OneToOneField(User, on_delete=models.CASCADE, primary_key=True)
@@ -109,7 +110,6 @@ class User_Book(models.Model):
     def set_due_date(self, borrowing_days):
         valid_statuses = [
             User_Book.BorrowStatus.CONFIRMED,
-            User_Book.BorrowStatus.BORROWING,
         ]
 
         if self.status not in valid_statuses:
@@ -125,26 +125,17 @@ class User_Book(models.Model):
             return False
         return date.today() > self.due_date
     
-    def check_stock(self):
-        if not self.book:
-            raise ValueError("Thông tin sách không hợp lệ hoặc sách không tồn tại trong hệ thống!")
-        if self.book.available_quantity() == 0:
-            raise ValueError(f"Sách {self.book.name} hiện không còn!")
-        if self.borrowing_quantity <= 0:
-            raise ValueError(f"Số lượng mượn phải lớn hơn 0")
-        if self.borrowing_quantity > self.book.available_quantity():
-            raise ValueError(f"Sách {self.book.name} chỉ còn {self.book.available_quantity()} bản!")
-        return True    
+    
     
 class User_Book_Detail_Fine(models.Model):
     user_book = models.OneToOneField(User_Book, on_delete=models.CASCADE, primary_key=True)
-    late_dates = models.IntegerField(null=True)
+    late_dates = models.IntegerField(default=0)
     setting = models.ForeignKey("Setting", on_delete=models.PROTECT)
     
     def total_fine(self):
         if not self.late_dates:
             return 0
-        return self.late_dates * self.setting.borrowing_overdue_fine
+        return self.late_dates * self.setting.borrowing_overdue_fine * self.user_book.borrowing_quantity
          
         
 class Setting(models.Model):
@@ -157,7 +148,7 @@ class Reservation(models.Model):
     class ReservationStatus(models.TextChoices):
         WAITING = "WAITING", "Waiting"
         CONFIRMED = "CONFIRMED", "Confirmed"
-        READY = "READY", "Ready"
+        ALREADY = "ALREADY", "Already"
         CANCELLED = "CANCELLED", "Cancelled"
         EXPIRED = "EXPIRED", "Expired"
     user = models.ForeignKey(User, on_delete=models.CASCADE)
@@ -166,7 +157,8 @@ class Reservation(models.Model):
     status = models.CharField( max_length=20,
         choices=ReservationStatus.choices,
         default=ReservationStatus.WAITING)
-    created_at = models.DateTimeField(auto_now=True)
+    created_at = models.DateTimeField(auto_now_add=True)
+    updated_at = models.DateTimeField(auto_now=True)
     
 # class Interaction(BaseView):
 #     user = models.ForeignKey(User, on_delete=models.CASCADE)

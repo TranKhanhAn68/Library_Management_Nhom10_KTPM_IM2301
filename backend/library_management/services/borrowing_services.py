@@ -1,7 +1,7 @@
-from django.db import transaction
 from django.db.models import Sum
 from library_management.models import Book, User_Book
-from library_management.serializers import CartItemSerializer
+from library_management.services import constraint
+from django.utils import timezone
 
 
 def check_stock(item):
@@ -36,10 +36,10 @@ def check_pending_request(user):
     ).exists():
         raise ValueError("Không thể gửi thêm! Yêu cầu đang được xử lý.")
     
-def check_max_books(user, cart, max_books=5):
+def check_max_books(user, cart):
     total_books = sum(item['borrowing_quantity'] for item in cart)
 
-    current = User_Book.objects.filter(
+    current_books = User_Book.objects.filter(
         user=user,
         returning_book_date__isnull=True,
         status__in=[
@@ -49,18 +49,36 @@ def check_max_books(user, cart, max_books=5):
         ]
     ).aggregate(total=Sum('borrowing_quantity'))['total'] or 0
 
-    if current + total_books > max_books:
-        raise ValueError(f"Không thể mượn quá {max_books} sách")
+    if current_books + total_books > constraint.MAX_BORROW_BOOKS:
+        raise ValueError(f"Không thể mượn quá {constraint.MAX_BORROW_BOOKS} sách")
     
-def process_borrow(user, cart, request):
-    with transaction.atomic():
-        for item in cart:
+    return True
+    
 
-            check_stock(item)  
+def validate_status_transition(current_status, new_status):
+    allowed = constraint.ALLOWED_TRANSITIONS.get(current_status, [])
 
-            serializer = CartItemSerializer(
-                data=item,
-                context={'request': request}
-            )
-            serializer.is_valid(raise_exception=True)
-            serializer.save()
+    if new_status not in allowed:
+        raise ValueError(
+            f"Không thể chuyển từ {current_status} sang {new_status}"
+        )
+        
+def update_borrow_status(borrow_obj, new_status):
+    try:
+        new_status = User_Book.BorrowStatus(new_status)
+    except ValueError:
+        raise ValueError("Trạng thái không hợp lệ!")
+    
+    validate_status_transition(borrow_obj.status, new_status)   
+    borrow_obj.status = new_status
+
+    if borrow_obj.status == User_Book.BorrowStatus.CONFIRMED:
+        borrow_obj.borrowing_book_date = timezone.localtime(timezone.now())
+        borrow_obj.set_due_date(borrow_obj.user_book_detail_fine.setting.borrowing_days)
+
+    elif borrow_obj.status == User_Book.BorrowStatus.RETURNED:
+        borrow_obj.returning_book_date = timezone.localtime(timezone.now())
+
+    return borrow_obj 
+
+

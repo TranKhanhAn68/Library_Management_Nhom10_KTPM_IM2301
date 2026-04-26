@@ -1,7 +1,7 @@
 import pytest
 
 from library_management.models import *
-from library_management.services import borrowing_serivces
+from backend.library_management.services import borrowing_services
 @pytest.mark.django_db
 def test_check_stock_return_true():
     category = Category.objects.create(name="IT")
@@ -14,7 +14,7 @@ def test_check_stock_return_true():
         category=category,
     )
 
-    result = borrowing_serivces.check_stock({
+    result = borrowing_services.check_stock({
         "book_id": book.id,
         "name": book.name,
         "date": "2026-01-01",
@@ -36,7 +36,7 @@ def test_check_stock_exact_quantity():
         category=category,
     )
 
-    result = borrowing_serivces.check_stock({
+    result = borrowing_services.check_stock({
         "book_id": book.id,
         "name": book.name,
         "date": "2026-01-01",
@@ -57,7 +57,7 @@ def test_check_stock_failed():
         category=category,
     )
     with pytest.raises(ValueError) as info:
-        borrowing_serivces.check_stock({
+        borrowing_services.check_stock({
             "book_id": book.id,
             "name": book.name,
             "date": "2026-01-01",
@@ -77,7 +77,7 @@ def test_check_stock_zero_quantity():
         category=category,
     )
     with pytest.raises(ValueError) as info:
-        borrowing_serivces.check_stock({
+        borrowing_services.check_stock({
             "book_id": book.id,
             "name": book.name,
             "date": "2026-01-01",
@@ -97,7 +97,7 @@ def test_book_not_found():
         category=category,
     )
     with pytest.raises(ValueError) as info:
-        borrowing_serivces.check_stock({
+        borrowing_services.check_stock({
             "book_id": 9999,
             "borrowing_quantity": 1
         })
@@ -125,7 +125,7 @@ def test_check_stock_when_no_enough_stock():
     )
 
     with pytest.raises(ValueError) as info:
-        borrowing_serivces.check_stock({
+        borrowing_services.check_stock({
             "book_id": book.id,
             "borrowing_quantity": 1
         })
@@ -137,25 +137,25 @@ def test_check_stock_when_no_enough_stock():
 @pytest.mark.django_db
 def test_validate_cart_empty():
     with pytest.raises(ValueError) as info:
-        borrowing_serivces.validate_cart([])
+        borrowing_services.validate_cart([])
     assert str(info.value) == "Không có sách trong giỏ hàng"
 
 @pytest.mark.django_db
 def test_validate_cart_is_null():
     
     with pytest.raises(TypeError) as info:
-        borrowing_serivces.validate_cart(None)
+        borrowing_services.validate_cart(None)
     assert str(info.value) == "Cart phải là list"
 
 @pytest.mark.django_db
 def test_validate_cart_invalid_type():
     with pytest.raises(TypeError) as info:
-        borrowing_serivces.validate_cart("[]")
+        borrowing_services.validate_cart("[]")
     assert str(info.value) == "Cart phải là list"
 
 @pytest.mark.django_db
 def test_validate_cart_valid():
-    borrowing_serivces.validate_cart(["book1"])
+    borrowing_services.validate_cart(["book1"])
 
 @pytest.mark.django_db
 def test_pending_request():
@@ -184,5 +184,8 @@ def test_pending_request():
         borrowing_quantity=2
     )
     with pytest.raises(ValueError) as info:
-        borrowing_serivces.check_pending_request(user)
+        borrowing_services.check_pending_request(user)
     assert str(info.value) == "Không thể gửi thêm! Yêu cầu đang được xử lý."
+    
+
+    

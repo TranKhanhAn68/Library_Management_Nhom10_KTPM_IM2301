@@ -5,9 +5,10 @@ import { Link } from 'react-router-dom';
 import { AuthContent } from '../../utils/AuthContext';
 import Tooltip from 'bootstrap/js/dist/tooltip';
 import Menu from './Menu';
-const Header = ({ handleSearch, searchParams, cart, authors }) => {
+const Header = ({ handleSearch, searchParams, cart, authors, categories }) => {
     const { logout, user, status } = useContext(AuthContent)
-    const [openMenuHover, setOpenMenuHover] = useState(false)
+    const [openMenuAuthorHover, setOpenMenuAuthorHover] = useState(false)
+    const [openMenuCatgoryHover, setOpenMenuCategoryHover] = useState(false)
     const [inputSearch, setInputSearch] = useState('')
     useEffect(() => {
         const tooltipTriggerList = document.querySelectorAll('[data-bs-toggle="tooltip"]');
@@ -24,12 +25,11 @@ const Header = ({ handleSearch, searchParams, cart, authors }) => {
     }
     return (
         <>
-            <nav className="navbar navbar-expand-md navbar-dark bg-light py-3 ">
+            <nav className="navbar navbar-expand-md bg-light  py-3 position-fixed w-100" style={{ zIndex: 999 }}>
 
-                <a className="navbar-brand d-flex" href="/">
+                <Link className="navbar-brand d-flex" href="/">
                     <img src={logo} className="rounded" alt="logo" />
-                </a>
-
+                </Link>
                 <button
                     className="navbar-toggler border-0 shadow-none"
                     type="button"
@@ -65,7 +65,15 @@ const Header = ({ handleSearch, searchParams, cart, authors }) => {
                                     <i class="fa-solid fa-magnifying-glass m-2"></i>
                                     Khám phá
                                 </button>
-                                <Menu openMenuHover={openMenuHover} setOpenMenuHover={setOpenMenuHover} authors={authors} />
+                                <Menu
+                                    openMenuAuthorHover={openMenuAuthorHover}
+                                    setOpenMenuAuthorHover={setOpenMenuAuthorHover}
+                                    openMenuCatgoryHover={openMenuCatgoryHover}
+                                    setOpenMenuCategoryHover={setOpenMenuCategoryHover}
+                                    authors={authors}
+                                    categories={categories}
+                                />
+
 
                             </div>
                             {status ? (
@@ -86,7 +94,7 @@ const Header = ({ handleSearch, searchParams, cart, authors }) => {
 
                                         <ul className="dropdown-menu dropdown fs-6 shadow"
                                             aria-labelledby="avatarDropdown"
-                                            style={{ minWidth: "250px" }}
+                                            style={{ minWidth: "300px" }}
                                         >
 
                                             <li className="px-3 py-2">
@@ -102,25 +110,25 @@ const Header = ({ handleSearch, searchParams, cart, authors }) => {
                                                 <hr className="dropdown-divider" />
                                             </li>
 
-                                            <li>
-                                                <a className="dropdown-item" href="/order">
+                                            <li className="dropdown-item py-2">
+                                                <Link to="current_user/borrowing-history">
                                                     <i className="fas fa-book me-1"></i>
                                                     Sách đã đặt
-                                                </a>
+                                                </Link>
                                             </li>
 
-                                            <li>
-                                                <a className="dropdown-item">
+                                            <li className="dropdown-item py-2">
+                                                <Link to="current_user/information">
                                                     <i className="fas fa-user me-1"></i>
                                                     Thông tin cá nhân
-                                                </a>
+                                                </Link>
                                             </li>
 
-                                            <li>
-                                                <a className="dropdown-item" >
+                                            <li className="dropdown-item py-2">
+                                                <Link  >
                                                     <i className="fas fa-unlock me-1"></i>
                                                     Đổi mật khẩu
-                                                </a>
+                                                </Link>
                                             </li>
 
 

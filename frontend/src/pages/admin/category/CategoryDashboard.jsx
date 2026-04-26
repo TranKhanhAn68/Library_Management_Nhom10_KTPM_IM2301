@@ -4,6 +4,7 @@ import { CategoryListAPI, DeleteCategory } from '../../../services/CategoryAPI';
 import { AuthContent } from '../../../utils/AuthContext';
 import Loading from '../../../components/Loading';
 import BaseModal from '../../../components/BaseModal';
+import Input from '../../../components/Input';
 
 const CategoryDashboard = () => {
     const { token } = useContext(AuthContent)
@@ -69,6 +70,24 @@ const CategoryDashboard = () => {
                     Add Category
                 </Link>
             </div>
+
+            <div className='tw-flex tw-justify-end tw-my-4 tw-gap-2'>
+
+                <Input
+                    placeholder="Tìm category..."
+                    className="tw-w-64 tw-bg-white tw-border-orange-300 tw-text-gray-700 placeholder:tw-text-gray-400 tw-outline-none
+                    focus:tw-border-yellow-500 focus:tw-ring-2 focus:tw-ring-yellow-300 tw-transition-all"
+                />
+
+                <button
+                    className="tw-bg-orange-300 hover:tw-bg-yellow-600 tw-text-white tw-px-4 tw-rounded-lg
+                            tw-flex tw-items-center tw-gap-2 tw-shadow-sm hover:tw-shadow-md tw-transition-all"
+                >
+                    <i className="fa fa-search"></i>
+                    Tìm
+                </button>
+
+            </div>
             <div className='tw-bg-orange-100 tw-p-6 tw-rounded-2xl tw-shadow-sm'>
                 <h2 className='tw-text-xl tw-font-semibold tw-mb-4 tw-text-blue-700'>
                     List Category
@@ -120,12 +139,12 @@ const CategoryDashboard = () => {
                                             </td>
 
                                             <td className='tw-p-3'>
-                                                {new Date(cate.created_at).toLocaleDateString()}
+                                                {new Date(cate.created_at).toLocaleString('vi-vn')}
                                             </td>
 
                                             <td className='tw-p-3'>
                                                 {cate.updated_at
-                                                    ? new Date(cate.updated_at).toLocaleDateString()
+                                                    ? new Date(cate.updated_at).toLocaleString('vi-vn')
                                                     : "-"}
                                             </td>
 

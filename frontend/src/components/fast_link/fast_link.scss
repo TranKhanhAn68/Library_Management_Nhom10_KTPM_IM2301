@@ -1,47 +1,66 @@
-* {
-    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-}
-
 div.left {
     background-color: #007a65;
     height: 400px;
-    width: 20%;
-    padding: 20px 30px 20px 30px;
-    font-size: 1.2rem;
+    padding: 20px 30px;
+    font-size: 1.1rem;
     font-weight: 500;
     color: white;
-    
+    border-radius: 12px;
+    min-width: "300px";
+    height: "fit-content";
+
     .title-fast-link {
-        font-size: 1.8rem;
+        font-size: 1.6rem;
+        font-weight: 600;
+        margin-bottom: 15px;
     }
 
-    ul.list-group  {
+    ul.list-group {
         list-style: none;
-        padding-left: 10px;
+        padding-left: 0;
+        margin: 0;
     }
 
     ul.list-group li {
-        margin-bottom: 15px;;
+        margin-bottom: 12px;
     }
 
     ul.list-group li .fast-link {
         position: relative;
+        display: flex;
+        align-items: center;
+        gap: 10px;
+        padding: 10px 12px;
+        border-radius: 8px;
         text-decoration: none;
+        color: white;
+        overflow: hidden;
         z-index: 1;
+        transition: all 0.3s ease;
     }
 
     ul.list-group li .fast-link::before {
         content: "";
         position: absolute;
         left: 0;
-        bottom: 0;
+        top: 0;
         width: 0%;
         height: 100%;
-        background-color: rgba(0,128,0,0.3);
-        transition: width 0.5s ease;
+        background-color: rgba(255, 255, 255, 0.15);
+        transition: width 0.35s ease;
+        z-index: -1;
     }
 
     ul.list-group li .fast-link:hover::before {
         width: 100%;
+    }
+
+    ul.list-group li .fast-link:hover {
+        transform: translateX(4px);
+    }
+
+    ul.list-group li .fast-link i {
+        width: 18px;
+        text-align: center;
     }
 }

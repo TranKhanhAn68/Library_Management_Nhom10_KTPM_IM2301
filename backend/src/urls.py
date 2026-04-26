@@ -32,6 +32,7 @@ router.register('authors', views.AuthorViewSet)
 router.register('publishers', views.PublisherViewSet)
 router.register('borrowing',views.BorrowViewSet, basename='borrowing-books')
 router.register('reservations', views.ReservationViewSet, basename='reservations')
+router.register('account', views.AuthViewSet, basename='auth')
 router.register('settings', views.SettingViewSet, basename='settings')
 schema_view = get_schema_view(
     openapi.Info(
@@ -60,9 +61,6 @@ SWAGGER_SETTINGS = {
 urlpatterns = [
     path('admin/', admin_site.urls),
     path('', include(router.urls)),
-    path('account/register/', views.RegisterViewSet.as_view(), name='register_user'),
-    path('account/login/', views.LoginAPIView.as_view(), name='login_user'),
-    path('account/logout/', views.LogoutAPIView.as_view(), name='logout_user'),
     path('api/token/', obtain_auth_token),
     re_path(r'^swagger(?P<format>\.json|\.yaml)$',
             schema_view.without_ui(cache_timeout=0),

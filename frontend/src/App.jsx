@@ -34,6 +34,10 @@ import UserDashboard from './pages/admin/user/UserDashBoard'
 import EditUser from './pages/admin/user/EditUser'
 import AddUser from './pages/admin/user/AddUser'
 import AddSetting from './pages/admin/setting/AddSetting'
+import InformationUserPage from './pages/home/InformationUserPage'
+import BorrowingHistory from './components/books/BorrowingHistory'
+import LibraryRules from './components/LibraryRules'
+import OrderListBook from './components/books/OrderListBook'
 function App() {
   const { user } = useContext(AuthContent)
   const router = createBrowserRouter([
@@ -59,13 +63,19 @@ function App() {
           element: <MainPage />,
           children: [
             { index: true, element: <Books /> },
-            { path: "notification", element: <Notification /> },
+            { path: "current_user/borrowing-history", element: <BorrowingHistory /> },
+            { path: "current_user/orders", element: <OrderListBook /> },
+            { path: "library_rules", element: <LibraryRules /> }
           ]
         },
         { path: "shopping-cart", element: <CartPage /> },
         { path: "detail-book/:id/", element: <DetailBook /> },
         { path: "authors", element: <AuthorsPage /> },
-        { path: "authors/:id/:name", element: <DetailAuthorPage /> }
+        { path: "authors/:id/:name", element: <DetailAuthorPage /> },
+        {
+          path: "current_user/information",
+          element: <InformationUserPage />,
+        }
       ]
     },
 
@@ -189,6 +199,8 @@ function App() {
             </ProtectedRoute>
           )
         },
+
+
         {
           path: 'employee/orders',
           element: (

@@ -6,10 +6,12 @@ import { AuthContent } from '../../../utils/AuthContext';
 import Pagination from '../../../components/Pagination';
 import Loading from '../../../components/Loading';
 import { getError } from '../../../utils/GetError';
+import Input from '../../../components/Input';
 const Book = () => {
     const { token } = useContext(AuthContent)
     const [reload, setReload] = useState(false) //Biến cờ cập nhật dữ liệu book lại khi xóa
     const [currentPage, setCurrentPage] = useState(1)
+    const [searchBookName, setSearchBookName] = useState("")
     const dataBooks = BookListAPI(currentPage, "", "", "", token, reload)
     const books = dataBooks?.results || []
     const [selectedBook, setSelectedBook] = useState(null)
@@ -31,6 +33,11 @@ const Book = () => {
         setSelectedBook(book)
         setOpenModal(true)
 
+    }
+
+    const handleSearch = () => {
+        setCurrentPage(1)
+        setReload(prev => !prev)
     }
 
     const goPage = (page) => {
@@ -76,14 +83,45 @@ const Book = () => {
             <div className='tw-flex tw-justify-between tw-items-center tw-mb-6'>
                 <h1 className='tw-text-3xl tw-font-bold tw-text-red-600'>
                     <i className='fa-solid fa-p tw-text-blue-600'></i>
-                    Manager Book
+                    Quản lý sách
                 </h1>
                 <Link to="add-book"
                     className='tw-bg-blue-600 tw-text-white tw-px-4 tw-py-2 tw-rounded'>
                     Add Book
                 </Link>
             </div>
+            <div className='tw-flex tw-justify-end tw-my-4 tw-gap-2'>
 
+                <Input
+                    placeholder="Tìm sách..."
+                    value={searchBookName}
+                    onChange={(e) => setSearchBookName(e.target.value)}
+                    className="tw-w-64 tw-border-blue-300 tw-bg-whitetw-text-gray-700
+                                placeholder:tw-text-gray-400 focus:tw-border-indigo-500 tw-outline-none
+                                focus:tw-ring-2 focus:tw-ring-indigo-300tw-transition-all"
+                />
+
+                <button
+                    onClick={handleSearch}
+                    className="
+            tw-bg-indigo-500 
+            hover:tw-bg-indigo-600 
+            tw-text-white 
+            tw-px-4 
+            tw-rounded-lg 
+            tw-flex 
+            tw-items-center 
+            tw-gap-2
+            tw-shadow-sm
+            hover:tw-shadow-md
+            tw-transition-all
+        "
+                >
+                    <i className="fa fa-search"></i>
+                    Tìm
+                </button>
+
+            </div>
             <table className='tw-w-full tw-bg-pink-300 tw-border-collapse tw-shadow tw-rounded-2xl tw-shadow-sm overflow-hidden'>
                 <thead>
                     <tr className='tw-bg-blue-200 tw-text-center tw-text-red-500'>
@@ -269,7 +307,8 @@ const Book = () => {
                             <i class="fa-solid fa-circle-xmark tw-text-red-500 tw-text-lg"></i>
                         }
                         <div>
-                            {typeof (message) === "string" && message.trim().length > 0 && message}
+                            {/* {typeof (message) === "string" && message.trim().length > 0 && message} */}
+                            {message}
                         </div>
                     </div>
                 </BaseModal>

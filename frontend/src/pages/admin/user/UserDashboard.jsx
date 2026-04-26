@@ -5,6 +5,7 @@ import { BookListAPI } from '../../../services/BookAPI';
 import { AuthContent } from '../../../utils/AuthContext';
 import Pagination from '../../../components/Pagination';
 import { UserListAPI } from '../../../services/UserAPI';
+import Input from '../../../components/Input';
 const UserDashboard = () => {
     const { token } = useContext(AuthContent)
     const [currentPage, setCurrentPage] = useState(1)
@@ -18,6 +19,11 @@ const UserDashboard = () => {
     const handleSelected = (user) => {
         setSelectedUser(user)
         setOpenModal(true)
+    }
+
+    const handleSearch = () => {
+        setCurrentPage(1)
+        setReload(prev => !prev)
     }
 
     const goPage = (page) => {
@@ -37,6 +43,28 @@ const UserDashboard = () => {
                     Thêm User
                 </Link>
             </div>
+
+            <div className='tw-flex tw-justify-end tw-my-2 gap-2'>
+                <Input
+                    placeholder="Tìm user..."
+                    className="
+                            tw-border-green-300 
+                            focus:tw-border-cyan-400 
+                            focus:tw-ring-2 
+                            focus:tw-ring-cyan-300
+                            tw-transition-all tw-outline-none
+                        "
+                />
+                <button
+                    onClick={handleSearch}
+                    className="tw-bg-cyan-500 hover:tw-bg-cyan-600 tw-text-white tw-px-4 tw-rounded-lg 
+                            tw-flex tw-items-center tw-gap-2"
+                >
+                    <i className="fa fa-search"></i>
+                    Tìm
+                </button>
+            </div>
+
 
             <table className='tw-w-full tw-bg-green-200 tw-border-collapse tw-shadow tw-rounded-2xl tw-shadow-sm overflow-hidden'>
                 <thead>

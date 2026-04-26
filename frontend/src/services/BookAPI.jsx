@@ -48,6 +48,7 @@ export const BookListAPI = (page, q = "", category_id = "", author_id = "", toke
 
 export const BookIDAPI = (id, token) => {
     const [book, setBook] = useState(null)
+    const [err, setErr] = useState("")
     const fetchData = async () => {
         try {
             const res = await fetch(`${BOOK_URL}/${id}/`, {
@@ -59,18 +60,18 @@ export const BookIDAPI = (id, token) => {
                 }
             })
 
-            if (!res.ok) throw new Error("Backend response was not OK!")
+            if (!res.ok) throw new Error("Lỗi hệ thống, vui lòng thử lại")
             const result = await res.json()
             setBook(result)
         } catch (err) {
-            console.error("fetch err: ", err);
+            setErr(err.message)
         }
     }
     useEffect(() => {
         fetchData();
-    }, [id]);
+    }, [id, token]);
 
-    return book;
+    return { book, err };
 }
 
 export const UpdateBook = async (token, id, formData) => {

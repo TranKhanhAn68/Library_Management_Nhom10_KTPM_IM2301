@@ -2,6 +2,7 @@ from rest_framework import serializers
 from .models import *
 import re
 from django.contrib.auth import authenticate
+from rest_framework.exceptions import AuthenticationFailed
 from django.db import transaction
 # class UserSerializer(serializers.ModelSerializer):
 #     class Meta: 
@@ -30,8 +31,8 @@ class CategorySerializer(serializers.ModelSerializer):
         data = super().to_representation(instance)
         request = self.context.get('request')
         
-        if request and not request.user.is_staff:
-            fields_to_hide = ['created_at', 'updated_at']
+        if request and not request.user.is_superuser:
+            fields_to_hide = ['created_at', 'updated_at', "active"]
             
             for filed in fields_to_hide:
                 data.pop(filed, None)
@@ -48,9 +49,10 @@ class PublisherSerializer(serializers.ModelSerializer):
         fields = "__all__"
 
 class SimpleBookSerializer(ItemSerializer):
+    borrow_count = serializers.IntegerField(read_only=True)
     class Meta:
         model = Book
-        fields = ['name', 'image']
+        fields = ['name', 'image', 'borrow_count']
         
 class BookSerializer(ItemSerializer):
     author = AuthorSerializer(read_only=True)
@@ -93,14 +95,10 @@ class BookSerializer(ItemSerializer):
                 data.pop(filed, None)
         return data
         
-        
-
-
-        
 class SimpleUserSerializer(ItemSerializer):
     class Meta:
         model = User
-        fields = ['id', 'first_name', 'last_name', 'email', 'image']
+        fields = ['id', 'first_name', 'last_name', 'image', "phone_number", "gender", "dob"]
         
 class UserSerializer(ItemSerializer):
     class Meta:
@@ -148,10 +146,27 @@ class UserSerializer(ItemSerializer):
         instance.save()
         return instance
 
+class SimpleSettingSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Setting
+        fields = ['borrowing_days', 'borrowing_fee', 'borrowing_overdue_fine']
+
+class SettingSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = SimpleSettingSerializer.Meta.model
+        fields = SimpleSettingSerializer.Meta.fields + ['id', 'active']
+
+class BorrowingDetailCartSerializer(serializers.ModelSerializer):
+    setting = SimpleSettingSerializer(read_only=True)
+    class Meta:
+        model = User_Book_Detail_Fine
+        fields = ['late_dates', 'setting']
+        
 
 class BorrowSerializer(serializers.ModelSerializer):
     user = SimpleUserSerializer(read_only=True)
     book = SimpleBookSerializer(read_only=True)
+    fine = BorrowingDetailCartSerializer(source="user_book_detail_fine", read_only=True)
     class Meta:
         model = User_Book
         fields = "__all__"
@@ -172,7 +187,9 @@ class LoginSerializer(serializers.Serializer):
         )
         
         if not user:
-            raise serializers.ValidationError("Sai tài khoản hoặc mật khẩu")
+            raise AuthenticationFailed("Sai tài khoản hoặc mật khẩu")
+        if not user.is_active:
+            raise AuthenticationFailed("Tài khoản bị khóa")
         
         data['user'] = user
         return data
@@ -193,6 +210,9 @@ class LoginSerializer(serializers.Serializer):
     
     
 class RegisterSerializer(serializers.ModelSerializer):
+    username = serializers.CharField()
+    password = serializers.CharField(write_only=True)
+    email = serializers.EmailField()
     class Meta:
         model = User
         fields = ['username', 'email', 'password', 'first_name', 'last_name']
@@ -204,51 +224,46 @@ class RegisterSerializer(serializers.ModelSerializer):
         }
     
     def validate_username(self, value):
-        if not re.match(r'^[A-Za-z][0-9A-Za-z]{5,15}$', value):
-            raise serializers.ValidationError( 
+        username = value
+        if not re.match(r'^[A-Za-z][0-9A-Za-z]{5,15}$', username):
+            raise AuthenticationFailed( 
                  "Username chỉ có nhiều hơn 6 ký tự và bao gồm cả chữ, số"
-            )        
+            )
+            
+        if User.objects.filter(username=username).exists():
+            raise AuthenticationFailed("Username đã tồn tại")
         return value
     
     def validate_password(self, value):
-        if not re.match(r'^[A-Za-z](?=.*?[0-9])(?=.*?[A-Za-z]).{8,24}$', value):
-            raise serializers.ValidationError(
+        password = value
+        if not re.match(r'^[A-Za-z](?=.*?[0-9])(?=.*?[A-Za-z]).{8,24}$', password):
+            raise AuthenticationFailed(
                 "Password phải >=8 ký tự, gồm chữ và số"
             )
         return value
         
     def validate_email(self, value):
-        if not re.match(r'^\S+@\S+\.\S+$', value):
-            raise serializers.ValidationError(
+        email = value
+        if not re.match(r'^\S+@\S+\.\S+$', email):
+            raise AuthenticationFailed(
                 "Sai định dạng email"
             )
+        
+        if User.objects.filter(email=email).exists():
+            raise AuthenticationFailed("Email đã tồn tại")
         return value
     
     def create(self, validated_data):
-        user = User(**validated_data)
+        user = User.objects.create(**validated_data)
         user.set_password(user.password)
         
         user.save()
         return user
     
-    
-
-        
 class ReservationSerializer(serializers.ModelSerializer):
     class Meta:
         model = Reservation
-        fields = "__all__"
-        
-class SettingSerializer(serializers.ModelSerializer):
-    class Meta:
-        model = Setting
-        fields = "__all__"
-    
-        
-class OrderItemSerializer(serializers.ModelSerializer):
-    class Meta:
-        model= Reservation
-        fields = ['book', 'user']
+        fields = "__all__"  
         extra_kwargs = {
             'user': {
                 'read_only': True
@@ -261,6 +276,7 @@ class OrderItemSerializer(serializers.ModelSerializer):
         data['user'] = SimpleUserSerializer(instance.user).data
         data['book'] = SimpleBookSerializer(instance.book).data
         return data
+        
         
 class CartItemSerializer(serializers.ModelSerializer):
     book_id = serializers.IntegerField(source='book', write_only=True)
@@ -289,9 +305,6 @@ class CartItemSerializer(serializers.ModelSerializer):
         )
         return borrowing
         
-class BorrowingDetailCartSerializer(serializers.ModelSerializer):
-    class Meta:
-        model = User_Book_Detail_Fine
-        fields = '__all__'
+
         
 

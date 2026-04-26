@@ -7,7 +7,7 @@ const BaseModal = ({ open, close, children }) => {
             ${open ? "tw-visible tw-bg-black/20" : "invisible"}`}
             onClick={close}
         >
-            <div className={`tw-bg-white tw-rounded-xl tw-shadow tw-py-2 tw-transition-all 
+            <div className={`tw-bg-white tw-rounded-xl tw-shadow tw-transition-all 
                 ${open ? "tw-scale-100 tw-opacity-100" : "tw-scale-125 tw-opacity-0"}`}
                 onClick={(e) => e.stopPropagation()}
             >

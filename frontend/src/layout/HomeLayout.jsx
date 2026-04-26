@@ -6,6 +6,9 @@ import { Outlet, useNavigate, useSearchParams } from 'react-router-dom';
 import { BookListAPI } from '../services/BookAPI';
 import { AuthContent } from '../utils/AuthContext';
 import { AuthorListAPI } from '../services/AuthorAPI';
+import { CategoryListAPI } from '../services/CategoryAPI'
+import Footer from '../components/footer/Footer';
+
 const HomeLayout = () => {
     const { token } = useContext(AuthContent)
     const [searchParams, setSearchParams] = useSearchParams();
@@ -16,6 +19,7 @@ const HomeLayout = () => {
     const dataBooks = BookListAPI(currentPage, searchBook, searchCategory, searchAuthor, token)
     const books = dataBooks?.results || []
     const [authors] = AuthorListAPI(token)
+    const [categories] = CategoryListAPI(token)
     const [loading, setLoading] = useState(false)
     const [cart, setCart] = useState(() => {
         const cartData = localStorage.getItem("cart")
@@ -64,22 +68,26 @@ const HomeLayout = () => {
 
     return (
         <div>
-            <Header handleSearch={goSearch} searchParams={searchParams} cart={cart} authors={authors} />
-            <Outlet context={{
-                books,
-                authors,
-                currentPage,
-                dataBooks,
-                searchBook,
-                cart,
-                loading,
-                setCart,
-                goSearch,
-                goPage,
-                goSearchToCategory,
-                goSearchToAuthor
-            }} />
-            {/* <Footer /> */}
+            <Header handleSearch={goSearch} searchParams={searchParams} cart={cart} authors={authors} categories={categories} />
+            <div style={{ paddingTop: "100px" }}>
+                <Outlet context={{
+                    books,
+                    authors,
+                    categories,
+                    currentPage,
+                    dataBooks,
+                    searchBook,
+                    cart,
+                    loading,
+                    setCart,
+                    goSearch,
+                    goPage,
+                    goSearchToCategory,
+                    goSearchToAuthor
+                }} />
+            </div>
+
+            <Footer />
         </div>
     );
 }

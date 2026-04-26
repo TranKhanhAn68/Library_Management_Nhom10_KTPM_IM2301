@@ -8,7 +8,7 @@
 | Thành viên             | MSSV       | Công việc                                                    |
 |------------------------|------------|--------------------------------------------------------------|
 | Trần Khánh An          | 2351050004 | hoàn thành test unit test + integration test + function test |
-| Phùng Thị Kim Ngân     | 2354050073 | đang viết báo cáo                                            |
+| Phùng Thị Kim Ngân     | 2354050073 | đang viết bài báo cáo                                        |
 
 ## 2. Tiến độ tổng thể
 

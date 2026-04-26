@@ -1,0 +1,44 @@
+# BÁO CÁO TUẦN 7
+## TUẦN: 7
+## NHÓM: 10
+## ĐỀ TÀI: HỆ THỐNG QUẢN LÝ THƯ VIỆN
+## NHÓM TRƯỞNG: TRẦN KHÁNH AN - 2351050004
+
+## 1. CÔNG VIỆC ĐÃ HOÀN THÀNH
+| Thành viên             | MSSV       | Công việc                                    |
+|------------------------|------------|----------------------------------------------|
+| Trần Khánh An          | 2351050004 | unit test + integration test + function test |
+| Phùng Thị Kim Ngân     | 2354050073 | unit test + test controller                  |
+
+## 2. Tiến độ tổng thể
+
+| Hạng mục              | Trạng thái   |   %   |
+|-----------------------|--------------|-------|
+| Phân tích yêu cầu     | Hoàn thành   | 100%  |
+| Thiết kế kiến trúc    | Đang làm     | 100%  |
+|(Theo yêu cầu)         |              |       |
+| Backend API           | Đang làm     | 100%  |
+| Frontend UI           | Đang làm     | 100%  |
+| Docker                | Chưa bắt đầu |  0%   |
+| Testing               | Chưa bắt đầu |  30%  | 
+
+**Tổng tiến độ: *70%*
+
+
+## 3. Kế hoạch tuần tới
+
+| Thành viên             |        Công việc dự kiến    |
+|------------------------|-----------------------------|
+| Trần Khánh An          |  tiếp tục viết test         |
+| Phùng Thị Kim Ngân     |  bắt đầu viết bài báo cáo   |
+
+
+## 4. Khó khăn / Cần hỗ trợ
+
+- [ ] [Mô tả khó khăn nếu có]  
+- [ ] [Câu hỏi cần GV giải đáp nếu có]  
+
+---
+
+*Ngày nộp: 19/4/2026*  
+*Xác nhận của Nhóm trưởng: [Trần Khánh An]*

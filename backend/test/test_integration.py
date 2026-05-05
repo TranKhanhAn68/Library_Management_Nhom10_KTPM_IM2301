@@ -432,3 +432,67 @@ def test_delete_setting(api_client):
 
     with pytest.raises(Exception):
         api_client.delete(f"/settings/{setting.id}/")
+
+
+# ===================== USER CRUD =====================
+
+@pytest.mark.django_db
+def test_create_user(api_client):
+    response = api_client.post("/users/", {
+        "username": "newuser",
+        "password": "123"
+    })
+
+    assert response.status_code in [401, 403]
+
+
+@pytest.mark.django_db
+def test_user_update_own_profile(api_client):
+    user = User.objects.create_user(username='test', password='123')
+    api_client.force_authenticate(user=user)
+
+    response = api_client.put(f"/users/{user.id}/", {
+        "username": "updated",
+        "password": "123"   
+    })
+
+    assert response.status_code in [403, 401]
+
+
+@pytest.mark.django_db
+def test_user_cannot_update_other_user(api_client):
+    user1 = User.objects.create_user(username='user1', password='123')
+    user2 = User.objects.create_user(username='user2', password='123')
+
+    api_client.force_authenticate(user=user1)
+
+    response = api_client.put(f"/users/{user2.id}/", {
+        "username": "hack",
+        "password": "123"
+    })
+
+    assert response.status_code in [401, 403]
+
+
+@pytest.mark.django_db
+def test_admin_delete_user(api_client):
+    admin = User.objects.create_superuser(username='admin', password='123')
+    api_client.force_authenticate(user=admin)
+
+    user = User.objects.create_user(username='test')
+
+    with pytest.raises(Exception):
+        api_client.delete(f"/users/{user.id}/")
+
+
+@pytest.mark.django_db
+def test_user_cannot_delete_user(api_client):
+    user1 = User.objects.create_user(username='user1', password='123')
+    user2 = User.objects.create_user(username='user2', password='123')
+
+    api_client.force_authenticate(user=user1)
+
+    response = api_client.delete(f"/users/{user2.id}/")
+
+    assert response.status_code in [401, 403]
+

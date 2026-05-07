@@ -10,15 +10,49 @@ export const AuthProvider = ({ children }) => {
     const [loading, setLoading] = useState(true);
 
     useEffect(() => {
-        const saveUser = localStorage.getItem("authUser")
-        if (saveUser) {
-            const parsed = JSON.parse(saveUser)
-            setToken(parsed.token)
-            setUser(parsed.user)
-            setStatus(parsed.status)
+        const fetchCurrentUser = async () => {
+            if (!token) {
+                setLoading(false);
+                return;
+            }
+
+            try {
+                setLoading(true);
+
+                const res = await fetch("http://127.0.0.1:8000/users/current_user/", {
+                    method: "GET",
+                    headers: {
+                        Authorization: `Token ${token}`
+                    }
+                });
+
+                if (!res.ok) {
+                    throw new Error("Failed to fetch user");
+                }
+
+                const data = await res.json();
+
+                setUser(data);
+                setStatus(true);
+            } catch (err) {
+                console.error(err);
+                setUser(null);
+                setStatus(false);
+            } finally {
+                setLoading(false);
+            }
+        };
+
+        fetchCurrentUser();
+    }, [token]);
+
+    useEffect(() => {
+        const token = localStorage.getItem("token")
+        if (token) {
+            const parsed = JSON.parse(token)
+            setToken(parsed)
         }
         setLoading(false);
-
     }, [])
 
     useEffect(() => {

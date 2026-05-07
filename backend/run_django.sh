@@ -1,10 +1,7 @@
 #!/bin/bash
 
-echo "🚀 Activate virtual environment..."
-source .venv/bin/activate   # nếu bạn dùng .venv
-
-echo "🧹 Flush database..."
-py manage.py flush --no-input
+echo "=== Cài đặt thư viện ==="
+pip install -r requirements.txt
 
 echo "📦 Migrate..."
 py manage.py migrate

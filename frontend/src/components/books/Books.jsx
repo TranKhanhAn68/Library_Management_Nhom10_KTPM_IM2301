@@ -16,37 +16,24 @@ const Books = () => {
         goPage,
         goSearchToCategory,
         goSearchToAuthor,
-        setCart
+        setCart,
+        loading
     } = useOutletContext();
-    const [settings] = SettingListAPI(token)
-    const [loading, setLoading] = useState(false)
+    const settings = SettingListAPI(token)
     const [searchAuthor, setSearchAuthor] = useState("")
     const [filteredAuthor, setFilteredAuthor] = useState([])
-    const totalPages = Math.ceil((dataBooks?.count || 0) / 8)
+    const totalPages = dataBooks ? Math.ceil(dataBooks.count / 8) : 1
     const [defaultSetting, setDefaultSetting] = useState(null)
-
-    useEffect(() => {
-        if (!books || books.length === 0) {
-            setLoading(true);
-
-            const timer = setTimeout(() => {
-                setLoading(false);
-            }, 1500);
-
-            return () => clearTimeout(timer);
-        }
-        else {
-            setLoading(false)
-        }
-    }, [books]);
 
     useEffect(() => {
         setDefaultSetting(settings[0])
     }, [settings])
 
     useEffect(() => {
-        setFilteredAuthor(authors)
-    }, [authors])
+        if (settings?.length > 0) {
+            setDefaultSetting(settings[0]);
+        }
+    }, [settings]);
 
     useEffect(() => {
         let filterAuthors = []
@@ -63,14 +50,12 @@ const Books = () => {
     const handleSearchAuthor = (e, id) => {
         e.preventDefault()
         goSearchToAuthor(id)
-        console.log(id)
     }
 
     const handleSearchCategory = (e, id) => {
         e.preventDefault()
         goSearchToCategory(id)
     }
-    console.log(settings)
     return (
         <div className='book-container mx-auto position-relative'>
             {loading && <Loading loading={loading} />}
@@ -131,7 +116,7 @@ const Books = () => {
 
                         <div className="custom-scroll" style={{ maxHeight: "150px", overflowY: "auto" }}>
                             <ul className="list-unstyled mb-0">
-                                {filteredAuthor &&
+                                {filteredAuthor && filteredAuthor.length > 0 && (
                                     filteredAuthor.map(author => (
                                         <li key={author.id}>
                                             <button
@@ -142,7 +127,7 @@ const Books = () => {
                                             </button>
                                         </li>
                                     ))
-                                }
+                                )}
                             </ul>
                         </div>
 
@@ -151,22 +136,31 @@ const Books = () => {
                 </div>
             </div>
             <div className='position-relative' style={{ minHeight: "150px" }}>
-                <div className="row row-cols-2 row-cols-md-4 g-2 p-1">
-                    {books.map(book => (
-                        <Card key={book.id} book={book} setCart={setCart} defaultSetting={defaultSetting} />
-                    ))}
-                </div>
+                {books.length <= 0 && !loading ? (
+                    <div className="position-absolute top-50 start-50 translate-middle">
+                        <small className="text-dark">Không có dữ liệu</small>
+                    </div>
+                ) : (
+                    <div>
+                        <div className="row row-cols-2 row-cols-md-4 g-2 p-1">
+                            {books?.map(book => (
+                                <Card key={book.id} book={book} setCart={setCart} defaultSetting={defaultSetting} />
+                            ))}
+                        </div>
 
-                <Pagination currentPage={currentPage}
-                    totalPages={totalPages}
-                    item={books}
-                    goPage={goPage}
+                        <Pagination currentPage={currentPage}
+                            totalPages={totalPages}
+                            item={books}
+                            goPage={goPage}
+                        />
 
-                />
-            </div>
+                    </div>
+                )
+                }
+            </div >
 
 
-        </div>
+        </div >
     );
 }
 

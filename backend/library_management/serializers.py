@@ -95,10 +95,70 @@ class BookSerializer(ItemSerializer):
                 data.pop(filed, None)
         return data
         
-class SimpleUserSerializer(ItemSerializer):
+from rest_framework import serializers
+from django.core.validators import RegexValidator
+from .models import User
+
+
+class SimpleUserSerializer(serializers.ModelSerializer):
+    phone_regex = RegexValidator(
+        regex=r'^\d{9,11}$',
+        message="Số điện thoại phải từ 9 đến 11 chữ số"
+    )
+
     class Meta:
         model = User
-        fields = ['id', 'first_name', 'last_name', 'image', "phone_number", "gender", "dob"]
+        fields = [
+            'id',
+            'username',
+            'email',
+            'is_active',
+            'first_name',
+            'last_name',
+            'image',
+            'phone_number',
+            'gender',
+            'dob',
+            'is_superuser',
+            'is_staff'
+        ]
+
+    def to_representation(self, instance):
+        request = self.context.get("request")
+        data = super().to_representation(instance)
+        data["image"] = instance.image.url if instance.image else None
+        user = request.user if request else None
+        is_admin = user and (user.is_staff or user.is_superuser)
+        if not is_admin:
+            data.pop("is_superuser", None)
+            data.pop("is_staff", None)
+        return data
+    
+    def validate_first_name(self, value):
+        if not value.strip():
+            raise serializers.ValidationError("Họ không được để trống")
+        return value
+
+    def validate_last_name(self, value):
+        if not value.strip():
+            raise serializers.ValidationError("Tên không được để trống")
+        return value
+
+    def validate_phone_number(self, value):
+        self.phone_regex(value)
+        return value
+
+    def validate_gender(self, value):
+        allowed = ["Nam", "Nữ", "Khác"]
+        if value not in allowed:
+            raise serializers.ValidationError("Giới tính không hợp lệ")
+        return value
+
+    def validate_image(self, value):
+        if value:
+            if value.size > 2* 1024 * 1024:
+                raise serializers.ValidationError("Ảnh tối đa 2MB")
+        return value
         
 class UserSerializer(ItemSerializer):
     class Meta:
@@ -305,6 +365,38 @@ class CartItemSerializer(serializers.ModelSerializer):
         )
         return borrowing
         
+class ChangePasswordSerializer(serializers.Serializer):
+    old_password = serializers.CharField(write_only=True)
+    new_password = serializers.CharField(write_only=True)
+    
+    def validate_old_password(self, value):
+        user = self.context['request'].user
 
+        if not user.check_password(value):
+            raise serializers.ValidationError("Mật khẩu cũ không đúng")
+
+        return value
+        
+    def validate_new_password(self, value):
+        if not re.match(r'^(?=.*[A-Za-z])(?=.*\d).{8,24}$', value):
+            raise serializers.ValidationError(
+                "Password phải >=8 ký tự, gồm chữ và số"
+            )
+        return value
+    
+    def validate(self, data):
+        if data['old_password'] == data['new_password']:
+            raise serializers.ValidationError(
+                "Mật khẩu mới không được trùng mật khẩu cũ"
+            )
+        return data
+    
+    def update(self, instance, validated_data):
+        new_password = validated_data.get('new_password')
+        instance.set_password(new_password)
+        instance.save()
+        return instance
+
+        
         
 

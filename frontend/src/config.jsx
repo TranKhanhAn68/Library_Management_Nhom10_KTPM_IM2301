@@ -71,3 +71,6 @@ export const RESERVATION_STATUS_CONFIG = {
         className: "tw-bg-red-100 tw-text-red-600",
     },
 };
+
+export const ITEM_PAGE_SIZE = 8
+export const USER_PAGE_SIZE = 5

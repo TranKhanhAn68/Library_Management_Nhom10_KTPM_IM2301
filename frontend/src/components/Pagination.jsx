@@ -39,14 +39,6 @@ const Pagination = ({ currentPage, totalPages, item, goPage }) => {
 
     const pages = customPagination();
 
-    if (item?.length <= 0)
-        return (
-            <div className="position-absolute top-50 start-50 translate-middle">
-                <small className="text-dark">Không có dữ liệu</small>
-            </div>
-        )
-
-
     return (
 
 

@@ -4,7 +4,6 @@ import { AuthContent } from './AuthContext';
 
 const PublicRoute = ({ children }) => {
     const { status } = useContext(AuthContent);
-
     if (status)
         return <Navigate to="/" />;
     return children;

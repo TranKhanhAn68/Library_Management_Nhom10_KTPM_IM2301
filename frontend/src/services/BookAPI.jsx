@@ -3,7 +3,9 @@ const BOOK_URL = "http://127.0.0.1:8000/books"
 export const BookListAPI = (page, q = "", category_id = "", author_id = "", token, reload) => {
 
     const [data, setData] = useState({})
+    const [loading, setLoading] = useState(false)
     const fetchData = async () => {
+        setLoading(true)
         try {
             const params = new URLSearchParams()
 
@@ -35,6 +37,8 @@ export const BookListAPI = (page, q = "", category_id = "", author_id = "", toke
             setData(data);
         } catch (err) {
             console.error("fetch err: ", err);
+        } finally {
+            setLoading(false)
         }
     };
 
@@ -42,7 +46,7 @@ export const BookListAPI = (page, q = "", category_id = "", author_id = "", toke
         fetchData();
     }, [page, q, category_id, author_id, token, reload]);
 
-    return data;
+    return { dataBooks: data, loading };
 };
 
 

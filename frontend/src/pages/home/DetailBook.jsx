@@ -15,7 +15,7 @@ const DetailBook = () => {
     const { id } = useParams()
     const [qTy, setQTy] = useState(1)
     const [selected, setSelected] = useState(null)
-    const [settings] = SettingListAPI()
+    const settings = SettingListAPI()
     const [loading, setLoading] = useState(false)
     const { book, err } = BookIDAPI(id, token)
     const [message, setMessage] = useState(null)
@@ -100,7 +100,7 @@ const DetailBook = () => {
                             }}
                         >
                             <option value="" disabled>Vui lòng chọn</option>
-                            {settings.map(s => (
+                            {settings?.map(s => (
                                 <option key={s.id} value={s.id}>
                                     {s.borrowing_days} ngày
                                 </option>
@@ -133,10 +133,10 @@ const DetailBook = () => {
                         <button
                             className="btn btn-primary d-flex align-items-center gap-2 px-4 py-2 fw-semibold"
                             onClick={handleAddToCart}
-                            disabled={isAdding}
+                            disabled={loading}
                             style={{ borderRadius: "12px" }}
                         >
-                            {isAdding ? (
+                            {loading ? (
                                 <>
                                     <span className="spinner-border spinner-border-sm"></span>
                                     Đang thêm...

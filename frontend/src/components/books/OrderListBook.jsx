@@ -35,7 +35,6 @@ const OrderListBook = () => {
                             className="tw-bg-white tw-rounded-2xl tw-shadow-sm tw-border tw-border-gray-100 hover:tw-shadow-md tw-transition-all"
                         >
                             <div className="tw-p-5 tw-flex tw-flex-col md:tw-flex-row tw-gap-6">
-                                {/* LEFT */}
                                 <div className="tw-flex-1">
                                     <div className="tw-flex tw-justify-between tw-items-start tw-mb-4">
                                         <div>
@@ -56,7 +55,6 @@ const OrderListBook = () => {
                                     </div>
                                 </div>
 
-                                {/* RIGHT */}
                                 <div className="tw-flex tw-items-center tw-justify-center tw-bg-gray-50 tw-px-6 tw-py-4 md:tw-min-w-[160px] tw-border-t md:tw-border-l tw-border-gray-100">
                                     <p className="tw-text-sm tw-text-gray-500">
                                         {order.status}

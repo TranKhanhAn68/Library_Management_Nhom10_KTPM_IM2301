@@ -76,7 +76,7 @@ const Menu = ({ openMenuAuthorHover, setOpenMenuAuthorHover, openMenuCategoryHov
                 )}
             </li>
 
-        </ul >
+        </ul>
     );
 }
 

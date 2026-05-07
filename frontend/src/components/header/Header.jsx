@@ -150,6 +150,7 @@ const Header = ({ handleSearch, searchParams, cart, authors, categories }) => {
                             <Link to='shopping-cart' className='mx-2  position-relative'>
                                 <i className="fa-solid fa-cart-shopping fs-3"></i>
                                 <span
+                                    aria-label='badge'
                                     className={`position-absolute top-0 start-100 translate-middle badge 
                                     rounded-pill bg-danger ${cart.length <= 0 ? "d-none" : ""}`}>
                                     {cart.length}

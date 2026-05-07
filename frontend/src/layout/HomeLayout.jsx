@@ -16,11 +16,10 @@ const HomeLayout = () => {
     const searchBook = searchParams.get("q") || ""
     const searchCategory = searchParams.get("category_id") || ""
     const searchAuthor = searchParams.get("author_id") || ""
-    const dataBooks = BookListAPI(currentPage, searchBook, searchCategory, searchAuthor, token)
+    const { dataBooks, loading } = BookListAPI(currentPage, searchBook, searchCategory, searchAuthor, token)
     const books = dataBooks?.results || []
     const [authors] = AuthorListAPI(token)
     const [categories] = CategoryListAPI(token)
-    const [loading, setLoading] = useState(false)
     const [cart, setCart] = useState(() => {
         const cartData = localStorage.getItem("cart")
         if (!cartData)
@@ -31,7 +30,6 @@ const HomeLayout = () => {
 
     useEffect(() => {
         localStorage.setItem("cart", JSON.stringify(cart));
-        console.log("Cart updated:", cart);
     }, [cart]);
 
     const goPage = (page) => {

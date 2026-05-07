@@ -7,7 +7,7 @@ import BaseModal from '../../../components/BaseModal';
 const SettingDashboard = () => {
     const { token } = useContext(AuthContent)
     const [reload, setReload] = useState(false)
-    const [settings, setSettings] = SettingListAPI(token, reload)
+    const settings = SettingListAPI(token, reload)
     const [selectedItem, setSelectedItem] = useState(null)
     const [listActiveSettings, setListActiveSettings] = useState([])
 
@@ -34,7 +34,6 @@ const SettingDashboard = () => {
             const changeSetting = await UpdateSetting(item.id, !item.active, token)
 
             if (changeSetting) {
-                setSettings(prev => prev.map(s => s.id === changeSetting.id ? changeSetting : s))
                 setMessage(changeSetting?.message)
                 setIsSuccess(true)
                 setReload(prev => !prev)

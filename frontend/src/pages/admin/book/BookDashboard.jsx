@@ -12,13 +12,12 @@ const Book = () => {
     const [reload, setReload] = useState(false) //Biến cờ cập nhật dữ liệu book lại khi xóa
     const [currentPage, setCurrentPage] = useState(1)
     const [searchBookName, setSearchBookName] = useState("")
-    const dataBooks = BookListAPI(currentPage, "", "", "", token, reload)
+    const { dataBooks, loading } = BookListAPI(currentPage, "", "", "", token, reload)
     const books = dataBooks?.results || []
     const [selectedBook, setSelectedBook] = useState(null)
     const [selectedBookByID, setSelectedBookByID] = useState("")
     const totalPages = Math.ceil((dataBooks?.count || 0) / 8)
 
-    const [loading, setLoading] = useState(true)
     const [message, setMessage] = useState("")
     const [isSuccess, setIsSuccess] = useState(false)
     const [openModal, setOpenModal] = useState(false)
@@ -47,7 +46,6 @@ const Book = () => {
     const handleDelete = async (e, id) => {
         e.preventDefault()
         try {
-            setLoading(true)
             const result = await DeleteBook(id, token)
             if (result) {
                 setMessage(result?.message)
@@ -60,7 +58,6 @@ const Book = () => {
             setMessage(error)
         } finally {
             handleClose()
-            setLoading(false)
         }
     }
 

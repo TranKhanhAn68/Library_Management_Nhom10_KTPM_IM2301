@@ -17,15 +17,8 @@ const Login = () => {
 
   useEffect(() => {
     const storedUsername = localStorage.getItem('storedUsername')
-    const storedPassword = localStorage.getItem('storedPassword')
     if (storedUsername)
       setUsername(storedUsername)
-
-    if (storedPassword) {
-      const parsed = JSON.parse(storedPassword)
-      setPassword(parsed.password)
-      setActiveRemember(parsed.activeRemember)
-    }
   }, []);
 
   const handleLogin = async (e) => {
@@ -41,21 +34,14 @@ const Login = () => {
     setLoading(true)
 
     try {
-      const authUser = await login(username, password);
-
+      const result = await login(username, password);
+      const token = result?.token
       localStorage.setItem('storedUsername', username);
+      localStorage.setItem('token', JSON.stringify(token))
 
-      if (activeRemember) {
-        const storedPassword = { password, activeRemember }
-        localStorage.setItem('storedPassword', JSON.stringify(storedPassword))
-      }
-      localStorage.setItem('authUser', JSON.stringify(authUser))
+      setToken(token)
 
-      setUser(authUser.user)
-      setStatus(authUser.status)
-      setToken(authUser.token)
-
-      navigate('/dashboard');
+      navigate('/');
 
     } catch (err) {
       setErr(err)
@@ -95,16 +81,6 @@ const Login = () => {
               {err && (
                 <p className="bg-danger text-white small p-2 rounded">{err}</p>
               )}
-
-              <div className="d-flex justify-content-between align-items-center">
-                <div className="form-check">
-                  <input className="form-check-input" type="checkbox" id="rememberMe"
-                    onChange={(e) => setActiveRemember(e.target.checked)} checked={activeRemember} />
-                  <label className="form-check-label small" htmlFor="rememberMe">
-                    Remember Me
-                  </label>
-                </div>
-              </div>
 
               <button type="submit" className="btn btn-primary fw-bold">
                 Đăng nhập

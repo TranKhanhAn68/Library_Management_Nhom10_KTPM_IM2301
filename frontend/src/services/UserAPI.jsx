@@ -109,8 +109,10 @@ export const DeleteUser = async (id, token) => {
 
 export const BorrowingListByUser = (token, status, page) => {
     const [data, setData] = useState([])
+    const [loading, setLoading] = useState(false)
     const fetchData = async () => {
         try {
+            setLoading(true)
             const params = new URLSearchParams()
             params.append("page", page)
             if (status)
@@ -130,6 +132,8 @@ export const BorrowingListByUser = (token, status, page) => {
 
         } catch (err) {
             console.error(err)
+        } finally {
+            setLoading(false)
         }
     }
 
@@ -137,7 +141,7 @@ export const BorrowingListByUser = (token, status, page) => {
         fetchData()
     }, [page, token, status])
 
-    return data
+    return { data, loading }
 }
 
 

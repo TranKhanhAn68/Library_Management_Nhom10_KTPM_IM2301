@@ -1,5 +1,6 @@
 import React, { useContext, useState, useEffect } from "react";
 import { AuthContent } from "../utils/AuthContext"
+import { getError } from "../utils/GetError";
 
 const InfoItem = ({ icon, label, value, isSuccess }) => (
     <div className="col-md-6">
@@ -16,22 +17,38 @@ const InfoItem = ({ icon, label, value, isSuccess }) => (
 );
 
 const InformationUser = () => {
-    const { user } = useContext(AuthContent);
-
+    const { user, setUser, token } = useContext(AuthContent);
+    const [loading, setLoading] = useState(false)
     // State cho việc hiển thị ảnh preview
     const [preview, setPreview] = useState(user?.image);
-    const [formData, setFormData] = useState({});
-
+    const [formData, setFormData] = useState({
+        first_name: "",
+        last_name: "",
+        gender: "",
+        dob: "",
+        phone_number: "",
+        avatar: ""
+    });
+    const [errors, setErrors] = useState([])
+    const [message, setMessage] = useState("")
     // Cập nhật preview khi dữ liệu user từ context thay đổi (quan trọng!)
     useEffect(() => {
-        if (user?.image) {
-            setPreview(user.image);
-        }
-    }, [user?.image]);
+        if (user) {
+            setFormData({
+                first_name: user.first_name || "",
+                last_name: user.last_name || "",
+                gender: user.gender || "",
+                dob: user.dob || "",
+                phone_number: user.phone_number || "",
+            });
 
+            if (user.image) {
+                setPreview(user.image);
+            }
+        }
+    }, [user]);
     // Xử lý thay đổi file
-    const handleFileChange = (e) => {
-        const file = e.target.files[0];
+    const handleFileChange = (file) => {
         if (file) {
             if (file.size > 1024 * 1024) {
                 alert("Kích thước ảnh quá lớn (tối đa 1MB)");
@@ -42,12 +59,96 @@ const InformationUser = () => {
         }
     };
 
-    // Hàm xử lý submit (Thay vì dùng action của form)
+    const handleChange = (e) => {
+        const { name, value, files } = e.target
+        if (name === "avatar") {
+            handleFileChange(files[0])
+            return;
+        }
+        setFormData({
+            ...formData,
+            [name]: value
+        });
+    }
+
+    const validFormData = () => {
+        const errors = [];
+
+        if (!formData.first_name.trim()) {
+            errors.push("Họ không được để trống");
+        }
+
+        if (!formData.last_name.trim()) {
+            errors.push("Tên không được để trống");
+        }
+
+        if (!formData.gender) {
+            errors.push("Vui lòng chọn giới tính");
+        }
+
+        if (!formData.phone_number.trim()) {
+            errors.push("Số điện thoại không được để trống");
+        } else if (!/^\d{9,11}$/.test(formData.phone_number)) {
+            errors.push("Số điện thoại không hợp lệ");
+        }
+
+        return errors;
+    };
+
     const handleSubmit = async (e) => {
         e.preventDefault();
-        // Ở đây bạn sẽ thực hiện gọi API update user
-        // console.log("Dữ liệu cần update:", formData);
-        alert("Chức năng cập nhật đang được xử lý!");
+
+        const validationErrors = validFormData();
+        if (validationErrors.length > 0) {
+            setErrors(validationErrors);
+            setMessage("");
+            return;
+        }
+
+        const form = new FormData();
+        form.append("first_name", formData.first_name);
+        form.append("last_name", formData.last_name);
+        form.append("gender", formData.gender);
+        form.append("dob", formData.dob);
+        form.append("phone_number", formData.phone_number);
+
+        if (formData.avatar) {
+            form.append("image", formData.avatar);
+        }
+
+        try {
+            setLoading(true);
+            setErrors([]);
+            setMessage("");
+
+            const res = await fetch("http://127.0.0.1:8000/users/current_user/", {
+                method: "PATCH",
+                headers: {
+                    ...(token && { Authorization: `Token ${token}` })
+                },
+                body: form
+            });
+
+            const result = await res.json();
+
+            if (!res.ok) {
+                const errors = getError(result);
+                setErrors(errors);
+                return;
+            }
+
+            setUser(prev => ({
+                ...prev,
+                ...result
+            }));
+
+            setMessage("Cập nhật thành công!");
+
+        } catch (e) {
+            setErrors([e.message || "Có lỗi xảy ra"]);
+        } finally {
+            setLoading(false);
+        }
     };
 
     return (
@@ -142,7 +243,7 @@ const InformationUser = () => {
                                                     name="avatar"
                                                     className="d-none"
                                                     accept="image/*"
-                                                    onChange={handleFileChange}
+                                                    onChange={handleChange}
                                                 />
                                             </label>
                                         </div>
@@ -158,8 +259,10 @@ const InformationUser = () => {
                                             </span>
                                             <input
                                                 type="text"
+                                                name="first_name"
                                                 className="form-control form-control-lg fs-6 shadow-none border-start-0"
-                                                value={user?.first_name}
+                                                value={formData.first_name}
+                                                onChange={handleChange}
                                                 placeholder="VD: Nguyễn"
                                                 required
                                             />
@@ -174,8 +277,10 @@ const InformationUser = () => {
                                             </span>
                                             <input
                                                 type="text"
+                                                name="last_name"
                                                 className="form-control form-control-lg fs-6 shadow-none border-start-0"
-                                                value={user?.last_name}
+                                                value={formData.last_name}
+                                                onChange={handleChange}
                                                 placeholder="VD: Văn An"
                                                 required
                                             />
@@ -189,7 +294,11 @@ const InformationUser = () => {
                                             <span className="input-group-text bg-light border-end-0 text-muted">
                                                 <i className="fas fa-venus-mars"></i>
                                             </span>
-                                            <select className="form-select form-control-lg fs-6 shadow-none border-start-0" defaultValue={user?.gender}>
+                                            <select className="form-select form-control-lg fs-6 shadow-none border-start-0"
+                                                value={formData.gender} onChange={handleChange}
+                                                name="gender"
+                                            >
+                                                <option value="" disabled>-- Chọn giới tính --</option>
                                                 <option value="Nam">Nam</option>
                                                 <option value="Nữ">Nữ</option>
                                                 <option value="Khác">Khác</option>
@@ -206,8 +315,10 @@ const InformationUser = () => {
                                             </span>
                                             <input
                                                 type="date"
+                                                name="dob"
                                                 className="form-control form-control-lg fs-6 shadow-none border-start-0"
-                                                value={user?.dob}
+                                                value={formData.dob}
+                                                onChange={handleChange}
                                             />
                                         </div>
                                     </div>
@@ -221,8 +332,10 @@ const InformationUser = () => {
                                             </span>
                                             <input
                                                 type="tel"
+                                                name="phone_number"
                                                 className="form-control form-control-lg fs-6 shadow-none border-start-0"
-                                                value={user?.phone_number}
+                                                value={formData.phone_number}
+                                                onChange={handleChange}
                                                 placeholder="Nhập số điện thoại mới"
                                             />
                                         </div>
@@ -230,10 +343,39 @@ const InformationUser = () => {
                                 </div>
                             </div>
 
+                            {message && (
+                                <div className="alert alert-success py-2">
+                                    {message}
+                                </div>
+                            )}
+
+                            {errors?.length > 0 && (
+                                <div className="alert alert-danger py-2">
+                                    <ul className="mb-0 ps-3">
+                                        {errors?.map((err, index) => (
+                                            <li key={index}>{err}</li>
+                                        ))}
+                                    </ul>
+                                </div>
+                            )}
                             <div className="modal-footer border-top-0 p-4 pt-0">
                                 <button type="button" className="btn btn-light px-4 fw-semibold rounded-pill" data-bs-dismiss="modal">Hủy bỏ</button>
-                                <button type="submit" className="btn btn-primary px-5 shadow-sm fw-semibold rounded-pill">
-                                    <i className="fas fa-save me-2"></i> Lưu thay đổi
+                                <button
+                                    type="submit"
+                                    className="btn btn-primary px-5 shadow-sm fw-semibold rounded-pill"
+                                    disabled={loading}
+                                >
+                                    {loading ? (
+                                        <>
+                                            <span className="spinner-border spinner-border-sm me-2" role="status" />
+                                            Đang lưu...
+                                        </>
+                                    ) : (
+                                        <>
+                                            <i className="fas fa-save me-2"></i>
+                                            Lưu thay đổi
+                                        </>
+                                    )}
                                 </button>
                             </div>
                         </form>

@@ -13,24 +13,12 @@ const Cart = ({ cart, setCart, handleIncreaseQTy, handleDecreaseQTy }) => {
 
     const handleRemoveItem = async () => {
         if (!selectedItem) return;
+        setCart(prev => prev.filter(book => book.book_id !== selectedItem.book_id));
+        setOpenModal(false);
+        setSelectedItem(null);
 
-        setLoading(true);
-
-        try {
-            await new Promise(resolve => setTimeout(resolve, 1000));
-
-            setCart(prev => prev.filter(book => book.book_id !== selectedItem.book_id));
-
-            setOpenModal(false);
-            setSelectedItem(null);
-        } catch (error) {
-            console.error("Lỗi khi xóa:", error);
-            alert("Không thể xóa sản phẩm, vui lòng thử lại!");
-        } finally {
-            setLoading(false);
-        }
     };
-
+    console.log(cart)
     return (
         <div className='d-block w-100'>
             <table className="table text-center align-middle">
@@ -53,7 +41,7 @@ const Cart = ({ cart, setCart, handleIncreaseQTy, handleDecreaseQTy }) => {
                             </td>
                         </tr>
                     ) : (
-                        cart.map((book, index) => (
+                        cart?.map((book, index) => (
                             <tr key={book.id || index}>
                                 <td>{index + 1}</td>
                                 <td>
@@ -105,7 +93,9 @@ const Cart = ({ cart, setCart, handleIncreaseQTy, handleDecreaseQTy }) => {
                                 </td>
 
                                 <td>
-                                    <button className='btn btn-sm border-2 border-dark' onClick={() => handleSelectedItem(book)}>
+                                    <button className='btn btn-sm border-2 border-dark'
+                                        aria-label="delete-item"
+                                        onClick={() => handleSelectedItem(book)}>
                                         <i className="fa-solid fa-x"></i>
                                     </button>
                                 </td>
@@ -126,11 +116,7 @@ const Cart = ({ cart, setCart, handleIncreaseQTy, handleDecreaseQTy }) => {
                             disabled={loading}
                             onClick={handleRemoveItem}
                         >
-                            {loading ?
-                                (<Loading loading={loading} />)
-                                : (
-                                    'Xóa'
-                                )}
+                            Xóa
                         </button>
                     </div>
                 </div>

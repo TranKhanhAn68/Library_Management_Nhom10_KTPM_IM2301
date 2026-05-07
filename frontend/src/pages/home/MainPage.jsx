@@ -10,6 +10,7 @@ const MainPage = () => {
         categories,
         currentPage,
         dataBooks,
+        loading,
         goSearch,
         goPage,
         goSearchToCategory,
@@ -40,7 +41,8 @@ const MainPage = () => {
                                 goPage,
                                 goSearchToCategory,
                                 goSearchToAuthor,
-                                setCart
+                                setCart,
+                                loading
                             }}
                         />
                     </div>

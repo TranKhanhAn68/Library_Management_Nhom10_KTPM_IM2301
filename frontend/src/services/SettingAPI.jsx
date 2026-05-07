@@ -29,7 +29,7 @@ export const SettingListAPI = (token, reload) => {
         fetchData();
     }, [token, reload]);
 
-    return [settings, setSettings]
+    return settings
 };
 
 export const SettingByIDAPI = (setting_id) => {

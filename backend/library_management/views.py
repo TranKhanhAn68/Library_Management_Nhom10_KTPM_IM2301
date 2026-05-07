@@ -120,7 +120,7 @@ class UserViewSet(BaseViewSet):
     pagination_class = paginators.UserPaginator
     
     def get_permissions(self):
-        if self.action in ['current_user', 'borrowing_list', 'orders_list']:
+        if self.action in ['current_user', 'borrowing_list', 'orders_list', "update_password"]:
             return [IsAuthenticated()]
         return [perms.AdminPermission()]        
     
@@ -130,15 +130,23 @@ class UserViewSet(BaseViewSet):
         return searching_services.search_user_name(queryset, keyword)
 
         
-    @action(methods=['PATCH'], url_path='current_user', detail=False)
+    @action(methods=['GET', 'PATCH'], url_path='current_user', detail=False)
     def current_user(self, request):
-        u = request.user
-        if request.method.__eq__('PATCH'):
-            serializer = SimpleUserSerializer(u, data=request.data, partial=True)
-            serializer.is_valid(raise_exception=True)
-            u = serializer.save()
+        if request.method == "PATCH":
+            try:
+                serializer = SimpleUserSerializer(instance=request.user, data=request.data, partial=True)
+                serializer.is_valid(raise_exception=True)
+                serializer.save()
+                return Response(serializer.data, status=status.HTTP_200_OK)
+            except (ValidationError) as e:
+                return Response(e.detail, status=status.HTTP_400_BAD_REQUEST)
+        if request.method == "GET":
+            serializer = SimpleUserSerializer(
+                request.user,
+                context={'request': request}
+            )
+            return Response(serializer.data, status=status.HTTP_200_OK)
 
-        return Response(SimpleUserSerializer(u).data, status=status.HTTP_200_OK)
     
     @action(methods=['GET'], url_path='current_user/borrowing_list', detail=False,)
     def borrowing_list(self, request):
@@ -168,6 +176,25 @@ class UserViewSet(BaseViewSet):
             serializer = BorrowSerializer(page, many=True)
             return p.get_paginated_response(serializer.data)
         return Response(ReservationSerializer(orders, many=True).data, status=status.HTTP_200_OK)
+    
+    @action(methods=["PATCH"], url_path='current_user/update_password', detail=False)
+    def update_password(self, request):
+        try:
+            serializer = ChangePasswordSerializer(
+                instance=request.user,
+                data=request.data,
+                context={'request': request}
+            )
+            serializer.is_valid(raise_exception=True)
+            serializer.save()
+            return Response(
+                {"message": "Đổi mật khẩu thành công"},
+                status=status.HTTP_200_OK
+            )
+        except (ValidationError) as e:
+            return Response(e.detail, status=status.HTTP_400_BAD_REQUEST)
+        
+
 
 class AuthViewSet(viewsets.ViewSet):
     @action(methods=['POST'], detail=False, url_path='login')
@@ -186,21 +213,7 @@ class AuthViewSet(viewsets.ViewSet):
             token, _ = Token.objects.get_or_create(user=user)
 
             return Response({
-                'status': True,
                 'token': token.key,
-                'user': {
-                    'username': user.username,
-                    'email': user.email,
-                    'image': user.image.url if user.image else None,
-                    'phone_number': user.phone_number,
-                    'first_name': user.first_name,
-                    'last_name': user.last_name,
-                    'is_superuser': user.is_superuser,
-                    'is_staff': user.is_staff,
-                    'gender': user.gender,
-                    'dob': user.dob,
-                    'is_active': user.is_active
-                }
             }, status=status.HTTP_200_OK)
         except (AuthenticationFailed) as e:
             return Response({

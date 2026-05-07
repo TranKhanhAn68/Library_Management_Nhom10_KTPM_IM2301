@@ -4,7 +4,6 @@ import Register from "./pages/register/Register"
 import { createBrowserRouter, RouterProvider } from 'react-router-dom'
 import './App.css'
 import MainPage from './pages/home/MainPage'
-import Notification from './components/notification/Notification'
 import HomeLayout from "./layout/HomeLayout"
 import Dashboard from "./pages/admin/Dashboard"
 import DashboardLayout from "./layout/DashboardLayout"
@@ -74,7 +73,8 @@ function App() {
         { path: "authors/:id/:name", element: <DetailAuthorPage /> },
         {
           path: "current_user/information",
-          element: <InformationUserPage />,
+          element:
+            <InformationUserPage />,
         }
       ]
     },

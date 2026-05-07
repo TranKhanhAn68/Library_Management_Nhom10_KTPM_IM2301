@@ -12,7 +12,11 @@ const ProtectedRoute = ({ children, allowRoles = [] }) => {
     if (!user) return <Navigate to='/admin/login' replace />;
 
     if (allowRoles.length > 0) {
-        const hasPermission = allowRoles.some(roleName => user[roleName] === true);
+        const hasPermission = allowRoles.some(roleName => {
+            if (user[roleName] === undefined)
+                return false
+            return user[roleName] === true
+        });
         if (!hasPermission) return <Navigate to='/403' replace />;
     }
     return children;

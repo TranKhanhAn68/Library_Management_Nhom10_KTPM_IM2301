@@ -1,94 +1,94 @@
-import React, { createContext, useEffect, useState } from 'react';
-import { LoginUserAPI, RegisterUserAPI } from '../services/AccountAPI';
+import { createContext, useEffect, useState } from "react";
+import { LoginUserAPI, LogoutUserAPI, RegisterUserAPI } from "../services/AccountAPI";
 
 export const AuthContent = createContext()
 
 export const AuthProvider = ({ children }) => {
     const [user, setUser] = useState(null)
-    const [status, setStatus] = useState(false)
     const [token, setToken] = useState(null)
     const [loading, setLoading] = useState(true);
+    const [reload, setReload] = useState(false)
 
     useEffect(() => {
         const fetchCurrentUser = async () => {
-            if (!token) {
+            const savedToken = localStorage.getItem("token");
+
+            if (!savedToken) {
                 setLoading(false);
+                setUser(null)
+                setToken(null)
                 return;
             }
 
             try {
-                setLoading(true);
-
                 const res = await fetch("http://127.0.0.1:8000/users/current_user/", {
-                    method: "GET",
                     headers: {
-                        Authorization: `Token ${token}`
+                        Authorization: `Token ${savedToken}`
                     }
                 });
 
-                if (!res.ok) {
-                    throw new Error("Failed to fetch user");
+                if (res.ok) {
+                    const data = await res.json();
+                    setUser(data);
+                    setToken(savedToken);
                 }
 
-                const data = await res.json();
-
-                setUser(data);
-                setStatus(true);
-            } catch (err) {
-                console.error(err);
-                setUser(null);
-                setStatus(false);
+            } catch {
+                setUser(null)
+                setToken(null)
+                localStorage.removeItem("token");
             } finally {
                 setLoading(false);
             }
         };
 
         fetchCurrentUser();
-    }, [token]);
+    }, [reload]);
 
     useEffect(() => {
-        const token = localStorage.getItem("token")
-        if (token) {
-            const parsed = JSON.parse(token)
-            setToken(parsed)
-        }
-        setLoading(false);
-    }, [])
-
-    useEffect(() => {
-        window.addEventListener("storage", (e) => {
-            if (e.key === "authUser" && e.newValue === null) {
-                logout();
+        const handleStorageChange = (event) => {
+            if (event.key === "logout") {
+                setUser(null);
+                setToken(null);
             }
-        });
+        };
 
-        return () => window.removeEventListener("storage", logout);
+        window.addEventListener("storage", handleStorageChange);
+
+        return () => {
+            window.removeEventListener("storage", handleStorageChange);
+        };
     }, []);
 
     const login = async (username, password) => {
-        const data = await LoginUserAPI(username, password)
-        return data;
-    }
+        return await LoginUserAPI(username, password);
+    };
 
     const register = async (firstname, lastname, email, username, password) => {
         const data = await RegisterUserAPI(firstname, lastname, email, username, password)
         return data
     }
+    const logout = async () => {
+        if (token) await LogoutUserAPI(token);
 
-    const logout = () => {
-        setUser(null)
-        setStatus(false)
-        setToken("")
-        localStorage.removeItem('authUser')
-    }
+        setUser(null);
+        setToken(null);
+        localStorage.removeItem("token");
+        localStorage.setItem("logout", Date.now());
+    };
     return (
-        <AuthContent.Provider
-            value={{
-                user, setUser, status, setStatus, token, setToken, login, register, logout, loading
-            }}
-        >
+        <AuthContent.Provider value={{
+            user,
+            token,
+            setUser,
+            setToken,
+            login,
+            register,
+            logout,
+            loading,
+            setReload
+        }}>
             {children}
         </AuthContent.Provider>
-    )
-
-}
+    );
+};

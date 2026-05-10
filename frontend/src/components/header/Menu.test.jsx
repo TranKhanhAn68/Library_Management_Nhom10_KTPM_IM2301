@@ -45,7 +45,6 @@ test("render menu basic", () => {
     renderMenu();
 
     expect(screen.getByText("Tác giả")).toBeInTheDocument();
-    expect(screen.getByText("Sách nổi bật")).toBeInTheDocument();
     expect(screen.getByText("Thể loại")).toBeInTheDocument();
 });
 

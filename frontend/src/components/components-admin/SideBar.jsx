@@ -10,6 +10,8 @@ const SideBar = () => {
         { link: '/dashboard/users', label: "Quản lý User", icon: 'fa-solid fa-user' },
         { link: '/dashboard/categories', label: "Quản lý loại sách", icon: 'fa-solid fa-layer-group' },
         { link: '/dashboard/books', label: "Quản lý sách", icon: 'fa-solid fa-book' },
+        { link: '/dashboard/authors', label: "Quản lý tác giả", icon: 'fa-solid fa-user-pen' },
+        { link: '/dashboard/publishers', label: "Quản lý NSB", icon: 'fa-solid fa-book-open-reader' },
         { link: '/dashboard/settings', label: "Cài đặt", icon: 'fa-solid fa-gear' }
     ];
 

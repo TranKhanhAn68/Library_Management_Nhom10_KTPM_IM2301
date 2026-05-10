@@ -20,8 +20,8 @@ class User(AbstractUser):
 class Employee(models.Model):
     user = models.OneToOneField(User, on_delete=models.CASCADE, primary_key=True)
     employee_id = models.CharField(max_length=20, null=False)
-    shift = models.CharField(max_length=100)
-    identity_card = models.CharField(max_length=50)
+    shift = models.CharField(max_length=100, null=True)
+    identity_card = models.CharField(max_length=50, null=True)
 
 class BaseView(models.Model):
     created_at = models.DateTimeField(auto_now_add=True)

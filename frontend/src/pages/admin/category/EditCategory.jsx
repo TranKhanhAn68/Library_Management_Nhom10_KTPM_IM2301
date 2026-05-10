@@ -4,9 +4,10 @@ import { CategoryByIDAPI, UpdateCategory } from '../../../services/CategoryAPI';
 import { AuthContent } from '../../../utils/AuthContext';
 import Loading from '../../../components/Loading';
 import BaseModal from '../../../components/BaseModal';
+import { getError } from '../../../utils/GetError';
 const EditCategory = () => {
     const { token } = useContext(AuthContent)
-    const [loading, setLoading] = useState(true)
+    const [loading, setLoading] = useState(false)
     const [message, setMessage] = useState("")
     const [openModal, setOpenModal] = useState(false)
     const { id } = useParams();
@@ -17,11 +18,8 @@ const EditCategory = () => {
 
     const [isSuccess, setIsSuccess] = useState(false)
     useEffect(() => {
-        if (cate) {
-            setName(cate.name);
-            setActive(cate.active);
-            setLoading(false)
-        }
+        setName(cate?.name);
+        setActive(cate?.active);
     }, [cate]);
 
     const handleSubmit = async (e) => {
@@ -35,13 +33,10 @@ const EditCategory = () => {
         try {
             setLoading(true)
             const updateCategory = await UpdateCategory(id, name, active, token)
-            if (updateCategory) {
-                setMessage("Cập nhật thành công")
-                setIsSuccess(true)
-            }
+            setMessage("Cập nhật thành công")
+            setIsSuccess(true)
         } catch (err) {
-            const error = getError(err)
-            setMessage(error)
+            setMessage(err[0])
         } finally {
             setLoading(false)
         }
@@ -53,8 +48,8 @@ const EditCategory = () => {
         <div>
             <div className='tw-p-6 tw-max-w-md tw-mx-auto tw-bg-yellow-100 tw-rounded-2xl tw-shadow-lg'>
                 <h2 className='tw-text-red-800 tw-text-2xl tw-font-bold 
-                    tw-mb-6 tw-bg-slate-300 tw-px-4 tw-py-2 tw-rounded-lg tw-flex tw-justify-center tw-shadow'>
-                    Sửa Danh Mục ID: {cate.id}
+                                                                                                                            tw-mb-6 tw-bg-slate-300 tw-px-4 tw-py-2 tw-rounded-lg tw-flex tw-justify-center tw-shadow'>
+                    Sửa Danh Mục ID: {cate?.id}
                 </h2>
 
                 <form className='tw-flex tw-flex-col tw-gap-4' onSubmit={handleSubmit}>
@@ -103,7 +98,7 @@ const EditCategory = () => {
                     <div className="tw-p-3 tw-flex tw-items-center tw-justify-center tw-gap-3" style={{ width: "300px" }}>
                         {isSuccess ?
                             <i className="fa-solid fa-circle-check tw-text-green-500 tw-text-lg"></i> :
-                            <i class="fa-solid fa-circle-xmark tw-text-red-500 tw-text-lg"></i>
+                            <i className="fa-solid fa-circle-xmark tw-text-red-500 tw-text-lg"></i>
                         }
                         <div>
                             {message.trim().length > 0 && message}

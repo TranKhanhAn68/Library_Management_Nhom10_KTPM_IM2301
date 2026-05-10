@@ -1,11 +1,17 @@
 import { useEffect, useState } from "react"
 const USER_URL = 'http://127.0.0.1:8000/users'
 
-export const UserListAPI = (page, token) => {
+export const UserListAPI = (page, search = "", token, reload) => {
     const [data, setData] = useState([])
     const fetchData = async () => {
         try {
-            const res = await fetch(`${USER_URL}/?page=${page}`, {
+            const params = new URLSearchParams()
+            params.append("page", page)
+
+            if (search)
+                params.append("search", search)
+            const res = await fetch(`${USER_URL}/?${params.toString()}`, {
+
                 method: 'GET',
                 headers: {
                     'Content-Type': 'application/json',
@@ -25,7 +31,7 @@ export const UserListAPI = (page, token) => {
 
     useEffect(() => {
         fetchData()
-    }, [page, token])
+    }, [page, token, reload])
 
     return data
 }
@@ -61,18 +67,19 @@ export const UserListByIDAPI = (id, token) => {
 }
 
 export const PostUser = async (token, formData) => {
-    const res = await fetch(`${USER_URL}/users/`, {
+    const res = await fetch(`${USER_URL}/`, {
         method: 'POST',
         headers: {
             ...(token && { Authorization: `Token ${token}` })
         },
         body: formData
     })
+    const data = await res.json()
     if (!res.ok) {
+        console.log(data)
         throw data
     }
-    const data = await res.json()
-    setUsers(data)
+    return data
 }
 
 export const UpdateUser = async (token, id, formData) => {
@@ -84,7 +91,6 @@ export const UpdateUser = async (token, id, formData) => {
         body: formData
     })
     const data = await res.json()
-    console.log("DATA:", data);
 
     if (!res.ok) {
         throw data
@@ -100,10 +106,11 @@ export const DeleteUser = async (id, token) => {
             ...(token && { Authorization: `Token ${token}` })
         },
     })
-    if (!res.ok) throw new Error(`Lỗi: ${res.status}`);
-
-    const data = await res.json();
-    return data;
+    if (!res.ok) {
+        const data = await res.json()
+        throw data
+    }
+    return true;
 }
 
 

@@ -40,12 +40,10 @@ const Order = () => {
         setOpenModalMsg(false);
         setOpenModalChangeStatus(false);
 
-        setTimeout(() => {
-            setSelectedOrder(null);   // đúng state
-            setSelectedStatus(null);
-            setMessage("");
-            setIsSuccess(false);
-        }, 200);
+        setSelectedOrder(null);
+        setSelectedStatus(null);
+        setMessage("");
+        setIsSuccess(false);
     };
 
     const handleUpdateStatus = async () => {
@@ -134,7 +132,7 @@ const Order = () => {
 
                 <tbody>
                     {orders?.map((order) => {
-                        const statusInfo = RESERVATION_STATUS_CONFIG[order.status] || { label: item.status, className: "tw-bg-gray-100" };
+                        const statusInfo = RESERVATION_STATUS_CONFIG[order.status];
                         return (
                             <tr key={order.id} className='tw-text-center border-b hover:tw-bg-gray-50'>
                                 <td className='tw-p-3'>{order.id}</td>
@@ -243,7 +241,7 @@ const Order = () => {
                     <div className="tw-p-3 tw-flex tw-items-center tw-justify-center tw-gap-3" style={{ width: "300px" }}>
                         {isSuccess ?
                             <i className="fa-solid fa-circle-check tw-text-green-500 tw-text-lg"></i> :
-                            <i class="fa-solid fa-circle-xmark tw-text-red-500 tw-text-lg"></i>
+                            <i className="fa-solid fa-circle-xmark tw-text-red-500 tw-text-lg"></i>
                         }
                         <div>
                             {message}
@@ -253,7 +251,7 @@ const Order = () => {
 
             {selectedOrder && (
                 <BaseModal open={openModal} close={handleClose}>
-                    <div className="tw-space-y-4 tw-px-4 tw-py-2">
+                    <div className="tw-space-y-4 tw-px-4 tw-py-2" data-testid="order-modal">
                         {/* HEADER */}
                         <div className="tw-border-b tw-pb-3">
                             <h2 className="tw-text-xl tw-font-bold tw-text-gray-800">

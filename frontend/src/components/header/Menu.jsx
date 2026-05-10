@@ -40,25 +40,24 @@ const Menu = ({ openMenuAuthorHover, setOpenMenuAuthorHover, openMenuCategoryHov
                     </MenuHoverDropdown>
                 }
             </li>
-            <li className='dropdown-item py-2'>
-                <Link className="py-2 fw-semibold d-flex justify-content-between align-items-center"
-                    to="/featured">
-                    Sách nổi bật
-                </Link>
-            </li>
 
-            <li className='dropdown-item position-relative py-2 '
+            <li className="dropdown-item position-relative py-2"
                 onMouseEnter={() => setOpenMenuCategoryHover(true)}
                 onMouseLeave={() => setOpenMenuCategoryHover(false)}
             >
-                <Link className="py-2 fw-semibold d-flex justify-content-between align-items-center" to="#">
+                <div
+                    className="w-100 py-2 fw-semibold d-flex justify-content-between align-items-center"
+
+                >
                     <span>Thể loại</span>
                     <i className="fa-solid fa-angle-right"></i>
-                </Link>
+                </div>
 
                 {openMenuCategoryHover && (
                     <MenuHoverDropdown open={openMenuCategoryHover}>
-                        <h6 className="px-3 py-2 fw-bold">DANH SÁCH THỂ LOẠI</h6>
+                        <h6 className="px-3 py-2 fw-bold">
+                            DANH SÁCH THỂ LOẠI
+                        </h6>
 
                         <div className="row g-2 px-2 pb-2">
                             {categories?.map((category) => (
@@ -75,8 +74,7 @@ const Menu = ({ openMenuAuthorHover, setOpenMenuAuthorHover, openMenuCategoryHov
                     </MenuHoverDropdown>
                 )}
             </li>
-
-        </ul>
+        </ul >
     );
 }
 

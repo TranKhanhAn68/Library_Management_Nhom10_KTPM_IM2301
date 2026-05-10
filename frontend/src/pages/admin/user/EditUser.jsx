@@ -54,7 +54,11 @@ const Edituser = () => {
     // 3. Hàm xử lý Submit
     const handleSubmit = async (e) => {
         e.preventDefault();
-
+        if (!email || !firstName || !lastName || !phone) {
+            setMessage("Vui lòng nhập đầy đủ thông tin")
+            setOpenModal(true)
+            return;
+        }
         const formData = new FormData()
         if (imageFile) formData.append('image', imageFile)
         formData.append('email', email);
@@ -78,7 +82,7 @@ const Edituser = () => {
             }
         } catch (err) {
             const error = getError(err)
-            setMessage(error)
+            setMessage(error[0])
             setOpenModal(true)
         } finally {
             setLoading(false)

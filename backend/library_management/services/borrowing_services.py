@@ -45,7 +45,7 @@ def check_max_books(user, cart):
         status__in=[
             User_Book.BorrowStatus.BORROWING,
             User_Book.BorrowStatus.OVERDUE,
-            User_Book.BorrowStatus.PENDING
+            User_Book.BorrowStatus.CONFIRMED
         ]
     ).aggregate(total=Sum('borrowing_quantity'))['total'] or 0
 

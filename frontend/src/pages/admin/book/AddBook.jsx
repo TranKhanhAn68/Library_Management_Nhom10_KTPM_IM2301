@@ -46,8 +46,8 @@ const AddBook = () => {
 
         const formData = new FormData()
 
-        if (!categoryID || !authorID || !publisherID) {
-            setMessage("Vui lòng chọn đầy đủ danh mục, tác giả, nhà xuất bản")
+        if (!categoryID || !authorID || !publisherID || !name || !description || !bookCode || !totalQuantity) {
+            setMessage("Vui lòng nhập đầy đủ thông tin")
             setOpenModal(true)
             return
         }
@@ -66,7 +66,6 @@ const AddBook = () => {
             formData.append("image", imageFile)
         }
 
-        // debug FormData
 
         try {
             setLoading(true)
@@ -79,7 +78,7 @@ const AddBook = () => {
             }
         } catch (err) {
             const error = getError(err)
-            setMessage(error)
+            setMessage(error[0])
             setOpenModal(true)
         } finally {
             setLoading(false)
@@ -148,7 +147,6 @@ const AddBook = () => {
                         </button>
                     </div>)}
 
-                {/* BOOK CODE */}
                 <input
                     type="text"
                     placeholder="Mã sách"
@@ -157,7 +155,6 @@ const AddBook = () => {
                     className='tw-border tw-p-3 tw-rounded-lg'
                 />
 
-                {/* QUANTITY */}
                 <input
                     type="number"
                     placeholder="Tổng số lượng"
@@ -167,8 +164,8 @@ const AddBook = () => {
                 />
 
 
-                {/* CATEGORY */}
                 <select
+                    id="choose_category"
                     value={categoryID}
                     onChange={(e) => setCategoryID(e.target.value)}
                     className='tw-border tw-p-3 tw-rounded-lg'
@@ -179,8 +176,8 @@ const AddBook = () => {
                     ))}
                 </select>
 
-                {/* AUTHOR */}
                 <select
+                    id="choose_author"
                     value={authorID}
                     onChange={(e) => setAuthorID(e.target.value)}
                     className='tw-border tw-p-3 tw-rounded-lg'
@@ -191,8 +188,8 @@ const AddBook = () => {
                     ))}
                 </select>
 
-                {/* PUBLISHER */}
                 <select
+                    id="choose_publisher"
                     value={publisherID}
                     onChange={(e) => setPublisherID(e.target.value)}
                     className='tw-border tw-p-3 tw-rounded-lg'
@@ -203,7 +200,6 @@ const AddBook = () => {
                     ))}
                 </select>
 
-                {/* ACTIVE */}
                 <label className="tw-flex tw-items-center tw-p-4 tw-border tw-rounded-xl tw-cursor-pointer">
                     <input
                         type="checkbox"
@@ -245,7 +241,7 @@ const AddBook = () => {
                     </div>
                 </div>
             </BaseModal>
-        </div >
+        </div>
     )
 }
 

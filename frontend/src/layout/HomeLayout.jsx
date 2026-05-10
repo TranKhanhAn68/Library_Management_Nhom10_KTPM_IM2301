@@ -8,6 +8,7 @@ import { AuthContent } from '../utils/AuthContext';
 import { AuthorListAPI } from '../services/AuthorAPI';
 import { CategoryListAPI } from '../services/CategoryAPI'
 import Footer from '../components/footer/Footer';
+import Loading from '../components/Loading';
 
 const HomeLayout = () => {
     const { token } = useContext(AuthContent)
@@ -18,8 +19,8 @@ const HomeLayout = () => {
     const searchAuthor = searchParams.get("author_id") || ""
     const { dataBooks, loading } = BookListAPI(currentPage, searchBook, searchCategory, searchAuthor, token)
     const books = dataBooks?.results || []
-    const [authors] = AuthorListAPI(token)
-    const [categories] = CategoryListAPI(token)
+    const [authors] = AuthorListAPI(token) || []
+    const [categories] = CategoryListAPI(token) || []
     const [cart, setCart] = useState(() => {
         const cartData = localStorage.getItem("cart")
         if (!cartData)
@@ -66,6 +67,7 @@ const HomeLayout = () => {
 
     return (
         <div>
+            {loading && <Loading loading={loading} />}
             <Header handleSearch={goSearch} searchParams={searchParams} cart={cart} authors={authors} categories={categories} />
             <div style={{ paddingTop: "100px" }}>
                 <Outlet context={{

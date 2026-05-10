@@ -15,7 +15,6 @@ export const BookListAPI = (page, q = "", category_id = "", author_id = "", toke
             if (author_id) {
                 params.append("author_id", author_id)
             } else {
-
                 if (q)
                     params.append("q", q)
 
@@ -52,31 +51,32 @@ export const BookListAPI = (page, q = "", category_id = "", author_id = "", toke
 
 export const BookIDAPI = (id, token) => {
     const [book, setBook] = useState(null)
-    const [err, setErr] = useState("")
-    const fetchData = async () => {
-        try {
-            const res = await fetch(`${BOOK_URL}/${id}/`, {
-                method: 'GET',
-                headers: {
-                    'Content-Type': 'application/json',
 
-                    ...(token && { Authorization: `Token ${token}` })
-                }
-            })
-
-            if (!res.ok) throw new Error("Lỗi hệ thống, vui lòng thử lại")
-            const result = await res.json()
-            setBook(result)
-        } catch (err) {
-            setErr(err.message)
-        }
-    }
     useEffect(() => {
+        const fetchData = async () => {
+            try {
+                const res = await fetch(`${BOOK_URL}/${id}/`, {
+                    method: "GET",
+                    headers: {
+                        "Content-Type": "application/json",
+                        ...(token && { Authorization: `Token ${token}` }),
+                    },
+                });
+
+                if (!res.ok) throw new Error("Lỗi hệ thống");
+
+                const result = await res.json();
+                setBook(result);
+            } catch (err) {
+                console.error(err);
+            }
+        };
+
         fetchData();
     }, [id, token]);
 
-    return { book, err };
-}
+    return [book, setBook];
+};
 
 export const UpdateBook = async (token, id, formData) => {
     const res = await fetch(`${BOOK_URL}/${id}/`, {
@@ -118,8 +118,9 @@ export const DeleteBook = async (id, token) => {
             ...(token && { Authorization: `Token ${token}` })
         },
     })
-    const data = await res.json();
-    if (!res.ok) throw data
-
-    return data;
+    if (!res.ok) {
+        const data = await res.json()
+        throw new Error(data)
+    }
+    return true;
 }

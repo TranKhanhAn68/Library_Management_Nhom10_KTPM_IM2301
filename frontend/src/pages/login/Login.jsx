@@ -6,14 +6,13 @@ import Loading from '../../components/Loading';
 
 const Login = () => {
   const inputRef = useRef()
-  const { login, setUser, setStatus, setToken } = useContext(AuthContent)
+  const { login, setToken, setReload } = useContext(AuthContent)
   const [username, setUsername] = useState('')
   const [password, setPassword] = useState('');
   const [loading, setLoading] = useState(false)
   const [activeRemember, setActiveRemember] = useState(false)
   const navigate = useNavigate()
   const [err, setErr] = useState(null)
-
 
   useEffect(() => {
     const storedUsername = localStorage.getItem('storedUsername')
@@ -37,14 +36,13 @@ const Login = () => {
       const result = await login(username, password);
       const token = result?.token
       localStorage.setItem('storedUsername', username);
-      localStorage.setItem('token', JSON.stringify(token))
-
+      localStorage.setItem('token', token)
       setToken(token)
-
+      setReload(prev => !prev)
       navigate('/');
 
     } catch (err) {
-      setErr(err)
+      setErr(err?.message || err || "Login failed");
     } finally {
       setLoading(false)
     }

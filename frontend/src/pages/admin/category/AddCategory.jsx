@@ -25,6 +25,7 @@ const AddCategory = () => {
     const handleSubmit = async (e) => {
         e.preventDefault();
         if (name.trim() === "") {
+            setOpenModal(true)
             setMessage("Không được để trống")
             return
         }
@@ -33,13 +34,10 @@ const AddCategory = () => {
         try {
             setLoading(true)
             const createCategory = await PostCategory(name, active, token)
-            if (createCategory) {
-                setMessage("Tạo thành công")
-                setIsSuccess(true)
-            }
+            setMessage("Tạo thành công")
+            setIsSuccess(true)
         } catch (err) {
-            const error = getError(err)
-            setMessage(error)
+            setMessage(err[0])
         } finally {
             setLoading(false)
         }
@@ -76,7 +74,6 @@ const AddCategory = () => {
                     <button
                         type='submit'
                         className='tw-px-4 tw-py-2 tw-rounded-lg tw-bg-green-500 tw-text-white hover:tw-bg-green-600 tw-transition-colors'
-                        onClick={handleSubmit}
                     >
                         Thêm mới
                     </button>
@@ -90,7 +87,7 @@ const AddCategory = () => {
                     </button>
                 </form>
             </div>
-            {message &&
+            {message?.trim() &&
                 <BaseModal open={openModal} close={() => {
                     setOpenModal(false)
                     setMessage("")

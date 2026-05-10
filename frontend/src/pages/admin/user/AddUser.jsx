@@ -7,11 +7,8 @@ import BaseModal from '../../../components/BaseModal';
 import { getError } from '../../../utils/GetError';
 
 const AddUser = () => {
-    const { id } = useParams();
     const { token } = useContext(AuthContent);
-    const [user] = UserListByIDAPI(id, token);
 
-    // 1. Khai báo State
     const [preview, setPreview] = useState('') //Lấy ảnh ban đầu
     const [imageFile, setImageFile] = useState(null) // Lấy ảnh từ máy tính
     const [email, setEmail] = useState('');
@@ -28,46 +25,44 @@ const AddUser = () => {
     const [identityCard, setIdentityCard] = useState('');
 
     const navigate = useNavigate();
-    const [loading, setLoading] = useState(true);
+    const [loading, setLoading] = useState(false);
     const [openModal, setOpenModal] = useState(false)
     const [message, setMessage] = useState("")
+    const [isSuccess, setIsSuccess] = useState(false)
 
-    const isSuccess = message === "Cập nhật thành công";
-
-    // 2. Đổ dữ liệu từ API vào State khi có dữ liệu user
-    useEffect(() => {
-        setLoading(false)
-    }, []);
-
-    // 3. Hàm xử lý Submits
     const handleSubmit = async (e) => {
         e.preventDefault();
-
+        if (!username || !password || !email || !firstName || !lastName || !phone) {
+            setMessage("Vui lòng nhập đầy đủ thông tin")
+            setOpenModal(true)
+            return;
+        }
         const formData = new FormData()
         if (imageFile) formData.append('image', imageFile)
         formData.append('email', email);
         formData.append('password', password);
-        formData.appent('username', username);
+        formData.append('username', username);
         formData.append('first_name', firstName);
         formData.append('last_name', lastName);
         formData.append('phone_number', phone);
         formData.append('is_active', active);
         formData.append('is_staff', isStaff);
         formData.append('is_superuser', isSuperuser);
-        formData.append('employee_id', employeeID);
-        formData.append('shift', shift);
-        formData.append('identity_card', identityCard);
+        if (isStaff) {
+            formData.append('employee_id', employeeID);
+            formData.append('shift', shift);
+            formData.append('identity_card', identityCard);
+        }
 
         setOpenModal(true)
         try {
             setLoading(true)
             const result = await PostUser(token, formData)
-            if (result) {
-                setMessage(result?.message)
-            }
+            setIsSuccess(true)
+            setMessage(result?.message)
         } catch (err) {
             const error = getError(err)
-            setMessage(error)
+            setMessage(error[0])
         } finally {
             setLoading(false)
         }
@@ -89,7 +84,7 @@ const AddUser = () => {
 
                 <div className="tw-bg-white tw-shadow-sm tw-rounded-2xl tw-overflow-hidden">
                     <div className="tw-px-8 tw-py-6 tw-border-b tw-border-gray-100">
-                        <h1 className="tw-text-2xl tw-font-bold tw-text-gray-800">Chỉnh sửa người dùng</h1>
+                        <h1 className="tw-text-2xl tw-font-bold tw-text-gray-800">Thêm người dùng</h1>
                     </div>
 
                     <form onSubmit={handleSubmit} className="tw-p-8 tw-space-y-8">
@@ -147,7 +142,7 @@ const AddUser = () => {
                             <div className="tw-flex tw-flex-col tw-gap-2">
                                 <label className="tw-text-sm tw-font-semibold tw-text-gray-600">Password</label>
                                 <input
-                                    type="text"
+                                    type="password"
                                     className="tw-border tw-p-2.5 tw-rounded-lg outline-none "
                                     value={password}
                                     onChange={(e) => setPassword(e.target.value)}

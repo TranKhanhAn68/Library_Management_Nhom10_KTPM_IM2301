@@ -23,7 +23,7 @@ const Register = () => {
   const [email, setEmail] = useState("")
   const [validEmail, setValidEmail] = useState(false)
   const [focusEmail, setFocusEmail] = useState(false)
-
+  const [errMsg, setErrMsg] = useState("")
   const [username, setUsername] = useState("")
   const [validName, setValidName] = useState(false)
   const [focusUsername, setFocusUsername] = useState(false)
@@ -36,13 +36,22 @@ const Register = () => {
   const [validMatch, setValidMatch] = useState(false)
   const [focusMatch, setFocusMatch] = useState(false)
 
-  const [errMsg, setErrMsg] = useState(null)
   const [done, setDone] = useState(false)
 
-  const [message, setMessage] = useState(null)
+  const [message, setMessage] = useState("")
+  const [errors, setErrors] = useState([])
   const [isSuccess, setIsSuccess] = useState(false)
   const [loading, setLoading] = useState(false)
   const navigate = useNavigate()
+
+  const [showPasswords, setShowPasswords] = useState({
+    new: false,
+    confirm: false
+  });
+
+  const toggleVisibility = (field) => {
+    setShowPasswords(prev => ({ ...prev, [field]: !prev[field] }));
+  };
 
   useEffect(() => {
     userRef.current.focus()
@@ -88,12 +97,15 @@ const Register = () => {
     try {
       const data = await register(firstname, lastname, email, username, pwd);
       setMessage(data.message)
+      setErrors([])
       setIsSuccess(data.success)
       setTimeout(() => {
         navigate('/login')
       }, 1500);
     } catch (err) {
-      setMessage(errw)
+      setMessage("")
+      setErrors(err)
+      console.log(err)
     } finally {
       setLoading(false)
     }
@@ -163,40 +175,61 @@ const Register = () => {
               <p className={(focusUsername && !validName && username) ? "instructions" : "offscreen"}>
                 6–16 ký tự, bắt đầu bằng chữ cái.
               </p>
-
-              <input
-                type="password"
-                placeholder="Mật khẩu"
-                onChange={(e) => setPwd(e.target.value)}
-                value={pwd}
-                onBlur={() => setFocusPwd(true)}
-                className={`form-control 
+              <div className="input-group">
+                <input
+                  type={showPasswords.new ? "text" : "password"}
+                  placeholder="Mật khẩu"
+                  onChange={(e) => setPwd(e.target.value)}
+                  value={pwd}
+                  onBlur={() => setFocusPwd(true)}
+                  className={`form-control 
                     ${focusPwd ? (validPwd ? "is-valid" : "is-invalid") : ""}`}
-              />
+                />
+                <span className="input-group-text bg-light border-start-0 text-muted cursor-pointer"
+                  onClick={() => toggleVisibility('new')} style={{ cursor: 'pointer' }} >
+                  <i className={`fas ${showPasswords.new ? 'fa-eye-slash' : 'fa-eye'}`}></i>
+                </span>
+              </div>
 
               <p className={(focusPwd && !validPwd && pwd) ? "instructions" : "offscreen"}>
                 8–24 ký tự, gồm chữ và số.
               </p>
 
-              <input
-                type="password"
-                placeholder="Nhập lại mật khẩu"
-                onChange={(e) => setMatchPwd(e.target.value)}
-                value={matchPwd}
-                onBlur={() => setFocusMatch(true)}
-                className={`form-control 
+              <div className="input-group">
+                <input
+                  type={showPasswords.confirm ? "text" : "password"}
+                  placeholder="Nhập lại mật khẩu"
+                  onChange={(e) => setMatchPwd(e.target.value)}
+                  value={matchPwd}
+                  onBlur={() => setFocusMatch(true)}
+                  className={`form-control 
                     ${focusMatch ? (validMatch ? "is-valid" : "is-invalid") : ""}`}
-              />
+                />
+                <span className="input-group-text bg-light border-start-0 text-muted cursor-pointer"
+                  onClick={() => toggleVisibility('confirm')} style={{ cursor: 'pointer' }} >
+                  <i className={`fas ${showPasswords.confirm ? 'fa-eye-slash' : 'fa-eye'}`}></i>
+                </span>
+              </div>
 
               <p className={(focusMatch && !validMatch && matchPwd) ? "instructions" : "offscreen"}>
-                {errMsg && errMsg}
+                {errMsg?.trim() && errMsg}
               </p>
 
-              {message && (
-                <p className={`${isSuccess ? "bg-success" : "bg-danger"} text-white small p-2 rounded`}>{message}</p>
+              {message.trim() && (
+                <p className={`${isSuccess && "bg-success"} text-white small p-2 rounded`}>{message}</p>
               )}
-
-              <button type="submit" className="btn btn-primary fw-bold" disabled={checkAllInput()}>
+              {errors.length > 0 && (
+                <ul className={`${!isSuccess && "bg-danger"} text-white small p-2 rounded`}>
+                  {errors.map((e, index) => (
+                    <li key={index}>{e}</li>
+                  ))}
+                </ul>
+              )}
+              <button
+                type="submit"
+                className={`btn btn-primary fw-bold `}
+                disabled={checkAllInput()}
+              >
                 Đăng ký
               </button>
             </form>
@@ -211,7 +244,7 @@ const Register = () => {
 
         </div>
       </div>
-    </div>
+    </div >
   );
 }
 

@@ -18,3 +18,7 @@
 .custom-scroll::-webkit-scrollbar-thumb:hover {
     background: #888;
 }
+
+button:disabled {
+  cursor: not-allowed;
+}

@@ -7,8 +7,24 @@ vi.mock("react-router-dom", () => ({
 }));
 
 vi.mock("../BaseModal", () => ({
+    default: ({ open, children, close }) =>
+        open ? (
+            <div data-testid="modal">
+                {children}
+                <button onClick={close}>close</button>
+            </div>
+        ) : null
+}));
+
+vi.mock("../BaseModal", () => ({
     default: ({ open, children }) =>
         open ? <div data-testid="modal">{children}</div> : null
+}));
+
+vi.mock("../../utils/CartAction", () => ({
+    AddToCart: vi.fn((book, setting, qty, setCart) => {
+        setCart?.(prev => [...(prev || []), book]);
+    })
 }));
 
 import { render, screen, fireEvent } from "@testing-library/react";
@@ -43,12 +59,10 @@ const book = {
 const defaultSetting = {};
 const setCart = vi.fn();
 
-// ================= RESET =================
 beforeEach(() => {
     vi.clearAllMocks();
 });
 
-// ================= TEST 1 =================
 test("render book info", () => {
     render(<Card book={book} defaultSetting={defaultSetting} setCart={setCart} />);
 
@@ -56,7 +70,6 @@ test("render book info", () => {
     expect(screen.getByText(/Số lượng còn lại/)).toBeInTheDocument();
 });
 
-// ================= TEST 2 =================
 test("click add to cart calls AddToCart", () => {
     render(<Card book={book} defaultSetting={defaultSetting} setCart={setCart} />);
 
@@ -73,7 +86,6 @@ test("click add to cart calls AddToCart", () => {
     expect(screen.getByText(/đã được thêm vào giỏ hàng/)).toBeInTheDocument();
 });
 
-// ================= TEST 3 =================
 test("out of stock should not call AddToCart", () => {
     const outOfStockBook = {
         ...book,
@@ -94,4 +106,38 @@ test("out of stock should not call AddToCart", () => {
 
     expect(screen.getByTestId("modal")).toBeInTheDocument();
     expect(screen.getByText(/Sách đã hết/)).toBeInTheDocument();
+});
+
+test("handleAddToCart covers both branches", async () => {
+    const { rerender } = render(
+        <Card book={book} defaultSetting={defaultSetting} setCart={setCart} />
+    );
+
+    // IN STOCK
+    fireEvent.click(screen.getByText("Thêm vào giỏ hàng"));
+
+    expect(AddToCart).toHaveBeenCalledWith(
+        book,
+        defaultSetting,
+        1,
+        setCart
+    );
+
+    expect(screen.getByTestId("modal")).toBeInTheDocument();
+    expect(screen.getByText(/đã được thêm/i)).toBeInTheDocument();
+
+    // OUT OF STOCK
+    rerender(
+        <Card
+            book={{ ...book, available_quantity: 0 }}
+            defaultSetting={defaultSetting}
+            setCart={setCart}
+        />
+    );
+
+    fireEvent.click(screen.getByText("Thêm vào giỏ hàng"));
+
+    expect(AddToCart).toHaveBeenCalledTimes(1);
+
+    expect(screen.getByText(/Sách đã hết/i)).toBeInTheDocument();
 });

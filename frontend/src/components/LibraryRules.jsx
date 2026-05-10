@@ -3,7 +3,6 @@ import React from 'react';
 const LibraryRules = () => {
     return (
         <div className="tw-max-w-4xl tw-mx-auto tw-p-6 tw-bg-white tw-min-h-screen">
-            {/* Tiêu đề chính */}
             <div className="tw-text-center tw-mb-12">
                 <h1 className="tw-text-4xl tw-font-black tw-text-gray-900 tw-uppercase tw-tracking-tighter">
                     Nội Quy Thư Viện
@@ -12,10 +11,8 @@ const LibraryRules = () => {
                 <div className="tw-w-24 tw-h-1 tw-bg-red-500 tw-mx-auto tw-mt-4"></div>
             </div>
 
-            {/* Khối quy định chính - Viết tĩnh từng thẻ */}
             <div className="tw-grid tw-grid-cols-1 md:tw-grid-cols-2 tw-gap-8">
 
-                {/* Thẻ 1: Số lượng */}
                 <div className="tw-bg-gray-50 tw-p-6 tw-rounded-2xl tw-border-l-4 tw-border-blue-500">
                     <div className="tw-flex tw-items-center tw-gap-3 tw-mb-3">
                         <i className="fa-solid fa-book tw-text-blue-500 tw-text-xl"></i>
@@ -26,7 +23,6 @@ const LibraryRules = () => {
                     </p>
                 </div>
 
-                {/* Thẻ 2: Thời hạn */}
                 <div className="tw-bg-gray-50 tw-p-6 tw-rounded-2xl tw-border-l-4 tw-border-green-500">
                     <div className="tw-flex tw-items-center tw-gap-3 tw-mb-3">
                         <i className="fa-solid fa-clock tw-text-green-500 tw-text-xl"></i>
@@ -37,7 +33,6 @@ const LibraryRules = () => {
                     </p>
                 </div>
 
-                {/* Thẻ 3: Trách nhiệm */}
                 <div className="tw-bg-gray-50 tw-p-6 tw-rounded-2xl tw-border-l-4 tw-border-orange-500">
                     <div className="tw-flex tw-items-center tw-gap-3 tw-mb-3">
                         <i className="fa-solid fa-shield-halved tw-text-orange-500 tw-text-xl"></i>
@@ -48,7 +43,6 @@ const LibraryRules = () => {
                     </p>
                 </div>
 
-                {/* Thẻ 4: Xử phạt */}
                 <div className="tw-bg-gray-50 tw-p-6 tw-rounded-2xl tw-border-l-4 tw-border-red-500">
                     <div className="tw-flex tw-items-center tw-gap-3 tw-mb-3">
                         <i className="fa-solid fa-circle-exclamation tw-text-red-500 tw-text-xl"></i>

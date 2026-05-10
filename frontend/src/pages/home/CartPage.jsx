@@ -2,12 +2,12 @@ import React, { useContext, useEffect, useState } from 'react';
 import thumnailImg from '../../assets/thumnail.jpg'
 import Cart from '../../components/cart/Cart'
 import Loading from '../../components/Loading';
-import { useOutletContext } from 'react-router-dom';
+import { Link, useOutletContext } from 'react-router-dom';
 import BaseModal from '../../components/BaseModal';
 import { BorrowingBookAPI } from '../../services/BorrowAPI';
 import { AuthContent } from '../../utils/AuthContext';
 const CartPage = () => {
-    const { token } = useContext(AuthContent)
+    const { token, user } = useContext(AuthContent)
     const { cart, setCart } = useOutletContext();
     const [data, setData] = useState(null)
     const [isLoading, setIsLoading] = useState(false)
@@ -35,9 +35,9 @@ const CartPage = () => {
     };
 
     const handleSubmit = async () => {
-        setIsLoading(true)
         try {
-            const filterdCart = cart.map(item => ({
+            setIsLoading(true)
+            const filterdCart = cart?.map(item => ({
                 book_id: item.book_id,
                 borrowing_quantity: item.borrowing_quantity,
                 price: item.price,
@@ -46,6 +46,7 @@ const CartPage = () => {
 
             const data = await BorrowingBookAPI(filterdCart, token)
             setData(data)
+            setCart([])
         } catch (error) {
             console.error("Lỗi đặt sách:", error);
             alert("Không thể đặt sách, vui lòng thử lại!");
@@ -53,7 +54,6 @@ const CartPage = () => {
             setOpenModal(false)
             setOpenResultModal(true)
             setIsLoading(false)
-            setCart(null)
         }
     }
 
@@ -75,7 +75,7 @@ const CartPage = () => {
                         <Cart cart={cart} setCart={setCart} handleDecreaseQTy={handleDecreaseQTy} handleIncreaseQTy={handleIncreaseQTy} />
                     </div>
                     <div
-                        className={`shadow rounded-4 overflow-hidden ${!cart || cart.length <= 0 ? "d-none" : ""}`}
+                        className={`shadow rounded-4 overflow-hidden ${!cart || cart?.length <= 0 ? "d-none" : ""}`}
                         style={{ minWidth: '350px', height: 'fit-content' }}
                     >
                         <div className='bg-warning px-4 py-3 d-block text-white fw-bold fs-5'>
@@ -88,7 +88,7 @@ const CartPage = () => {
                                 <div className='fw-bold text-end'>Thành tiền</div>
                             </div>
 
-                            {cart.map(book => (
+                            {cart?.map(book => (
                                 <div key={book?.id} className='d-flex justify-content-between align-items-center my-2'>
                                     <div className="text-truncate" style={{ maxWidth: '180px' }}>{book?.name}</div>
                                     <div className='fw-semibold '>{(book?.price || 0).toLocaleString()}đ</div>
@@ -114,23 +114,52 @@ const CartPage = () => {
 
             </div>
             <BaseModal open={openModal} close={() => setOpenModal(false)}>
-                <div style={{ width: "300px" }}>
-                    <h5 className="px-3 py-1">Xác nhận đặt sách?</h5>
-                    <div className="d-flex justify-content-end gap-2 mt-2 px-3 py-1">
-                        <button className="btn btn-secondary" disabled={isLoading} onClick={() => setOpenModal(false)}>Hủy</button>
-                        <button
-                            className="btn btn-info"
-                            disabled={isLoading}
-                            onClick={handleSubmit}
+                {!user && !token ? (
+                    <div className="text-center p-4" style={{ width: "320px" }}>
+                        <div className="mb-3 text-primary fs-3">
+                            🔒
+                        </div>
+
+                        <h6 className="mb-3 text-secondary">
+                            Vui lòng đăng nhập để có thể đặt sách!
+                        </h6>
+
+                        <Link
+                            to="/login"
+                            className="btn btn-primary px-4"
                         >
-                            {isLoading ?
-                                (<Loading loading={isLoading} />)
-                                : (
-                                    'Đặt sách'
-                                )}
-                        </button>
+                            Login ngay
+                        </Link>
                     </div>
-                </div>
+                ) : (
+                    <div style={{ width: "320px" }}>
+                        <h5 className="px-3 py-2 text-center">
+                            Xác nhận đặt sách?
+                        </h5>
+
+                        <div className="d-flex justify-content-end gap-2 mt-2 px-3 pb-3">
+                            <button
+                                className="btn btn-secondary"
+                                disabled={isLoading}
+                                onClick={() => setOpenModal(false)}
+                            >
+                                Hủy
+                            </button>
+
+                            <button
+                                className="btn btn-info d-flex align-items-center justify-content-center"
+                                disabled={isLoading}
+                                onClick={handleSubmit}
+                            >
+                                {isLoading ? (
+                                    <Loading loading={isLoading} />
+                                ) : (
+                                    "Đặt sách"
+                                )}
+                            </button>
+                        </div>
+                    </div>
+                )}
             </BaseModal>
 
             {data && <BaseModal open={openResultModal} close={() => setOpenResultModal(false)}>

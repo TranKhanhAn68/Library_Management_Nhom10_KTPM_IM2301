@@ -1,4 +1,4 @@
-import { render, screen, fireEvent } from "@testing-library/react";
+import { render, screen, fireEvent, waitFor } from "@testing-library/react";
 import { vi, test, expect, beforeEach } from "vitest";
 import React from "react";
 import Header from "./Header";
@@ -158,4 +158,40 @@ test("hide cart badge when empty", () => {
 
     const badge = screen.getByLabelText("badge")
     expect(badge).toHaveClass("d-none");
+
+});
+
+test("can't click logout while loading", async () => {
+    const pendingPromise = new Promise(() => { }); // giữ pending
+
+    mockLogout.mockReturnValueOnce(pendingPromise);
+
+    render(
+        <AuthContent.Provider value={{
+            status: true,
+            logout: mockLogout,
+            user: {
+                first_name: "An",
+                last_name: "Tran",
+                username: "an123",
+                image: ""
+            }
+        }}>
+            <MemoryRouter>
+                <Header {...defaultProps} />
+            </MemoryRouter>
+        </AuthContent.Provider>
+    );
+
+    const btn = screen.getByText("Đăng xuất");
+
+    fireEvent.click(btn);
+
+    expect(screen.getByText("Đang đăng xuất...")).toBeInTheDocument();
+
+    fireEvent.click(btn);
+
+    await waitFor(() => {
+        expect(mockLogout).toHaveBeenCalledTimes(1);
+    });
 });

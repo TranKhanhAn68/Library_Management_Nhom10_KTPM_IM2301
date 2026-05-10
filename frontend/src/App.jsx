@@ -18,7 +18,6 @@ import ProtectedRoute from './utils/ProtectedRoute'
 import Book from './pages/admin/book/BookDashboard'
 import AddBook from './pages/admin/book/AddBook'
 import EditBook from './pages/admin/book/EditBook'
-import AdminLogin from './pages/admin/AdminLogin'
 import UserData from './data/UserData'
 import CategoryData from './data/CategoryData'
 import SettingDashboard from './pages/admin/setting/SettingDashboard'
@@ -37,6 +36,8 @@ import InformationUserPage from './pages/home/InformationUserPage'
 import BorrowingHistory from './components/books/BorrowingHistory'
 import LibraryRules from './components/LibraryRules'
 import OrderListBook from './components/books/OrderListBook'
+import AuthorDashboard from './pages/admin/author/AuthorDashboard'
+import PublisherDashboard from './pages/admin/publisher/PublisherDashboard'
 function App() {
   const { user } = useContext(AuthContent)
   const router = createBrowserRouter([
@@ -90,9 +91,7 @@ function App() {
         {
           index: true,
           element: (
-            <ProtectedRoute>
-              <Dashboard />
-            </ProtectedRoute>
+            <Dashboard />
           )
         },
 
@@ -192,6 +191,24 @@ function App() {
         },
 
         {
+          path: 'authors',
+          element: (
+            <ProtectedRoute allowRoles={PERMISSIONS.CAN_MANAGE_ALL}>
+              <AuthorDashboard />
+            </ProtectedRoute>
+          )
+        },
+
+        {
+          path: 'publishers',
+          element: (
+            <ProtectedRoute allowRoles={PERMISSIONS.CAN_MANAGE_ALL}>
+              <PublisherDashboard />
+            </ProtectedRoute>
+          )
+        },
+
+        {
           path: 'employee/transactions',
           element: (
             <ProtectedRoute allowRoles={PERMISSIONS.CAN_HANDLE_ORDERS}>
@@ -210,15 +227,7 @@ function App() {
           )
         },
 
-
-
       ]
-    },
-
-
-    {
-      path: "/admin/login",
-      element: <AdminLogin />
     },
 
     { path: "/403", element: <Page403 /> }

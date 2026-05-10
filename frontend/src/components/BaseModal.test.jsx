@@ -23,7 +23,7 @@ test("modal is hidden when open = false", () => {
 
     const overlay = screen.getByText("Modal Content").parentElement.parentElement;
 
-    expect(overlay).toHaveClass("invisible");
+    expect(overlay).toHaveClass("tw-invisible");
 });
 
 test("click overlay calls close", () => {

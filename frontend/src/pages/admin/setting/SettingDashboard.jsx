@@ -4,6 +4,7 @@ import { SettingListAPI, UpdateSetting } from '../../../services/SettingAPI';
 import { AuthContent } from '../../../utils/AuthContext';
 import Loading from '../../../components/Loading';
 import BaseModal from '../../../components/BaseModal';
+import { getError } from '../../../utils/GetError';
 const SettingDashboard = () => {
     const { token } = useContext(AuthContent)
     const [reload, setReload] = useState(false)
@@ -11,15 +12,13 @@ const SettingDashboard = () => {
     const [selectedItem, setSelectedItem] = useState(null)
     const [listActiveSettings, setListActiveSettings] = useState([])
 
-    const [loading, setLoading] = useState(true)
+    const [loading, setLoading] = useState(false)
     const [message, setMessage] = useState("")
     const [openModal, setOpenModal] = useState(false)
     const [openModalMsg, setOpenModalMsg] = useState(false)
     const [isSuccess, setIsSuccess] = useState(false)
 
-    useEffect(() => {
-        setLoading(false)
-    }, [])
+
     useEffect(() => {
         setListActiveSettings(
             settings.filter(item => item.active)
@@ -41,7 +40,7 @@ const SettingDashboard = () => {
 
         } catch (err) {
             const error = getError(err)
-            setMessage(error)
+            setMessage(error[0])
         } finally {
             setLoading(false)
         }
@@ -61,7 +60,7 @@ const SettingDashboard = () => {
                 </h1>
                 <Link
                     to='add-setting'
-                    className='tw-bg-blue-400 hover:tw-bg-blue-600 tw-text-white tw-px-4 tw-py-2 tw-rounded-lg tw-flex tw-items-center tw-gap-2 tw-shadow'
+                    className='tw-bg-blue-600 hover:tw-bg-blue-700 tw-text-white tw-px-4 tw-py-2 tw-rounded-lg tw-flex tw-items-center tw-gap-2 tw-shadow'
                 >
                     Add Setting
                 </Link>
@@ -168,7 +167,7 @@ const SettingDashboard = () => {
                     <div className="tw-p-3 tw-flex tw-items-center tw-justify-center tw-gap-3" style={{ width: "300px" }}>
                         {isSuccess ?
                             <i className="fa-solid fa-circle-check tw-text-green-500 tw-text-lg"></i> :
-                            <i class="fa-solid fa-circle-xmark tw-text-red-500 tw-text-lg"></i>
+                            <i className="fa-solid fa-circle-xmark tw-text-red-500 tw-text-lg"></i>
                         }
                         <div>
                             {typeof (message) === "string" && message.trim().length > 0 && message}

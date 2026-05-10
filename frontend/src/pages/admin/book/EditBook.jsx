@@ -14,7 +14,7 @@ const EditBook = () => {
     const { token } = useContext(AuthContent)
     const { id } = useParams()
 
-    const { book, err } = BookIDAPI(id, token)
+    const [book] = BookIDAPI(id, token)
     const [authors] = AuthorListAPI(token)
     const [publishers] = PublisherListAPI(token)
     const [categories] = CategoryListAPI(token)
@@ -31,14 +31,14 @@ const EditBook = () => {
     const [totalQuantity, setTotalQuantity] = useState("")
     const [active, setActive] = useState(false)
 
-    const [loading, setLoading] = useState(true)
+    const [loading, setLoading] = useState(false)
     const [openModal, setOpenModal] = useState(false)
     const [message, setMessage] = useState("")
     const [isSuccess, setIsSuccess] = useState(false)
 
     // fill data
     useEffect(() => {
-        if (book && authors && publishers && categories) {
+        if (book) {
             setName(book.name || "")
             setDescription(book.description || "")
             setCategoryId(book.category?.id || "")
@@ -49,12 +49,17 @@ const EditBook = () => {
             setActive(book.active || false)
             setPreview(book.image || "")
 
-            setLoading(false)
         }
     }, [book, authors, publishers, categories])
 
+
     const handleSubmit = async (e) => {
         e.preventDefault()
+        if (!categoryId || !authorId || !publisherId || !name || !description || !bookCode || !totalQuantity) {
+            setMessage("Vui lòng nhập đầy đủ thông tin")
+            setOpenModal(true)
+            return
+        }
 
         const formData = new FormData()
 
@@ -70,8 +75,6 @@ const EditBook = () => {
         if (imageFile) {
             formData.append("image", imageFile)
         }
-
-        // debug FormData
 
         try {
             setLoading(true)
@@ -142,6 +145,7 @@ const EditBook = () => {
                     <div className="tw-relative tw-inline-block tw-w-fit tw-h-fit">
                         <img src={preview} className="tw-w-24 tw-h-24 tw-rounded-xl tw-object-cover tw-border" />
                         <button
+                            aria-label="delete_preview"
                             className="tw-absolute tw-top-0 tw-right-0 tw-w-6 tw-h-6 tw-bg-white tw-rounded-full tw-flex tw-items-center tw-justify-center tw-shadow"
                             onClick={() => {
                                 setPreview(null)

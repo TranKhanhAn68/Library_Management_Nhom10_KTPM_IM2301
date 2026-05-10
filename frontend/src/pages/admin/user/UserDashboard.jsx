@@ -1,15 +1,18 @@
 import React, { useContext, useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import BaseModal from '../../../components/BaseModal';
-import { BookListAPI } from '../../../services/BookAPI';
 import { AuthContent } from '../../../utils/AuthContext';
 import Pagination from '../../../components/Pagination';
-import { UserListAPI } from '../../../services/UserAPI';
+import { DeleteUser, UserListAPI } from '../../../services/UserAPI';
 import Input from '../../../components/Input';
+import { getError } from '../../../utils/GetError';
 const UserDashboard = () => {
     const { token } = useContext(AuthContent)
     const [currentPage, setCurrentPage] = useState(1)
-    const dataUsers = UserListAPI(currentPage, token)
+    const [reload, setReload] = useState(false)
+    const [searchUserName, setSearchUserName] = useState("")
+    const [loading, setLoading] = useState(false)
+    const dataUsers = UserListAPI(currentPage, searchUserName, token, reload)
     const users = dataUsers?.results || []
     const [selectedUser, setSelectedUser] = useState(null)
     const totalPages = Math.ceil((dataUsers?.count || 0) / 5)
@@ -29,7 +32,24 @@ const UserDashboard = () => {
     const goPage = (page) => {
         setCurrentPage(page)
     }
-    console.log(dataUsers)
+
+    const handleDelete = async (e, id) => {
+        e.preventDefault();
+
+        const confirmDelete = window.confirm("Bạn có chắc muốn xóa không?");
+        if (!confirmDelete) return;
+        try {
+            setLoading(true)
+            await DeleteUser(id, token)
+            setReload(prev => !prev)
+            alert("Xóa thành công")
+        } catch (e) {
+            const error = getError(e)
+            alert(error)
+        } finally {
+            setLoading(false)
+        }
+    }
     return (
         <div className='tw-p-6'>
             <div className='tw-flex tw-justify-between tw-items-center tw-mb-6'>
@@ -46,7 +66,9 @@ const UserDashboard = () => {
 
             <div className='tw-flex tw-justify-end tw-my-2 gap-2'>
                 <Input
-                    placeholder="Tìm user..."
+                    placeholder="Tìm theo tên hoặc username.."
+                    value={searchUserName}
+                    onChange={(e) => setSearchUserName(e.target.value)}
                     className="
                             tw-border-green-300 
                             focus:tw-border-cyan-400 
@@ -132,9 +154,14 @@ const UserDashboard = () => {
 
                                         <button
                                             className='tw-text-blue-600 hover:tw-text-pink-500'
-                                            onClick={() => onDelete(user)}
+                                            onClick={(e) => handleDelete(e, user.id)}
+                                            disabled={loading}
                                         >
-                                            <i className='fa fa-trash' />
+                                            {loading ? (
+                                                <i className="fa fa-spinner fa-spin" />
+                                            ) : (
+                                                <i className='fa fa-trash' />
+                                            )}
                                         </button>
                                     </div>
                                 </td>

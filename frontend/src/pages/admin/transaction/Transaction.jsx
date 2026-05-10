@@ -7,7 +7,7 @@ import { getError } from '../../../utils/GetError';
 import { Link } from 'react-router-dom'
 // API bạn tự đổi lại
 import { BorrowChange, BorrowChangeStatus, BorrowListAPI } from '../../../services/BorrowAPI';
-import { STATUS_CONFIG } from '../../../config'
+import { ITEM_PAGE_SIZE, STATUS_CONFIG } from '../../../config'
 import DetailTransaction from './DetailTransaction';
 import Input from '../../../components/Input';
 const Transaction = () => {
@@ -21,7 +21,6 @@ const Transaction = () => {
 
     const data = BorrowListAPI(currentPage, token, reload, searchName, searchBookName)
     const borrows = data?.results
-    const totalPages = Math.ceil((data?.count || 0) / 8)
 
     const [selected, setSelected] = useState(null)
     const [selectedID, setSelectedID] = useState("")
@@ -35,7 +34,7 @@ const Transaction = () => {
     const [openConfirm, setOpenConfirm] = useState(false)
     const [openModalMsg, setOpenModalMsg] = useState(false)
     const [openModalChangeStatus, setOpenModalChangeStatus] = useState(false)
-
+    const totalPages = Math.ceil((data?.count || 0) / ITEM_PAGE_SIZE)
 
     const [editNote, setEditNote] = useState(false)
     const [note, setNote] = useState(null)
@@ -237,6 +236,7 @@ const Transaction = () => {
                                 {/* STATUS BADGE */}
                                 <td>
                                     <span
+                                        aria-label={`status-${item.id}`}
                                         className={`tw-px-4 tw-py-2 tw-rounded-full tw-text-xs tw-font-semibold tw-cursor-pointer
                                         ${status?.className}
                                         `}
@@ -259,6 +259,7 @@ const Transaction = () => {
                                 <td>
                                     <div className='tw-flex tw-justify-center tw-gap-2'>
                                         <button
+                                            aria-label="view-detail"
                                             onClick={() => handleSelected(item)}
                                             className='tw-bg-gray-500 hover:tw-bg-gray-600 tw-text-white tw-px-3 tw-py-1 tw-rounded-lg tw-text-sm'
                                         >
@@ -277,6 +278,7 @@ const Transaction = () => {
             <Pagination
                 currentPage={currentPage}
                 totalPages={totalPages}
+                item={borrows}
                 goPage={goPage}
             />
 

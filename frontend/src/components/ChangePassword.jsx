@@ -23,7 +23,6 @@ const ChangePassword = () => {
         setShowPasswords(prev => ({ ...prev, [field]: !prev[field] }));
     };
 
-    // ✅ VALIDATE CHUẨN
     const validateForm = () => {
         const errs = [];
 
@@ -42,7 +41,6 @@ const ChangePassword = () => {
         return errs;
     };
 
-    // ✅ HANDLE SUBMIT
     const handleSubmit = async (e) => {
         e.preventDefault();
 
@@ -108,9 +106,9 @@ const ChangePassword = () => {
 
                         <div className="card-body p-4">
 
-                            {/* ✅ HIỂN THỊ ERROR */}
                             {errors.length > 0 && (
-                                <div className="alert alert-danger">
+                                <div aria-label="errors"
+                                    className="alert alert-danger">
                                     <ul className="mb-0">
                                         {errors.map((err, i) => (
                                             <li key={i}>{err}</li>
@@ -119,14 +117,11 @@ const ChangePassword = () => {
                                 </div>
                             )}
 
-                            {/* ✅ SUCCESS */}
                             {message && (
                                 <div className="alert alert-success">{message}</div>
                             )}
 
                             <form onSubmit={handleSubmit}>
-
-                                {/* OLD */}
                                 <div className="mb-4">
                                     <label htmlFor="oldPassword" className="form-label">Mật khẩu hiện tại</label>
                                     <div className="input-group">

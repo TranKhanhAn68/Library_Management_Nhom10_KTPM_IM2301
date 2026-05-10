@@ -2,7 +2,7 @@ from rest_framework import viewsets, mixins, parsers, status
 from rest_framework.views import APIView, Response
 from rest_framework.authentication import TokenAuthentication
 from rest_framework.decorators import action
-from rest_framework.permissions import IsAuthenticated
+from rest_framework.permissions import IsAuthenticated, AllowAny
 from .models import *
 from .serializers import *
 from django.shortcuts import get_object_or_404
@@ -34,15 +34,17 @@ class BaseViewSet(viewsets.GenericViewSet,
         return query
     
     def create(self, request, *args, **kwargs):
-        serializer = self.get_serializer(data=request.data)
-        serializer.is_valid(raise_exception=True)
+        try:
+            serializer = self.get_serializer(data=request.data)
+            serializer.is_valid(raise_exception=True)
 
-        self.perform_create(serializer)
+            self.perform_create(serializer)
 
-        return Response({
-            "message": "Tạo mới thành công",
-            "data": serializer.data
-        },status=status.HTTP_201_CREATED)            
+            return Response({
+                "message": "Tạo mới thành công",
+            },status=status.HTTP_201_CREATED)      
+        except ValidationError as e:
+            return Response(e.detail, status=status.HTTP_400_BAD_REQUEST)      
     
     def update(self, request, *args, **kwargs):
         instance = self.get_object()
@@ -71,7 +73,6 @@ class CategoryViewSet(BaseViewSet):
         queryset = super().get_queryset()
         keyword = self.request.query_params.get("search")
         return searching_services.search_item_name(queryset, keyword)
-    
     
 class BookViewSet(BaseViewSet):
     queryset = Book.objects.all()    
@@ -244,11 +245,13 @@ class AuthViewSet(viewsets.ViewSet):
                 'message': e.detail
             }, status=status.HTTP_400_BAD_REQUEST)
         
-    @action(methods=['post'], detail=False, url_path='logout', permission_classes=[IsAuthenticated()])
+    @action(methods=['post'], detail=False, url_path='logout', permission_classes=[IsAuthenticated])
     def logout(self, request):
         try:
+            request.user.last_login = timezone.now()
+            request.user.save()
             request.user.auth_token.delete()
-            return Response({'message': 'Logout thành công!'}, status=status.HTTP_200_OK)
+            return Response(status=status.HTTP_200_OK)
         except Exception as e:
             return Response({'error': str(e)}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
 
@@ -263,11 +266,11 @@ class BorrowViewSet(viewsets.GenericViewSet, mixins.ListModelMixin, mixins.Retri
     def get_queryset(self):
         queryset = User_Book.objects.all()
         queryset = searching_services.sort_by_created_desc(queryset)            
-        user = self.request.query_params.get("user")
+        user = self.request.query_params.get("search")
         book = self.request.query_params.get("book")
         status = self.request.query_params.get("status")
         if user:
-            queryset = searching_services.search_user_name(queryset, user)
+            queryset = searching_services.search_user_name(queryset, user, 'user__')
         if book:
             queryset = searching_services.search_item_name(queryset, book, field="book__name")
         if status:
@@ -354,11 +357,11 @@ class ReservationViewSet(viewsets.GenericViewSet, mixins.ListModelMixin, mixins.
     def get_queryset(self):
         queryset = Reservation.objects.all()
         queryset = searching_services.sort_by_created_desc(queryset)            
-        user = self.request.query_params.get("user")
+        user = self.request.query_params.get("search")
         book = self.request.query_params.get("book")
         status = self.request.query_params.get("status")
         if user:
-            queryset = searching_services.search_user_name(queryset, user)
+            queryset = searching_services.search_user_name(queryset, user, 'user__')
         if book:
             queryset = searching_services.search_item_name(queryset, book, field="book__name")
         if status:
@@ -403,8 +406,8 @@ class AuthorViewSet(BaseViewSet):
     queryset = Author.objects.all()
     serializer_class = AuthorSerializer
     permission_classes = [perms.SimplePermission]
-    
     def get_queryset(self):
+        print(self.request.user)
         queryset = super().get_queryset()
         keyword = self.request.query_params.get("search")
         return searching_services.search_item_name(queryset, keyword)

@@ -4,11 +4,7 @@ import re
 from django.contrib.auth import authenticate
 from rest_framework.exceptions import AuthenticationFailed
 from django.db import transaction
-# class UserSerializer(serializers.ModelSerializer):
-#     class Meta: 
-#         model = User
-#         fields = '__all__'
-
+from library_management.services import validator
 class ItemSerializer(serializers.ModelSerializer):
     def to_representation(self, instance):
         data = super().to_representation(instance)
@@ -21,12 +17,11 @@ class CategorySerializer(serializers.ModelSerializer):
     class Meta:
         model = Category
         fields = '__all__'
-        
-    def validate_name(self, value):
-        if not value.strip():
-            raise serializers.ValidationError("Tên không được rỗng")
-        return value
-        
+    def create(self, validated_data):
+        name = validated_data.get("name")
+        validator.validate_unique_name(Category, name, "Category name đã tồn tại!")
+        return super().create(validated_data)
+    
     def to_representation(self, instance):
         data = super().to_representation(instance)
         request = self.context.get('request')
@@ -38,15 +33,54 @@ class CategorySerializer(serializers.ModelSerializer):
                 data.pop(filed, None)
         return data
         
+from django.utils import timezone
+from rest_framework import serializers
+
 class AuthorSerializer(ItemSerializer):
     class Meta:
         model = Author
         fields = "__all__"
+
+    def create(self, validated_data):
+        name = validated_data.get("name")
+        validator.validate_unique_name(Author, name, "Author name đã tồn tại!")
+        return super().create(validated_data)
+
+    def validate_date_of_birth(self, value):
+        today = timezone.now().date()
+
+        if value > today:
+            raise serializers.ValidationError(
+                "Ngày sinh không được lớn hơn ngày hiện tại!"
+            )
+
+        return value
+
+    def validate(self, attrs):
+        date_of_birth = attrs.get("date_of_birth")
+        date_of_death = attrs.get("date_of_death")
+
+        if (
+            date_of_birth and
+            date_of_death and
+            date_of_death < date_of_birth
+        ):
+            raise serializers.ValidationError({
+                "date_of_death": "Ngày mất không được nhỏ hơn ngày sinh!"
+            })
+
+        return attrs
+
         
 class PublisherSerializer(serializers.ModelSerializer):
     class Meta:
         model = Publisher
         fields = "__all__"
+        
+    def create(self, validated_data):
+        name = validated_data.get("name")
+        validator.validate_unique_name(Publisher, name, "Publisher name đã tồn tại!")
+        return super().create(validated_data)
 
 class SimpleBookSerializer(ItemSerializer):
     borrow_count = serializers.IntegerField(read_only=True)
@@ -69,17 +103,20 @@ class BookSerializer(ItemSerializer):
         fields = '__all__'
     
     def create(self, validated_data):
+        name = validated_data.get("name")
+        book_id = validated_data.get("book_id")
         category_id = validated_data.pop('category_id')
         author_id = validated_data.pop('author_id')
         publisher_id = validated_data.pop('publisher_id')
-        
+        validator.validate_unique_name(Book, name, "Book name đã tồn tại!")
+        validator.validate_unique_book_id(Book, book_id, "Book Code đã được định danh!")
         return Book.objects.create(
             category_id = category_id,
             author_id = author_id,
             publisher_id=publisher_id,
             **validated_data   
         )
-    
+
     def get_available_quantity(self, obj):
         return obj.available_quantity()
     
@@ -109,7 +146,6 @@ class SimpleUserSerializer(serializers.ModelSerializer):
     class Meta:
         model = User
         fields = [
-            'id',
             'username',
             'email',
             'is_active',
@@ -160,52 +196,117 @@ class SimpleUserSerializer(serializers.ModelSerializer):
                 raise serializers.ValidationError("Ảnh tối đa 2MB")
         return value
         
-class UserSerializer(ItemSerializer):
+class UserSerializer(serializers.ModelSerializer):
+
+    employee_id = serializers.CharField(write_only=True, required=False)
+    shift = serializers.CharField(write_only=True, required=False)
+    identity_card = serializers.CharField(write_only=True, required=False)
+
     class Meta:
-        model = User
-        fields = "__all__"
+        model = SimpleUserSerializer.Meta.model
+
+        fields = SimpleUserSerializer.Meta.fields + [
+            'id',
+            'password',
+            'last_login',
+            'date_joined',
+
+            'employee_id',
+            'shift',
+            'identity_card',
+        ]
+
         extra_kwargs = {
             'password': {
                 'write_only': True
             }
         }
-        
+
+    def validate_username(self, value):
+        if not re.match(r'^[A-Za-z][0-9A-Za-z]{5,15}$', value):
+            raise serializers.ValidationError( 
+                 "Username chỉ có nhiều hơn 6 ký tự và bao gồm cả chữ, số"
+            )        
+        return value
+    
     def validate_password(self, value):
         if not re.match(r'^[A-Za-z](?=.*?[0-9])(?=.*?[A-Za-z]).{8,24}$', value):
             raise serializers.ValidationError(
                 "Password phải >=8 ký tự, gồm chữ và số"
             )
         return value
-        
+
     def validate_email(self, value):
         if not re.match(r'^\S+@\S+\.\S+$', value):
             raise serializers.ValidationError(
                 "Sai định dạng email"
             )
-        return value
         
+        return value
+
     def to_representation(self, instance):
         data = super().to_representation(instance)
+
         if instance.image:
             data['image'] = instance.image.url
-            print(data['image'])
+
         return data
-    
+
     def create(self, validated_data):
+        username = validated_data.get("username")
+        email = validated_data.get("email")
+        employee_id = validated_data.pop('employee_id', None)
+        shift = validated_data.pop('shift', None)
+        identity_card = validated_data.pop('identity_card', None)
+        if User.objects.filter(username=username).exists():
+            raise serializers.ValidationError("Username đã tồn tại")
+        if User.objects.filter(email=email).exists():
+            raise serializers.ValidationError(  
+                "Email đã tồn tại"
+            )            
         user = User(**validated_data)
-        user.set_password(user.password)
+        user.set_password(validated_data['password'])
         user.save()
+        if employee_id and shift and identity_card:
+            Employee.objects.create(
+                user=user,
+                employee_id=employee_id,
+                shift=shift,
+                identity_card=identity_card
+            )
+
         return user
-    
+
     def update(self, instance, validated_data):
-        password = validated_data.pop('password', None) 
+
+        password = validated_data.pop('password', None)
+
+        employee_id = validated_data.pop('employee_id', None)
+        shift = validated_data.pop('shift', None)
+        identity_card = validated_data.pop('identity_card', None)
+
         for attr, value in validated_data.items():
             setattr(instance, attr, value)
+
         if password:
             instance.set_password(password)
-        instance.save()
-        return instance
 
+        instance.save()
+
+        if instance.is_staff:
+
+            employee, created = Employee.objects.get_or_create(
+                user=instance
+            )
+
+            employee.employee_id = employee_id
+            employee.shift = shift
+            employee.identity_card = identity_card
+
+            employee.save()
+
+        return instance
+    
 class SimpleSettingSerializer(serializers.ModelSerializer):
     class Meta:
         model = Setting
@@ -215,6 +316,25 @@ class SettingSerializer(serializers.ModelSerializer):
     class Meta:
         model = SimpleSettingSerializer.Meta.model
         fields = SimpleSettingSerializer.Meta.fields + ['id', 'active']
+    def validate_borrowing_days(self, value):
+        if Setting.objects.filter(borrowing_days=value).exists():
+            raise serializers.ValidationError(
+                "Đã tồn tại Setting với số ngày này không thể tạo thêm!"
+            )
+        return value
+    def create(self, validated_data):
+        if str(validated_data.get('borrowing_days', '')).strip() == '':
+            raise serializers.ValidationError('Số ngày mượn là bắt buộc')
+
+        if str(validated_data.get('borrowing_fee', '')).strip() == '':
+            raise serializers.ValidationError('Phí mượn là bắt buộc')
+
+        if str(validated_data.get('borrowing_overdue_fine', '')).strip() == '':
+            raise serializers.ValidationError('Tiền phạt quá hạn là bắt buộc')
+
+
+        return super().create(validated_data)
+        
 
 class BorrowingDetailCartSerializer(serializers.ModelSerializer):
     setting = SimpleSettingSerializer(read_only=True)
@@ -241,6 +361,11 @@ class LoginSerializer(serializers.Serializer):
     is_superuser = serializers.BooleanField(read_only=True)
     
     def validate(self, data):
+        username = data.get('username', '').strip()
+        password = data.get('password', '').strip()
+        if not username or not password:
+            raise AuthenticationFailed("Không được bỏ trống")
+        
         user = authenticate(
             username=data['username'],
             password=data['password']
@@ -283,21 +408,30 @@ class RegisterSerializer(serializers.ModelSerializer):
             }
         }
     
+    def validate(self, data):
+        required_fields = ["username", "email", "password", "first_name", "last_name"]
+
+        for field in required_fields:
+            value = data.get(field)
+            if not value or not str(value).strip():
+                raise serializers.ValidationError("Vui lòng điền đầy đủ thông tin đăng ký")
+        return data
+    
     def validate_username(self, value):
         username = value
         if not re.match(r'^[A-Za-z][0-9A-Za-z]{5,15}$', username):
-            raise AuthenticationFailed( 
+            raise serializers.ValidationError( 
                  "Username chỉ có nhiều hơn 6 ký tự và bao gồm cả chữ, số"
             )
             
         if User.objects.filter(username=username).exists():
-            raise AuthenticationFailed("Username đã tồn tại")
+            raise serializers.ValidationError("Username đã tồn tại")
         return value
     
     def validate_password(self, value):
         password = value
         if not re.match(r'^[A-Za-z](?=.*?[0-9])(?=.*?[A-Za-z]).{8,24}$', password):
-            raise AuthenticationFailed(
+            raise serializers.ValidationError(
                 "Password phải >=8 ký tự, gồm chữ và số"
             )
         return value
@@ -305,12 +439,12 @@ class RegisterSerializer(serializers.ModelSerializer):
     def validate_email(self, value):
         email = value
         if not re.match(r'^\S+@\S+\.\S+$', email):
-            raise AuthenticationFailed(
+            raise serializers.ValidationError(
                 "Sai định dạng email"
             )
         
         if User.objects.filter(email=email).exists():
-            raise AuthenticationFailed("Email đã tồn tại")
+            raise serializers.ValidationError("Email đã tồn tại")
         return value
     
     def create(self, validated_data):

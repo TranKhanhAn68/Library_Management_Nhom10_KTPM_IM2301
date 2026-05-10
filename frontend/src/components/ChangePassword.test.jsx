@@ -5,12 +5,10 @@ import React from "react";
 import ChangePassword from "./ChangePassword";
 import { AuthContent } from "../utils/AuthContext";
 
-// mock getError
 vi.mock("../utils/GetError", () => ({
     getError: vi.fn(() => "Lỗi từ server")
 }));
 
-// mock fetch
 global.fetch = vi.fn();
 
 const renderComponent = () => {
@@ -116,6 +114,88 @@ test("show success message", async () => {
     expect(
         screen.queryByRole("alert", { name: /errors/i })
     ).not.toBeInTheDocument();
+
+    await waitFor(() => {
+        expect(screen.getByLabelText(/Mật khẩu hiện tại/i).value).toBe("");
+    });
 });
 
+test("toggle show/hide old password", () => {
+    renderComponent();
+    const input = screen.getByLabelText("Mật khẩu hiện tại");
+    expect(input.type).toBe("password");
+    const toggleBtn = input.parentElement.querySelector("span");
 
+    fireEvent.click(toggleBtn);
+
+    expect(input.type).toBe("text");
+
+    fireEvent.click(toggleBtn);
+
+    expect(input.type).toBe("password");
+})
+
+test("show server error", async () => {
+    fetch.mockResolvedValueOnce({
+        ok: false,
+        json: async () => ({
+            detail: "Sai mật khẩu"
+        })
+    });
+
+    renderComponent();
+
+    fireEvent.change(screen.getByLabelText(/Mật khẩu hiện tại/i), {
+        target: { value: "old123" }
+    });
+
+    fireEvent.change(screen.getByLabelText(/Mật khẩu mới/i), {
+        target: { value: "new12345" }
+    });
+
+    fireEvent.change(screen.getByLabelText(/Xác nhận mật khẩu/i), {
+        target: { value: "new12345" }
+    });
+
+    fireEvent.click(screen.getByRole("button", {
+        name: /Đổi mật khẩu/i
+    }));
+
+    expect(
+        await screen.findByText(/Lỗi từ server/i)
+    ).toBeInTheDocument();
+});
+
+test("show loading state", async () => {
+    fetch.mockImplementationOnce(() =>
+        new Promise(resolve =>
+            setTimeout(() =>
+                resolve({
+                    ok: true,
+                    json: async () => ({
+                        message: "Success"
+                    })
+                }), 100)
+        )
+    );
+    renderComponent();
+    fireEvent.change(screen.getByLabelText(/Mật khẩu hiện tại/i), {
+        target: { value: "old123" }
+    });
+
+    fireEvent.change(screen.getByLabelText(/Mật khẩu mới/i), {
+        target: { value: "new12345" }
+    });
+
+    fireEvent.change(screen.getByLabelText(/Xác nhận mật khẩu/i), {
+        target: { value: "new12345" }
+    });
+
+    fireEvent.click(screen.getByRole("button", {
+        name: /Đổi mật khẩu/i
+    }));
+
+    expect(
+        screen.getByText(/Đang xử lý/i)
+    ).toBeInTheDocument();
+});

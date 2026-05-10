@@ -1,4 +1,5 @@
 import { useEffect, useState } from "react";
+import { getError } from "../utils/GetError";
 
 const CATE_URL = "http://127.0.0.1:8000/categories"
 export const CategoryListAPI = (token, reload) => {
@@ -72,7 +73,10 @@ export const PostCategory = async (name, active, token) => {
     });
     const data = await res.json();
     console.log(data)
-    if (!res.ok) throw data;
+    if (!res.ok) {
+        const error = getError(data)
+        throw error
+    }
 
     return data;
 };
@@ -90,10 +94,12 @@ export const UpdateCategory = async (category_id, name, active, token) => {
         })
     });
 
-    if (!res.ok) throw new Error(`Lỗi: ${res.status}`);
 
-    console.log("Cập nhật thành công")
     const data = await res.json();
+    if (!res.ok) {
+        const error = getError(data)
+        throw error
+    }
     return data;
 };
 
@@ -106,8 +112,9 @@ export const DeleteCategory = async (id, token) => {
         },
     });
 
-    if (!res.ok) throw new Error(`Lỗi: ${res.status}`);
-
-    const data = await res.json();
-    return data;
+    if (!res.ok) {
+        const data = await res.json()
+        throw new Error(data)
+    }
+    return true;
 }

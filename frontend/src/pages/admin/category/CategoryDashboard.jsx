@@ -5,6 +5,7 @@ import { AuthContent } from '../../../utils/AuthContext';
 import Loading from '../../../components/Loading';
 import BaseModal from '../../../components/BaseModal';
 import Input from '../../../components/Input';
+import { getError } from '../../../utils/GetError';
 
 const CategoryDashboard = () => {
     const { token } = useContext(AuthContent)
@@ -14,7 +15,7 @@ const CategoryDashboard = () => {
 
 
     const [openModalNotification, setOpenModalNotification] = useState(false)
-    const [openModalMsg, setOpenModalMsg] = useState("")
+    const [openModalMsg, setOpenModalMsg] = useState(false)
     const [loading, setLoading] = useState(true)
     const [isSuccess, setIsSuccess] = useState(false)
     const [message, setMessage] = useState("")
@@ -24,21 +25,19 @@ const CategoryDashboard = () => {
 
     const handleDelete = async (e, id) => {
         e.preventDefault()
+        setOpenModalMsg(true)
         try {
             setLoading(true)
-            const result = await DeleteCategory(id, token)
-            if (result) {
-                setMessage(result?.message)
-                setOpenModalMsg(true)
-                setIsSuccess(true)
-                setReload(prev => !prev)
-            }
+            await DeleteCategory(id, token)
+            setMessage("Xóa dữ liệu thành công!")
+            setIsSuccess(true)
+            setReload(prev => !prev)
         } catch (err) {
             const error = getError(err)
             setMessage(error)
         } finally {
-            handleClose()
             setLoading(false)
+            setOpenModalNotification(false)
         }
     }
 
@@ -159,6 +158,7 @@ const CategoryDashboard = () => {
 
                                                     <button
                                                         className='tw-text-blue-600 hover:tw-text-pink-500'
+                                                        aria-label='delete_button'
                                                         onClick={() => {
                                                             setSelectedBookByID(cate.id)
                                                             setOpenModalNotification(true)
@@ -194,7 +194,7 @@ const CategoryDashboard = () => {
                 </BaseModal>
             }
 
-            {message
+            {message.trim()
                 && <BaseModal open={openModalMsg} close={handleClose}>
                     <div className="tw-p-3 tw-flex tw-items-center tw-justify-center tw-gap-3" style={{ width: "300px" }}>
                         {isSuccess ?

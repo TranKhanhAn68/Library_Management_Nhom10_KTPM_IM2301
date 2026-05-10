@@ -5,6 +5,7 @@ import React from "react";
 import BorrowingHistory from "./BorrowingHistory";
 import { BorrowingListByUser } from "../../services/UserAPI";
 import { AuthContent } from "../../utils/AuthContext";
+import { MemoryRouter } from "react-router-dom";
 
 vi.mock("../../services/UserAPI", () => ({
     BorrowingListByUser: vi.fn()
@@ -36,12 +37,10 @@ vi.mock("../Pagination", () => ({
     )
 }));
 
-vi.mock("../../utils/AuthContext", async () => {
-    const React = await vi.importActual("react");
-    return {
-        AuthContent: React.createContext({ token: "fake-token" })
-    };
-});
+vi.mock("../Loading", () => ({
+    default: () => <div>Loading...</div>
+}));
+
 
 const borrowedData = {
     results: [
@@ -86,16 +85,27 @@ beforeEach(() => {
     });
 });
 
-test("render ALL borrowing history", async () => {
-    render(<BorrowingHistory />);
+const renderComponent = (value = {
+    token: "fake-token",
+    user: { id: 1 }
+}) => {
+    return render(
+        <MemoryRouter>
+            <AuthContent.Provider value={value}>
+                <BorrowingHistory />
+            </AuthContent.Provider>
+        </MemoryRouter>
+    );
+};
 
+test("render ALL borrowing history", async () => {
+    renderComponent()
     expect(await screen.findByText("Book A")).toBeInTheDocument();
     expect(await screen.findByText("Book B")).toBeInTheDocument();
 });
 
 test("filter BORROWING status", async () => {
-    render(<BorrowingHistory />);
-
+    renderComponent()
     fireEvent.change(screen.getByTestId("status-select"), {
         target: { value: "BORROWING" }
     });
@@ -113,8 +123,7 @@ test("filter BORROWING status", async () => {
 });
 
 test("filter RETURNED status", async () => {
-    render(<BorrowingHistory />);
-
+    renderComponent()
     fireEvent.change(screen.getByTestId("status-select"), {
         target: { value: "RETURNED" }
     });
@@ -132,14 +141,12 @@ test("filter RETURNED status", async () => {
 });
 
 test("should render pagination on UI", async () => {
-    render(<BorrowingHistory />);
-
+    renderComponent()
     expect(await screen.findByTestId("pagination")).toBeInTheDocument();
 });
 
 test("should change page when click pagination", async () => {
-    render(<BorrowingHistory />);
-
+    renderComponent()
     const btn = await screen.findByTestId("next-page");
 
     fireEvent.click(btn);
@@ -151,4 +158,48 @@ test("should change page when click pagination", async () => {
             2
         );
     });
+});
+
+test("show loading component", () => {
+    mockBorrowingListByUser.mockReturnValue({
+        data: null,
+        loading: true
+    });
+
+    renderComponent()
+    expect(screen.getByText(/Loading.../i)).toBeInTheDocument();
+});
+
+test("show overdue button", () => {
+    mockBorrowingListByUser.mockReturnValue({
+        data: {
+            results: [
+                {
+                    id: 1,
+                    status: "OVERDUE",
+                    book: { name: "Book X" }
+                }
+            ]
+        },
+        loading: false
+    });
+
+    renderComponent()
+    expect(
+        screen.getByText(/Gia hạn/i)
+    ).toBeInTheDocument();
+});
+
+test("show login link when user is not logged in", () => {
+    renderComponent({
+        token: null,
+        user: null
+    });
+
+    const loginLink = screen.getByRole("link", {
+        name: /login ngay/i
+    });
+
+    expect(loginLink).toBeInTheDocument();
+    expect(loginLink).toHaveAttribute("href", "/login");
 });

@@ -6,9 +6,9 @@ import { BorrowingListByUser } from '../../services/UserAPI';
 import Loading from '../Loading';
 import { ITEM_PAGE_SIZE } from '../../config';
 import Pagination from '../Pagination';
-import { useOutletContext } from 'react-router-dom';
+import { Link, useOutletContext } from 'react-router-dom';
 const BorrowingHistory = () => {
-    const { token } = useContext(AuthContent)
+    const { token, user } = useContext(AuthContent)
     const [currentPage, setCurrentPage] = useState(1)
     const [status, setStatus] = useState("");
 
@@ -42,71 +42,90 @@ const BorrowingHistory = () => {
                     }}
                 />
             </header>
-            {history?.length === 0 ? (
-                <div className="tw-text-center tw-py-20 tw-text-gray-400">
-                    Không có dữ liệu cho trạng thái này.
-                </div>
-            ) : (
-                <div className="tw-grid tw-gap-5">
-                    {history?.map((item) => {
-                        // Lấy config tương ứng với status của item
-                        const statusInfo = STATUS_CONFIG[item.status] || { label: item.status, className: "tw-bg-gray-100" };
+            {!user ? (
+                <div className="tw-bg-white tw-rounded-2xl tw-shadow-sm tw-p-10 tw-text-center">
+                    <h2 className="tw-text-2xl tw-font-bold tw-text-gray-800">
+                        Bạn chưa đăng nhập
+                    </h2>
 
-                        return (
-                            <div
-                                key={item.id}
-                                className="tw-bg-white tw-rounded-2xl tw-shadow-sm tw-border tw-border-gray-100 hover:tw-shadow-md tw-transition-all tw-overflow-hidden"
-                            >
-                                <div className="tw-p-5 tw-flex tw-flex-col md:tw-flex-row tw-gap-6">
-                                    <div className="tw-flex-1">
-                                        <div className="tw-flex tw-justify-between tw-items-start tw-mb-4">
-                                            <div>
-                                                <h3 className="tw-text-lg tw-font-bold tw-text-gray-800">
-                                                    {item.book.name}
-                                                </h3>
-                                                <small>Ngày tạo: {new Date(item.created_at).toLocaleString("vi-vn")}</small>
-                                                <p className="tw-text-sm tw-text-gray-500">
-                                                    Số lượng: <span className="tw-font-bold tw-text-gray-700">{item.borrowing_quantity}</span>
+                    <p className="tw-text-gray-500 tw-mt-2">
+                        Vui lòng đăng nhập để xem lịch sử giao dịch.
+                    </p>
+
+                    <Link
+                        to="/login"
+                        className="tw-inline-block tw-mt-5 tw-bg-blue-600 hover:tw-bg-blue-700 tw-text-white tw-font-semibold tw-px-6 tw-py-3 tw-rounded-xl tw-transition"
+                    >
+                        Login ngay
+                    </Link>
+                </div>
+            )
+                : history?.length === 0 ? (
+                    <div className="tw-text-center tw-py-20 tw-text-gray-400">
+                        Không có dữ liệu cho trạng thái này.
+                    </div>
+                ) : (
+                    <div className="tw-grid tw-gap-5">
+                        {history?.map((item) => {
+                            // Lấy config tương ứng với status của item
+                            const statusInfo = STATUS_CONFIG[item.status] || { label: item.status, className: "tw-bg-gray-100" };
+
+                            return (
+                                <div
+                                    key={item.id}
+                                    className="tw-bg-white tw-rounded-2xl tw-shadow-sm tw-border tw-border-gray-100 hover:tw-shadow-md tw-transition-all tw-overflow-hidden"
+                                >
+                                    <div className="tw-p-5 tw-flex tw-flex-col md:tw-flex-row tw-gap-6">
+                                        <div className="tw-flex-1">
+                                            <div className="tw-flex tw-justify-between tw-items-start tw-mb-4">
+                                                <div>
+                                                    <h3 className="tw-text-lg tw-font-bold tw-text-gray-800">
+                                                        {item.book.name}
+                                                    </h3>
+                                                    <small>Ngày tạo: {new Date(item.created_at).toLocaleString("vi-vn")}</small>
+                                                    <p className="tw-text-sm tw-text-gray-500">
+                                                        Số lượng: <span className="tw-font-bold tw-text-gray-700">{item.borrowing_quantity}</span>
+                                                    </p>
+                                                </div>
+
+                                                <span className={`tw-px-3 tw-py-1 tw-rounded-full tw-text-[11px] tw-font-bold tw-uppercase tw-tracking-wider ${statusInfo.className}`}>
+                                                    {statusInfo.label}
+                                                </span>
+                                            </div>
+
+                                            <div className="tw-grid tw-grid-cols-2 sm:tw-grid-cols-4 tw-gap-4">
+                                                <DetailItem label="Ngày mượn" value={item.borrowing_book_date} />
+                                                <DetailItem label="Hạn trả" value={item.due_date} />
+                                                <DetailItem label="Đơn giá" value={Number(item.price).toLocaleString() + " đ"} />
+                                                <DetailItem label="Thành tiền" value={Number(item.price).toLocaleString() + " đ"} isBold />
+                                            </div>
+                                        </div>
+
+                                        <div className="tw-flex tw-flex-row md:tw-flex-col tw-justify-between tw-items-center tw-bg-gray-50 tw-px-6 tw-py-4 md:tw-min-w-[160px] tw-border-t md:tw-border-l tw-border-gray-100">
+                                            <div className="tw-text-center">
+                                                <p className="tw-text-[10px] tw-uppercase tw-text-gray-400 tw-font-bold">
+                                                    Thực tế trả
+                                                </p>
+                                                <p className={`tw-text-sm tw-font-bold ${item.returnDate ? 'tw-text-green-600' : 'tw-text-orange-500'}`}>
+                                                    {item.returning_book_date || "Chưa trả"}
                                                 </p>
                                             </div>
 
-                                            <span className={`tw-px-3 tw-py-1 tw-rounded-full tw-text-[11px] tw-font-bold tw-uppercase tw-tracking-wider ${statusInfo.className}`}>
-                                                {statusInfo.label}
-                                            </span>
+                                            {/* Nút hành động nếu quá hạn */}
+                                            {item.status === "OVERDUE" && (
+                                                <button className="tw-mt-2 tw-bg-red-500 tw-text-white tw-px-4 tw-py-1.5 tw-rounded-lg tw-text-xs tw-font-bold hover:tw-bg-red-600 tw-transition-colors">
+                                                    Gia hạn / Phạt
+                                                </button>
+                                            )}
                                         </div>
-
-                                        <div className="tw-grid tw-grid-cols-2 sm:tw-grid-cols-4 tw-gap-4">
-                                            <DetailItem label="Ngày mượn" value={item.borrowing_book_date} />
-                                            <DetailItem label="Hạn trả" value={item.due_date} />
-                                            <DetailItem label="Đơn giá" value={Number(item.price).toLocaleString() + " đ"} />
-                                            <DetailItem label="Thành tiền" value={Number(item.price).toLocaleString() + " đ"} isBold />
-                                        </div>
-                                    </div>
-
-                                    <div className="tw-flex tw-flex-row md:tw-flex-col tw-justify-between tw-items-center tw-bg-gray-50 tw-px-6 tw-py-4 md:tw-min-w-[160px] tw-border-t md:tw-border-l tw-border-gray-100">
-                                        <div className="tw-text-center">
-                                            <p className="tw-text-[10px] tw-uppercase tw-text-gray-400 tw-font-bold">
-                                                Thực tế trả
-                                            </p>
-                                            <p className={`tw-text-sm tw-font-bold ${item.returnDate ? 'tw-text-green-600' : 'tw-text-orange-500'}`}>
-                                                {item.returning_book_date || "Chưa trả"}
-                                            </p>
-                                        </div>
-
-                                        {/* Nút hành động nếu quá hạn */}
-                                        {item.status === "OVERDUE" && (
-                                            <button className="tw-mt-2 tw-bg-red-500 tw-text-white tw-px-4 tw-py-1.5 tw-rounded-lg tw-text-xs tw-font-bold hover:tw-bg-red-600 tw-transition-colors">
-                                                Gia hạn / Phạt
-                                            </button>
-                                        )}
                                     </div>
                                 </div>
-                            </div>
-                        );
-                    })}
-                    <Pagination currentPage={currentPage} totalPages={totalPages} item={history} goPage={goPage} />
+                            );
+                        })}
+                        <Pagination currentPage={currentPage} totalPages={totalPages} item={history} goPage={goPage} />
 
-                </div>)}
+                    </div>
+                )}
 
         </div>
     );

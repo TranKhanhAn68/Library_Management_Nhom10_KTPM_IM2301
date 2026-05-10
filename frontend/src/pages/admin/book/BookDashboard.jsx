@@ -12,10 +12,11 @@ const Book = () => {
     const [reload, setReload] = useState(false) //Biến cờ cập nhật dữ liệu book lại khi xóa
     const [currentPage, setCurrentPage] = useState(1)
     const [searchBookName, setSearchBookName] = useState("")
-    const { dataBooks, loading } = BookListAPI(currentPage, "", "", "", token, reload)
+    const { dataBooks, loading } = BookListAPI(currentPage, searchBookName, "", "", token, reload)
     const books = dataBooks?.results || []
     const [selectedBook, setSelectedBook] = useState(null)
     const [selectedBookByID, setSelectedBookByID] = useState("")
+
     const totalPages = Math.ceil((dataBooks?.count || 0) / 8)
 
     const [message, setMessage] = useState("")
@@ -24,9 +25,7 @@ const Book = () => {
     const [openModalNotification, setOpenModalNotification] = useState(false)
     const [openModalMsg, setOpenModalMsg] = useState("")
 
-    useEffect(() => {
-        setLoading(false)
-    }, [books])
+
 
     const handleSelected = (book) => {
         setSelectedBook(book)
@@ -43,36 +42,49 @@ const Book = () => {
         setCurrentPage(page)
     }
 
-    const handleDelete = async (e, id) => {
-        e.preventDefault()
-        try {
-            const result = await DeleteBook(id, token)
-            if (result) {
-                setMessage(result?.message)
-                setOpenModalMsg(true)
-                setIsSuccess(true)
-                setReload(prev => !prev)
-            }
-        } catch (err) {
-            const error = getError(err)
-            setMessage(error)
-        } finally {
-            handleClose()
-        }
-    }
-
-    const handleClose = () => {
-        setOpenModal(false)
-        setOpenModalNotification(false)
-        setOpenModalMsg(false)
-
+    const resetData = () => {
         setTimeout(() => {
-            setSelectedBook(null)
-            setSelectedBookByID('')
-            setMessage('')
-            setIsSuccess(false)
-        }, 200)
-    }
+            setSelectedBook(null);
+            setSelectedBookByID("");
+            setMessage("");
+            setIsSuccess(false);
+        }, 200);
+    };
+
+    const closeDetailModal = () => {
+        setOpenModal(false);
+        resetData();
+    };
+
+    const closeDeleteModal = () => {
+        setOpenModalNotification(false);
+    };
+
+    const closeMessageModal = () => {
+        setOpenModalMsg(false);
+        resetData();
+    };
+
+    const handleDelete = async (e, id) => {
+        e.preventDefault();
+
+        try {
+            await DeleteBook(id, token)
+            setMessage("Xóa dữ liệu thành công!");
+            setIsSuccess(true);
+            setOpenModalMsg(true);
+            setReload(prev => !prev);
+        } catch (err) {
+            const error = getError(err);
+            setMessage(error);
+            setIsSuccess(false);
+            setOpenModalMsg(true);
+        } finally {
+            setOpenModalNotification(false);
+        }
+    };
+
+
     if (loading) return <Loading loading={loading} />
 
     return (
@@ -208,13 +220,13 @@ const Book = () => {
 
             />
 
-            <BaseModal open={openModal} close={handleClose}>
+            <BaseModal open={openModal} close={closeDetailModal}>
                 {
                     selectedBook &&
                     <div className='container'>
                         <div className="tw-flex tw-justify-between tw-items-center tw-mb-4">
                             <h2 className="tw-text-xl tw-font-bold">Chi tiết sách</h2>
-                            <button onClick={handleClose} className="tw-text-gray-500 hover:tw-text-black">
+                            <button onClick={closeDetailModal} className="tw-text-gray-500 hover:tw-text-black">
                                 ✕
                             </button>
                         </div>
@@ -279,12 +291,12 @@ const Book = () => {
             </BaseModal>
 
             {selectedBookByID &&
-                <BaseModal open={openModalNotification} close={handleClose}>
+                <BaseModal open={openModalNotification} close={closeDeleteModal}>
                     <div className="p-3">
                         <h5>Xác nhận xóa?</h5>
                         <p>Bạn có chắc chắn muốn xóa sản phẩm này khỏi giỏ hàng?</p>
                         <div className="d-flex justify-content-end gap-2 mt-3">
-                            <button className="btn btn-secondary" onClick={handleClose}>Hủy</button>
+                            <button className="btn btn-secondary" onClick={closeDeleteModal}>Hủy</button>
                             <button
                                 className="btn btn-danger"
                                 onClick={(e) => handleDelete(e, selectedBookByID)}
@@ -297,13 +309,13 @@ const Book = () => {
             }
 
             {message
-                && <BaseModal open={openModalMsg} close={handleClose}>
+                && <BaseModal open={openModalMsg} close={closeMessageModal}>
                     <div className="tw-p-3 tw-flex tw-items-center tw-justify-center tw-gap-3" style={{ width: "300px" }}>
-                        {isSuccess ?
-                            <i className="fa-solid fa-circle-check tw-text-green-500 tw-text-lg"></i> :
-                            <i class="fa-solid fa-circle-xmark tw-text-red-500 tw-text-lg"></i>
-                        }
                         <div>
+                            {isSuccess ?
+                                <i className="fa-solid fa-circle-check tw-text-green-500 tw-text-lg"></i> :
+                                <i class="fa-solid fa-circle-xmark tw-text-red-500 tw-text-lg"></i>
+                            }
                             {/* {typeof (message) === "string" && message.trim().length > 0 && message} */}
                             {message}
                         </div>

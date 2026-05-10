@@ -17,7 +17,7 @@ const DetailBook = () => {
     const [selected, setSelected] = useState(null)
     const settings = SettingListAPI()
     const [loading, setLoading] = useState(false)
-    const { book, err } = BookIDAPI(id, token)
+    const [book] = BookIDAPI(id, token)
     const [message, setMessage] = useState(null)
     const [openModal, setOpenModal] = useState(false)
 
@@ -153,7 +153,7 @@ const DetailBook = () => {
                             className="btn btn-outline-primary d-flex align-items-center gap-2 px-4 py-2 fw-semibold rounded-4"
                             onClick={handleOrderBook}
                         >
-                            <i className="bi bi-clock-history"></i>
+                            <i className="fa-solid fa-clock-rotate-left"></i>
                             Đặt trước
                         </button>
                     )}

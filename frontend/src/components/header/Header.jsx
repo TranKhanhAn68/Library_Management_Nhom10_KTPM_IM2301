@@ -1,15 +1,17 @@
 import React, { useContext, useEffect, useState } from 'react';
 import logo from '../../assets/logo.png'
 import './header.scss'
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import { AuthContent } from '../../utils/AuthContext';
 import Tooltip from 'bootstrap/js/dist/tooltip';
 import Menu from './Menu';
 const Header = ({ handleSearch, searchParams, cart, authors, categories }) => {
-    const { logout, user, status } = useContext(AuthContent)
+    const { logout, user } = useContext(AuthContent)
     const [openMenuAuthorHover, setOpenMenuAuthorHover] = useState(false)
-    const [openMenuCatgoryHover, setOpenMenuCategoryHover] = useState(false)
+    const [openMenuCategoryHover, setOpenMenuCategoryHover] = useState(false)
     const [inputSearch, setInputSearch] = useState('')
+    const [loading, setLoading] = useState(false)
+    const navigate = useNavigate()
     useEffect(() => {
         const tooltipTriggerList = document.querySelectorAll('[data-bs-toggle="tooltip"]');
         tooltipTriggerList.forEach(el => new Tooltip(el));
@@ -23,6 +25,17 @@ const Header = ({ handleSearch, searchParams, cart, authors, categories }) => {
         e.preventDefault()
         handleSearch(inputSearch.trim())
     }
+    const handleLogout = async () => {
+        try {
+            setLoading(true);
+
+            await logout();
+
+            navigate('/login');
+        } finally {
+            setLoading(false);
+        }
+    };
     return (
         <>
             <nav className="navbar navbar-expand-md bg-light  py-3 position-fixed w-100" style={{ zIndex: 999 }}>
@@ -68,7 +81,7 @@ const Header = ({ handleSearch, searchParams, cart, authors, categories }) => {
                                 <Menu
                                     openMenuAuthorHover={openMenuAuthorHover}
                                     setOpenMenuAuthorHover={setOpenMenuAuthorHover}
-                                    openMenuCatgoryHover={openMenuCatgoryHover}
+                                    openMenuCategoryHover={openMenuCategoryHover}
                                     setOpenMenuCategoryHover={setOpenMenuCategoryHover}
                                     authors={authors}
                                     categories={categories}
@@ -76,7 +89,7 @@ const Header = ({ handleSearch, searchParams, cart, authors, categories }) => {
 
 
                             </div>
-                            {status ? (
+                            {user ? (
                                 <div className='d-flex justify-items-center'>
                                     <div className="dropdown ">
                                         <div href="#" className="d-block m-2" id="avatarDropdown" data-bs-toggle="dropdown" >
@@ -123,7 +136,15 @@ const Header = ({ handleSearch, searchParams, cart, authors, categories }) => {
                                                     Thông tin cá nhân
                                                 </Link>
                                             </li>
+                                            {user?.is_super_user || user?.is_staff && (
+                                                <li className="dropdown-item py-2">
+                                                    <Link to='dashboard' target='_blank'>
+                                                        <i class="fa-solid fa-gauge-high me-1a"></i>
+                                                        Admin Dashboard
+                                                    </Link>
 
+                                                </li>
+                                            )}
                                             <li className="dropdown-item py-2">
                                                 <Link  >
                                                     <i className="fas fa-unlock me-1"></i>
@@ -136,10 +157,21 @@ const Header = ({ handleSearch, searchParams, cart, authors, categories }) => {
                                     </div>
 
                                     <button
-                                        className='nav-link nav-link-checkin my-3'
-                                        onClick={logout}
+                                        className='hover:tw-text-red-500 tw-text-gray-700'
+                                        onClick={handleLogout}
+                                        disabled={loading}
                                     >
-                                        Đăng xuất
+                                        {loading ? (
+                                            <>
+                                                <i className="fa-solid fa-spinner fa-spin tw-mr-2"></i>
+                                                <span>Đang đăng xuất...</span>
+                                            </>
+                                        ) : (
+                                            <>
+                                                <i className="fa-solid fa-right-from-bracket tw-mr-2"></i>
+                                                <span>Đăng xuất</span>
+                                            </>
+                                        )}
                                     </button>
                                 </div>
                             ) : (
@@ -152,8 +184,8 @@ const Header = ({ handleSearch, searchParams, cart, authors, categories }) => {
                                 <span
                                     aria-label='badge'
                                     className={`position-absolute top-0 start-100 translate-middle badge 
-                                    rounded-pill bg-danger ${cart.length <= 0 ? "d-none" : ""}`}>
-                                    {cart.length}
+                                    rounded-pill bg-danger ${cart?.length <= 0 ? "d-none" : ""}`}>
+                                    {cart?.length}
                                 </span>
                             </Link>
                             <form onSubmit={handleSubmit} >

@@ -73,33 +73,26 @@ export const PostSetting = async (borrowing_days, borrowing_fee, borrowing_overd
     });
 
     const data = await res.json();
-    if (!res.ok) throw data;
+    if (!res.ok) throw data
     return data;
 };
 
 export const UpdateSetting = async (setting_id, active, token) => {
-    try {
-        const res = await fetch(`${SETTING_URL}/${setting_id}/`, {
-            method: 'PATCH',
-            headers: {
-                'Content-Type': 'application/json',
-                'Authorization': `Token ${token}`
-            },
-            body: JSON.stringify({
-                active: active
-            })
-        });
+    const res = await fetch(`${SETTING_URL}/${setting_id}/`, {
+        method: "PATCH",
+        headers: {
+            'Content-Type': 'application/json',
+            'Authorization': `Token ${token}`
+        },
+        body: JSON.stringify({
+            active: active
+        })
+    });
+    const data = await res.json();
 
-        if (!res.ok) throw new Error(`Lỗi: ${res.status}`);
+    if (!res.ok) throw data
+    return data;
 
-        console.log("Cập nhật thành công")
-        const data = await res.json();
-        return data;
-
-    } catch (err) {
-        console.error("Error creating setting:", err);
-        return null;
-    }
 };
 
 export const DeleteSetting = async (id, token) => {

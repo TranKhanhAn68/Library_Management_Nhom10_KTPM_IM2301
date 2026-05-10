@@ -40,7 +40,11 @@ const SettingDashboard = () => {
 
         } catch (err) {
             const error = getError(err)
-            setMessage(error[0])
+            setMessage(
+                Array.isArray(error)
+                    ? error[0] || "Không thể thêm người dùng"
+                    : error || "Không thể thêm người dùng"
+            )
         } finally {
             setLoading(false)
         }

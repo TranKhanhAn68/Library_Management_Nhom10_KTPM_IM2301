@@ -74,8 +74,7 @@ export const PostCategory = async (name, active, token) => {
     const data = await res.json();
     console.log(data)
     if (!res.ok) {
-        const error = getError(data)
-        throw error
+        throw data
     }
 
     return data;
@@ -97,8 +96,7 @@ export const UpdateCategory = async (category_id, name, active, token) => {
 
     const data = await res.json();
     if (!res.ok) {
-        const error = getError(data)
-        throw error
+        throw data
     }
     return data;
 };

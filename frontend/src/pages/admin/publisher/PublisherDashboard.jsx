@@ -3,6 +3,7 @@ import { DeletePublisher, PostPublisher, PublisherListAPI } from '../../../servi
 import { AuthContent } from '../../../utils/AuthContext';
 import { PostAuthor } from '../../../services/AuthorAPI';
 import Loading from '../../../components/Loading';
+import { getError } from '../../../utils/GetError';
 
 const PublisherDashboard = () => {
     const { token } = useContext(AuthContent)
@@ -46,7 +47,12 @@ const PublisherDashboard = () => {
             setSuccess(true);
             setName('')
         } catch (e) {
-            console.log(e)
+            const error = getError(e)
+            alert(
+                Array.isArray(error)
+                    ? error[0] || "Không thể thêm người dùng"
+                    : error || "Lỗi server"
+            )
         } finally {
             setLoading(false);
         }

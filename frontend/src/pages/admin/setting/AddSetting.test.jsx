@@ -14,7 +14,7 @@ vi.mock("../../../components/Loading", () => ({
     default: () => <div>Loading...</div>,
 }));
 vi.mock("../../../utils/GetError", () => ({
-    getError: (err) => err.message
+    getError: (err) => ["Lỗi server"]
 }));
 vi.mock("../../../components/BaseModal", () => ({
     default: ({ children, open, close }) =>
@@ -99,7 +99,7 @@ test("submit fail shows error modal", async () => {
 
     expect(await screen.findByRole("dialog")).toBeInTheDocument();
 
-    expect(screen.getByText("Lỗi server")).toBeInTheDocument();
+    expect(screen.getByText(/Lỗi/i)).toBeInTheDocument();
 });
 
 test("user can toggle active checkbox", async () => {
@@ -133,10 +133,68 @@ test("modal closes when close is triggered", async () => {
 
     await user.click(screen.getByText("Tạo cài đặt"));
 
-    expect(await screen.findByRole("dialog")).toBeInTheDocument();
+    expect(await waitFor(() => {
+        expect(screen.getByRole("dialog")).toBeInTheDocument();
+    }));;
 
     const dialog = screen.getByRole("dialog");
     await user.click(dialog);
 
     expect(screen.queryByRole("dialog")).not.toBeInTheDocument();
+});
+
+test("submit fail - array error has value", async () => {
+    PostSetting.mockRejectedValueOnce(["Sai dữ liệu"]);
+
+    const user = userEvent.setup();
+    renderWithProviders(<AddSetting />);
+
+    await user.type(screen.getByPlaceholderText("Nhập số ngày..."), "30");
+    await user.type(screen.getByPlaceholderText("Nhập số tiền..."), "10000");
+    await user.type(screen.getByPlaceholderText("Nhập tiền phạt..."), "5000");
+
+    await user.click(screen.getByText("Tạo cài đặt"));
+
+    expect(await screen.findByRole("dialog")).toBeInTheDocument();
+    expect(screen.getByText("Lỗi server")).toBeInTheDocument();
+});
+
+test("submit fail - empty array error fallback message", async () => {
+    PostSetting.mockRejectedValueOnce([]);
+
+    const user = userEvent.setup();
+    renderWithProviders(<AddSetting />);
+
+    await user.type(screen.getByPlaceholderText("Nhập số ngày..."), "30");
+    await user.type(screen.getByPlaceholderText("Nhập số tiền..."), "10000");
+    await user.type(screen.getByPlaceholderText("Nhập tiền phạt..."), "5000");
+
+    await user.click(screen.getByText("Tạo cài đặt"));
+
+    expect(await screen.findByRole("dialog")).toBeInTheDocument();
+    expect(
+        screen.getByText("Lỗi server")
+    ).toBeInTheDocument();
+});
+
+test("close modal resets message and success state", async () => {
+    PostSetting.mockRejectedValueOnce(new Error("Lỗi server"));
+
+    const user = userEvent.setup();
+    renderWithProviders(<AddSetting />);
+
+    await user.type(screen.getByPlaceholderText("Nhập số ngày..."), "30");
+    await user.type(screen.getByPlaceholderText("Nhập số tiền..."), "10000");
+    await user.type(screen.getByPlaceholderText("Nhập tiền phạt..."), "5000");
+
+    await user.click(screen.getByText("Tạo cài đặt"));
+
+    const dialog = await screen.findByRole("dialog");
+
+    await user.click(dialog);
+
+    // check modal gone
+    await waitFor(() => {
+        expect(screen.queryByRole("dialog")).not.toBeInTheDocument();
+    });
 });

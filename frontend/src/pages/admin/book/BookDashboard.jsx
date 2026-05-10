@@ -7,6 +7,7 @@ import Pagination from '../../../components/Pagination';
 import Loading from '../../../components/Loading';
 import { getError } from '../../../utils/GetError';
 import Input from '../../../components/Input';
+import { ITEM_PAGE_SIZE } from '../../../config';
 const Book = () => {
     const { token } = useContext(AuthContent)
     const [reload, setReload] = useState(false) //Biến cờ cập nhật dữ liệu book lại khi xóa
@@ -17,7 +18,7 @@ const Book = () => {
     const [selectedBook, setSelectedBook] = useState(null)
     const [selectedBookByID, setSelectedBookByID] = useState("")
 
-    const totalPages = Math.ceil((dataBooks?.count || 0) / 8)
+    const totalPages = Math.ceil((dataBooks?.count || 0) / ITEM_PAGE_SIZE)
 
     const [message, setMessage] = useState("")
     const [isSuccess, setIsSuccess] = useState(false)

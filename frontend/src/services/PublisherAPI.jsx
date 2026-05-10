@@ -48,7 +48,7 @@ export const PostPublisher = async (token, name) => {
     const data = await res.json();
 
     if (!res.ok) {
-        throw getError(data);
+        throw data
     }
 
     return data.message;

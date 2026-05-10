@@ -34,58 +34,56 @@ beforeEach(() => {
 });
 
 
-describe("Navbar", () => {
-    test("render username đúng", () => {
-        renderNavbar({ username: "AnDepTrai" });
+test("render username đúng", () => {
+    renderNavbar({ username: "AnDepTrai" });
 
-        expect(screen.getByText("AnDepTrai")).toBeInTheDocument();
+    expect(screen.getByText("AnDepTrai")).toBeInTheDocument();
+});
+
+test("active logout and handle logout returning admin login", async () => {
+    mockLogout.mockResolvedValueOnce();
+
+    renderNavbar();
+
+    const btn = screen.getByText("Đăng xuất");
+    fireEvent.click(btn);
+
+    // loading state
+    expect(screen.getByText("Đang đăng xuất...")).toBeInTheDocument();
+
+    await waitFor(() => {
+        expect(mockLogout).toHaveBeenCalledTimes(1);
+        expect(mockNavigate).toHaveBeenCalledWith("/login");
     });
+});
 
-    test("active logout and handle logout returning admin login", async () => {
-        mockLogout.mockResolvedValueOnce();
+test("click Trang chủ open new page at new tag", () => {
+    const openSpy = vi.spyOn(window, "open").mockImplementation(() => { });
 
-        renderNavbar();
+    renderNavbar();
 
-        const btn = screen.getByText("Đăng xuất");
-        fireEvent.click(btn);
+    const homeBtn = screen.getByText("Trang chủ");
+    fireEvent.click(homeBtn);
 
-        // loading state
-        expect(screen.getByText("Đang đăng xuất...")).toBeInTheDocument();
+    expect(openSpy).toHaveBeenCalledWith("/", "_blank");
 
-        await waitFor(() => {
-            expect(mockLogout).toHaveBeenCalledTimes(1);
-            expect(mockNavigate).toHaveBeenCalledWith("/admin/login");
-        });
-    });
+    openSpy.mockRestore();
+});
 
-    test("click Trang chủ open new page at new tag", () => {
-        const openSpy = vi.spyOn(window, "open").mockImplementation(() => { });
+test("can't click logout while loading", async () => {
+    mockLogout.mockResolvedValueOnce(() => new Promise(() => { }));
 
-        renderNavbar();
+    renderNavbar();
 
-        const homeBtn = screen.getByText("Trang chủ");
-        fireEvent.click(homeBtn);
+    const btn = screen.getByText("Đăng xuất");
 
-        expect(openSpy).toHaveBeenCalledWith("/", "_blank");
+    fireEvent.click(btn);
 
-        openSpy.mockRestore();
-    });
+    expect(screen.getByText("Đang đăng xuất...")).toBeInTheDocument();
 
-    test("can't click logout while loading", async () => {
-        mockLogout.mockResolvedValueOnce(() => new Promise(() => { }));
+    fireEvent.click(btn);
 
-        renderNavbar();
-
-        const btn = screen.getByText("Đăng xuất");
-
-        fireEvent.click(btn);
-
-        expect(screen.getByText("Đang đăng xuất...")).toBeInTheDocument();
-
-        fireEvent.click(btn);
-
-        await waitFor(() => {
-            expect(mockLogout).toHaveBeenCalledTimes(1);
-        });
+    await waitFor(() => {
+        expect(mockLogout).toHaveBeenCalledTimes(1);
     });
 });

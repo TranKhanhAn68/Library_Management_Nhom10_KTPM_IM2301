@@ -33,7 +33,11 @@ const AddSetting = () => {
             setActive(false)
         } catch (err) {
             const error = getError(err)
-            setMessage(error[0] || "Không thể thêm cài đặt");
+            setMessage(
+                Array.isArray(error)
+                    ? error[0] || "Không thể thêm người dùng"
+                    : error || "Lỗi server"
+            )
         } finally {
             setLoading(false);
         }

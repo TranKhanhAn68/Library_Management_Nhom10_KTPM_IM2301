@@ -62,7 +62,11 @@ const AddUser = () => {
             setMessage(result?.message)
         } catch (err) {
             const error = getError(err)
-            setMessage(error[0])
+            setMessage(
+                Array.isArray(error)
+                    ? error[0] || "Không thể thêm người dùng"
+                    : error || "Không thể thêm người dùng"
+            )
         } finally {
             setLoading(false)
         }
@@ -70,7 +74,6 @@ const AddUser = () => {
 
     const onCancel = () => navigate("/dashboard/users");
 
-    if (loading) return <Loading loading={loading} />;
     return (
         <div className="tw-min-h-screen tw-bg-gray-100 tw-py-10 tw-px-4">
             <div className="tw-max-w-3xl tw-mx-auto">
@@ -81,7 +84,7 @@ const AddUser = () => {
                     </svg>
                     Quay lại danh sách
                 </button>
-
+                {loading && <Loading loading={loading} />}
                 <div className="tw-bg-white tw-shadow-sm tw-rounded-2xl tw-overflow-hidden">
                     <div className="tw-px-8 tw-py-6 tw-border-b tw-border-gray-100">
                         <h1 className="tw-text-2xl tw-font-bold tw-text-gray-800">Thêm người dùng</h1>
@@ -97,13 +100,16 @@ const AddUser = () => {
                                     className="tw-w-24 tw-h-24 tw-rounded-full tw-object-cover tw-border-2 tw-border-gray-200"
                                 />
 
-                                <label className="tw-absolute  tw-bottom-0 tw-right-0 tw-bg-blue-600 tw-p-2 tw-rounded-full tw-text-white tw-cursor-pointer hover:tw-bg-blue-700 tw-shadow-lg">
+                                <label className="tw-absolute  tw-bottom-0 tw-right-0 tw-bg-blue-600 tw-p-2 tw-rounded-full tw-text-white tw-cursor-pointer hover:tw-bg-blue-700 tw-shadow-lg"
+                                    htmlFor='file'
+                                >
                                     <svg xmlns="http://www.w3.org/2000/svg" className="tw-h-4 tw-w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                                         <path strokeLinecap="round" strokeLinejoin="round" stroke-width="2" d="M3 9a2 2 0 012-2h.93a2 2 0 001.664-.89l.812-1.22A2 2 0 0110.07 4h3.86a2 2 0 011.664.89l.812 1.22A2 2 0 0018.07 7H19a2 2 0 012 2v9a2 2 0 01-2 2H5a2 2 0 01-2-2V9z" />
                                         <path strokeLinecap="round" strokeLinejoin="round" stroke-width="2" d="M15 13a3 3 0 11-6 0 3 3 0 016 0z" />
                                     </svg>
                                     <input
                                         type="file"
+                                        id="file"
                                         className="tw-hidden"
                                         accept="image/*"
                                         onChange={(e) => {
@@ -130,8 +136,14 @@ const AddUser = () => {
                         <div className="tw-grid tw-grid-cols-1 md:tw-grid-cols-2 tw-gap-6">
 
                             <div className="tw-flex tw-flex-col tw-gap-2">
-                                <label className="tw-text-sm tw-font-semibold tw-text-gray-600">Username</label>
+                                <label htmlFor="username" className="tw-text-sm tw-font-semibold tw-text-gray-600"
+
+                                >
+                                    Username
+
+                                </label>
                                 <input
+                                    id="username"
                                     type="text"
                                     className="tw-border tw-p-2.5 tw-rounded-lg outline-none"
                                     value={username}
@@ -140,9 +152,12 @@ const AddUser = () => {
                             </div>
 
                             <div className="tw-flex tw-flex-col tw-gap-2">
-                                <label className="tw-text-sm tw-font-semibold tw-text-gray-600">Password</label>
+                                <label
+                                    htmlFor='password'
+                                    className="tw-text-sm tw-font-semibold tw-text-gray-600">Password</label>
                                 <input
                                     type="password"
+                                    id="password"
                                     className="tw-border tw-p-2.5 tw-rounded-lg outline-none "
                                     value={password}
                                     onChange={(e) => setPassword(e.target.value)}
@@ -153,9 +168,10 @@ const AddUser = () => {
 
                         <div className="tw-grid tw-grid-cols-1 md:tw-grid-cols-2 tw-gap-6">
                             <div className="tw-flex tw-flex-col tw-gap-2">
-                                <label className="tw-text-sm tw-font-semibold tw-text-gray-600">Email</label>
+                                <label htmlFor="email" className="tw-text-sm tw-font-semibold tw-text-gray-600">Email</label>
                                 <input
                                     type="email"
+                                    id="email"
                                     className="tw-border tw-p-2.5 tw-rounded-lg outline-none"
                                     value={email}
                                     onChange={(e) => setEmail(e.target.value)}
@@ -163,9 +179,12 @@ const AddUser = () => {
                             </div>
 
                             <div className="tw-flex tw-flex-col tw-gap-2">
-                                <label className="tw-text-sm tw-font-semibold tw-text-gray-600">Họ</label>
+                                <label
+                                    htmlFor='firstname'
+                                    className="tw-text-sm tw-font-semibold tw-text-gray-600">Họ</label>
                                 <input
                                     type="text"
+                                    id="firstname"
                                     className="tw-border tw-p-2.5 tw-rounded-lg outline-none"
                                     value={firstName}
                                     onChange={(e) => setFirstName(e.target.value)}
@@ -173,9 +192,12 @@ const AddUser = () => {
                             </div>
 
                             <div className="tw-flex tw-flex-col tw-gap-2">
-                                <label className="tw-text-sm tw-font-semibold tw-text-gray-600">Tên</label>
+                                <label
+                                    htmlFor='lastname'
+                                    className="tw-text-sm tw-font-semibold tw-text-gray-600">Tên</label>
                                 <input
                                     type="text"
+                                    id="lastname"
                                     className="tw-border tw-p-2.5 tw-rounded-lg outline-none"
                                     value={lastName}
                                     onChange={(e) => setLastName(e.target.value)}
@@ -184,9 +206,12 @@ const AddUser = () => {
 
                             {/* Số điện thoại */}
                             <div className="tw-flex tw-flex-col tw-gap-2">
-                                <label className="tw-text-sm tw-font-semibold tw-text-gray-600">Số điện thoại</label>
+                                <label
+                                    htmlFor='phone'
+                                    className="tw-text-sm tw-font-semibold tw-text-gray-600">Số điện thoại</label>
                                 <input
                                     type="text"
+                                    id="phone"
                                     className="tw-border tw-p-2.5 tw-rounded-lg outline-none"
                                     value={phone}
                                     onChange={(e) => setPhone(e.target.value)}
@@ -196,9 +221,12 @@ const AddUser = () => {
 
                         {/* Quyền hạn - Sử dụng e.target.checked cho Checkbox */}
                         <div className="tw-grid tw-grid-cols-1 sm:tw-grid-cols-3 tw-gap-4">
-                            <label className="tw-flex tw-items-center tw-p-4 tw-border tw-rounded-xl tw-cursor-pointer">
+                            <label
+                                htmlFor='active'
+                                className="tw-flex tw-items-center tw-p-4 tw-border tw-rounded-xl tw-cursor-pointer">
                                 <input
                                     type="checkbox"
+                                    id='active'
                                     checked={active}
                                     onChange={(e) => setActive(e.target.checked)}
                                     className="tw-w-4 tw-h-4"
@@ -231,27 +259,36 @@ const AddUser = () => {
                         {isStaff && (
                             <div className="tw-grid tw-grid-cols-1 md:tw-grid-cols-3 tw-gap-6 tw-bg-blue-50 tw-p-4 tw-rounded-xl">
                                 <div className="tw-flex tw-flex-col tw-gap-2">
-                                    <label className="tw-text-xs tw-font-bold">Mã nhân viên</label>
+                                    <label
+                                        htmlFor='employeeID'
+                                        className="tw-text-xs tw-font-bold">Mã nhân viên</label>
                                     <input
                                         type="text"
+                                        id='employeeID'
                                         value={employeeID}
                                         onChange={(e) => setEmployeeID(e.target.value)}
                                         className="tw-border tw-p-2 tw-rounded tw-bg-white"
                                     />
                                 </div>
                                 <div className="tw-flex tw-flex-col tw-gap-2">
-                                    <label className="tw-text-xs tw-font-bold">Ca làm việc</label>
+                                    <label
+                                        htmlFor='shift'
+                                        className="tw-text-xs tw-font-bold">Ca làm việc</label>
                                     <input
                                         type="text"
+                                        id="shift"
                                         value={shift}
                                         onChange={(e) => setShift(e.target.value)}
                                         className="tw-border tw-p-2 tw-rounded tw-bg-white"
                                     />
                                 </div>
                                 <div className="tw-flex tw-flex-col tw-gap-2">
-                                    <label className="tw-text-xs tw-font-bold">CCCD/CMND</label>
+                                    <label
+                                        htmlFor='identityCard'
+                                        className="tw-text-xs tw-font-bold">CCCD/CMND</label>
                                     <input
                                         type="text"
+                                        id="identityCard"
                                         value={identityCard}
                                         onChange={(e) => setIdentityCard(e.target.value)}
                                         className="tw-border tw-p-2 tw-rounded tw-bg-white"

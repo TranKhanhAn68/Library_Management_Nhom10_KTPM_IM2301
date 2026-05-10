@@ -29,7 +29,7 @@ vi.mock("../../../components/BaseModal", () => ({
 
 // MOCK ERROR
 vi.mock("../../../utils/GetError", () => ({
-    getError: vi.fn(() => "Lỗi server")
+    getError: vi.fn(() => ["Lỗi server"])
 }));
 
 import {

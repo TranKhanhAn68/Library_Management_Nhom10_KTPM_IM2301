@@ -41,3 +41,19 @@ test("click overlay calls close", () => {
 
     expect(mockClose).toHaveBeenCalled();
 });
+
+test("click inside modal does not call close", () => {
+    const mockClose = vi.fn();
+
+    render(
+        <BaseModal open={true} close={mockClose}>
+            <div>Modal Content</div>
+        </BaseModal>
+    );
+
+    const content = screen.getByText("Modal Content");
+
+    fireEvent.click(content);
+
+    expect(mockClose).not.toHaveBeenCalled();
+});

@@ -3,13 +3,16 @@ import { vi, test, expect, beforeEach } from "vitest";
 import React from "react";
 import Cart from "./Cart";
 
-// ===== MOCK =====
 vi.mock("../BaseModal", () => ({
-    default: ({ open, children }) =>
-        open ? <div data-testid="modal">{children}</div> : null
+    default: ({ open, children, close }) =>
+        open ? (
+            <div data-testid="modal">
+                <button onClick={close}>close-modal</button>
+                {children}
+            </div>
+        ) : null
 }));
 
-// ===== DATA =====
 const cartData = [
     {
         book_id: 1,
@@ -32,7 +35,6 @@ beforeEach(() => {
     handleDecreaseQTy = vi.fn();
 });
 
-// ===== TEST 1 =====
 test("render empty cart", () => {
     render(
         <Cart
@@ -46,7 +48,6 @@ test("render empty cart", () => {
     expect(screen.getByText(/Không có sản phẩm/)).toBeInTheDocument();
 });
 
-// ===== TEST 2 =====
 test("render cart item", () => {
     render(
         <Cart
@@ -60,7 +61,6 @@ test("render cart item", () => {
     expect(screen.getByText("Book A")).toBeInTheDocument();
 });
 
-// ===== TEST 3 =====
 test("increase quantity", () => {
     render(
         <Cart
@@ -76,7 +76,6 @@ test("increase quantity", () => {
     expect(handleIncreaseQTy).toHaveBeenCalledWith(1);
 });
 
-// ===== TEST 4 =====
 test("decrease quantity", () => {
     render(
         <Cart
@@ -92,7 +91,6 @@ test("decrease quantity", () => {
     expect(handleDecreaseQTy).toHaveBeenCalledWith(1);
 });
 
-// ===== TEST 5 =====
 test("open delete modal", () => {
     render(
         <Cart
@@ -108,7 +106,6 @@ test("open delete modal", () => {
     expect(screen.getByTestId("modal")).toBeInTheDocument();
 });
 
-// ===== TEST 6 =====
 test("cancel delete closes modal", () => {
     render(
         <Cart
@@ -126,7 +123,6 @@ test("cancel delete closes modal", () => {
     expect(screen.queryByTestId("modal")).not.toBeInTheDocument();
 });
 
-// ===== TEST 7 =====
 test("confirm delete calls setCart", () => {
     render(
         <Cart
@@ -142,4 +138,32 @@ test("confirm delete calls setCart", () => {
     fireEvent.click(screen.getByText("Xóa"));
 
     expect(setCart).toHaveBeenCalled();
+});
+
+test("does not render modal when selectedItem is null", () => {
+    render(
+        <Cart
+            cart={cartData}
+            setCart={setCart}
+            handleIncreaseQTy={handleIncreaseQTy}
+            handleDecreaseQTy={handleDecreaseQTy}
+        />
+    );
+
+    expect(screen.queryByTestId("modal")).not.toBeInTheDocument();
+});
+
+test("sets selectedItem and opens modal", () => {
+    render(
+        <Cart
+            cart={cartData}
+            setCart={setCart}
+            handleIncreaseQTy={handleIncreaseQTy}
+            handleDecreaseQTy={handleDecreaseQTy}
+        />
+    );
+
+    fireEvent.click(screen.getByLabelText("delete-item"));
+
+    expect(screen.getByTestId("modal")).toBeInTheDocument();
 });

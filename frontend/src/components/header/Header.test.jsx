@@ -4,10 +4,20 @@ import React from "react";
 import Header from "./Header";
 import { MemoryRouter } from "react-router-dom";
 import { AuthContent } from "../../utils/AuthContext";
-// ===== MOCK =====
+
+const mockNavigate = vi.fn();
 vi.mock("./Menu", () => ({
     default: () => <div data-testid="menu">Menu</div>
 }));
+
+vi.mock("react-router-dom", async () => {
+    const actual = await vi.importActual("react-router-dom");
+
+    return {
+        ...actual,
+        useNavigate: () => mockNavigate,
+    };
+});
 
 vi.mock("bootstrap/js/dist/tooltip", () => {
     return {
@@ -22,15 +32,13 @@ vi.mock("../../utils/AuthContext", async () => {
         AuthContent: React.createContext({
             logout: vi.fn(),
             user: null,
-            status: false
+            status: false,
         })
     };
 });
 
-// ===== MOCK AUTH =====
 const mockLogout = vi.fn();
 
-// ===== DEFAULT PROPS =====
 const defaultProps = {
     handleSearch: vi.fn(),
     searchParams: new URLSearchParams(""),
@@ -44,9 +52,7 @@ beforeEach(() => {
 });
 
 
-// ================= TEST =================
 
-// 1. render basic
 test("render header basic", () => {
     render(
         <MemoryRouter>
@@ -59,7 +65,6 @@ test("render header basic", () => {
 });
 
 
-// 2. search submit
 test("submit search", () => {
     const handleSearch = vi.fn();
 
@@ -79,7 +84,6 @@ test("submit search", () => {
 });
 
 
-// 3. show login when not authenticated
 test("show login button when not logged in", () => {
     render(
         <MemoryRouter>
@@ -91,7 +95,6 @@ test("show login button when not logged in", () => {
 });
 
 
-// 4. show user info when logged in
 test("show user info when logged in", () => {
     render(
         <AuthContent.Provider value={{
@@ -113,30 +116,39 @@ test("show user info when logged in", () => {
     expect(screen.getByText("Đăng xuất")).toBeInTheDocument();
 });
 
-
-// 5. logout click
-test("click logout", () => {
-    const React = require("react");
+test("logout success flow", async () => {
+    mockLogout.mockResolvedValue();
 
     render(
-        <MemoryRouter>
-            <Header
-                {...defaultProps}
-            />
-        </MemoryRouter>
+        <AuthContent.Provider value={{
+            logout: mockLogout,
+            user: {
+                first_name: "An",
+                last_name: "Tran",
+                username: "an123",
+                image: ""
+            }
+        }}>
+            <MemoryRouter>
+                <Header {...defaultProps} />
+            </MemoryRouter>
+        </AuthContent.Provider>
     );
 
-    // override context manually
-    const logoutBtn = screen.queryByText("Đăng xuất");
+    fireEvent.click(screen.getByText("Đăng xuất"));
 
-    if (logoutBtn) {
-        fireEvent.click(logoutBtn);
+    expect(screen.getByText("Đang đăng xuất...")).toBeInTheDocument();
+
+    await waitFor(() => {
         expect(mockLogout).toHaveBeenCalled();
-    }
+        expect(mockNavigate).toHaveBeenCalledWith("/login");
+    });
+
+    await waitFor(() => {
+        expect(screen.getByText("Đăng xuất")).toBeInTheDocument();
+    });
 });
 
-
-// 6. cart badge
 test("show cart badge when cart has items", () => {
     render(
         <MemoryRouter>
@@ -148,7 +160,6 @@ test("show cart badge when cart has items", () => {
 });
 
 
-// 7. hide cart badge when empty
 test("hide cart badge when empty", () => {
     render(
         <MemoryRouter>

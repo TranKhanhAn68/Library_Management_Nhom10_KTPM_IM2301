@@ -5,7 +5,6 @@ import { MemoryRouter, Route, Routes } from "react-router-dom"
 import { vi } from "vitest"
 import EditBook from "./EditBook"
 
-// ===== MOCK CONTEXT =====
 const mockContext = React.createContext()
 const mockNavigate = vi.fn()
 vi.mock("react-router-dom", async () => {
@@ -493,7 +492,7 @@ test("missing value book name", async () => {
 
     expect(
         screen.getByText(
-            "Tên sách không được để trống"
+            "Vui lòng nhập đầy đủ thông tin"
         )
     ).toBeInTheDocument()
 
@@ -523,7 +522,7 @@ test("missing value book code", async () => {
 
     expect(
         screen.getByText(
-            "Mã sách không được để trống"
+            "Vui lòng nhập đầy đủ thông tin"
         )
     ).toBeInTheDocument()
 
@@ -586,7 +585,7 @@ test("missing category value", async () => {
 
     expect(
         screen.getByText(
-            "Vui lòng chọn danh mục"
+            "Vui lòng nhập đầy đủ thông tin"
         )
     ).toBeInTheDocument()
 
@@ -619,7 +618,7 @@ test("missing author value", async () => {
 
     expect(
         screen.getByText(
-            "Vui lòng chọn tác giả"
+            "Vui lòng nhập đầy đủ thông tin"
         )
     ).toBeInTheDocument()
 
@@ -653,14 +652,14 @@ test("missing publisher value", async () => {
 
     expect(
         screen.getByText(
-            "Vui lòng chọn nhà xuất bản"
+            "Vui lòng nhập đầy đủ thông tin"
         )
     ).toBeInTheDocument()
 
     expect(UpdateBook).not.toHaveBeenCalled()
 })
 
-test("bỏ trống description", async () => {
+test("missing description", async () => {
 
     const user = userEvent.setup()
 
@@ -677,5 +676,9 @@ test("bỏ trống description", async () => {
 
     await user.click(submitBtn)
 
-    expect(UpdateBook).toHaveBeenCalled()
+    expect(UpdateBook).not.toHaveBeenCalled()
+
+    expect(
+        screen.getByText(/vui lòng/i)
+    ).toBeInTheDocument()
 })

@@ -25,7 +25,7 @@ vi.mock("../../../components/BaseModal", () => ({
 }))
 
 vi.mock("../../../utils/GetError", () => ({
-    getError: vi.fn(() => "Lỗi server")
+    getError: vi.fn(() => ["Lỗi server"])
 }))
 
 const mockNavigate = vi.fn()

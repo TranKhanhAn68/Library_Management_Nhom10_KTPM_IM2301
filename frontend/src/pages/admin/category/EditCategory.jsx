@@ -36,7 +36,12 @@ const EditCategory = () => {
             setMessage("Cập nhật thành công")
             setIsSuccess(true)
         } catch (err) {
-            setMessage(err[0])
+            const error = getError(err)
+            setMessage(
+                Array.isArray(error)
+                    ? error[0] || "Không thể thêm người dùng"
+                    : error || "Lỗi server"
+            )
         } finally {
             setLoading(false)
         }

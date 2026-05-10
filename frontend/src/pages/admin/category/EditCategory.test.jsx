@@ -4,7 +4,7 @@ import userEvent from "@testing-library/user-event"
 import { MemoryRouter, Route, Routes } from "react-router-dom"
 import { vi } from "vitest"
 import EditCategory from "./EditCategory"
-
+import { getError } from "../../../utils/GetError"
 const mockNavigate = vi.fn()
 
 vi.mock("react-router-dom", async () => {
@@ -61,7 +61,7 @@ vi.mock("../../../components/BaseModal", () => ({
 }))
 
 vi.mock("../../../utils/GetError", () => ({
-    getError: vi.fn(() => "Error")
+    getError: vi.fn(() => [])
 }))
 
 beforeEach(() => {
@@ -90,6 +90,7 @@ test("render category data", async () => {
 
 test("update category success", async () => {
     UpdateCategory.mockResolvedValue(true)
+    getError.mockReturnValueOnce("Error")
 
     const user = userEvent.setup()
     renderComponent()
@@ -175,4 +176,48 @@ test("close modal success navigate", async () => {
     await waitFor(() => {
         expect(mockNavigate).toHaveBeenCalledWith("/dashboard/categories")
     })
+})
+
+test("handles array error message", async () => {
+    const user = userEvent.setup()
+
+    getError.mockReturnValueOnce(["API error array"])
+
+    UpdateCategory.mockRejectedValueOnce(new Error("fail"))
+
+    renderComponent()
+
+    await user.click(screen.getByRole("button", { name: /cập nhật/i }))
+
+    expect(
+        await screen.findByText("API error array")
+    ).toBeInTheDocument()
+})
+
+test("handles empty array error fallback message", async () => {
+    const user = userEvent.setup()
+
+    UpdateCategory.mockRejectedValueOnce([])
+
+    renderComponent()
+
+    await user.click(screen.getByRole("button", { name: /cập nhật/i }))
+
+    expect(await screen.findByText("Không thể thêm người dùng")).toBeInTheDocument()
+})
+
+test("success update triggers navigate after modal close", async () => {
+    const user = userEvent.setup()
+
+    UpdateCategory.mockResolvedValueOnce(true)
+
+    renderComponent()
+
+    await user.click(screen.getByRole("button", { name: /cập nhật/i }))
+
+    expect(await screen.findByText("Cập nhật thành công")).toBeInTheDocument()
+
+    await user.click(screen.getByText("Close"))
+
+    expect(mockNavigate).toHaveBeenCalledWith("/dashboard/categories")
 })

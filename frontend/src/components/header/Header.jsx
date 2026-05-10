@@ -136,7 +136,7 @@ const Header = ({ handleSearch, searchParams, cart, authors, categories }) => {
                                                     Thông tin cá nhân
                                                 </Link>
                                             </li>
-                                            {user?.is_super_user || user?.is_staff && (
+                                            {(user?.is_super_user || user?.is_staff) && (
                                                 <li className="dropdown-item py-2">
                                                     <Link to='dashboard' target='_blank'>
                                                         <i class="fa-solid fa-gauge-high me-1a"></i>

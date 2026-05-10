@@ -22,11 +22,15 @@ const AddAuthor = ({ authorData, handleChange, handleSubmit, errors, success, lo
                 </div>
 
                 <div>
-                    <label className="tw-block tw-mb-2 tw-text-sm tw-font-semibold tw-text-gray-700">
+                    <label
+                        htmlFor="image"
+                        className="tw-block tw-mb-2 tw-text-sm tw-font-semibold tw-text-gray-700"
+                    >
                         Hình ảnh
                     </label>
 
                     <input
+                        id="image"
                         type="file"
                         name="image"
                         onChange={handleChange}

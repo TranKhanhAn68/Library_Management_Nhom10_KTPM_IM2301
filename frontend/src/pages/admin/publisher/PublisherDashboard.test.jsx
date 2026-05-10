@@ -136,3 +136,25 @@ test("delete publisher", async () => {
         );
     });
 });
+
+test("delete publisher fail", async () => {
+    const user = userEvent.setup();
+
+    window.alert = vi.fn();
+
+    DeletePublisher.mockRejectedValueOnce("Delete failed");
+
+    renderWithProvider();
+
+    const deleteButton = screen.getByRole("button", {
+        name: "",
+    });
+
+    await user.click(deleteButton);
+
+    await waitFor(() => {
+        expect(DeletePublisher).toHaveBeenCalled();
+    });
+
+    expect(window.alert).toHaveBeenCalledWith("Delete failed");
+});

@@ -136,8 +136,12 @@ const UserDashboard = () => {
                                     )}
                                 </td>
                                 <td>
-                                    <button onClick={() => handleSelected(user)} class="tw-bg-cyan-500 hover:tw-bg-cyan-700 tw-text-white tw-font-bold 
-                                tw-py-2 tw-px-4 rounded">
+                                    <button
+                                        aria-label={`detail-user-${user.id}`}
+                                        onClick={() => handleSelected(user)}
+                                        className="tw-bg-cyan-500 hover:tw-bg-cyan-700 tw-text-white tw-font-bold 
+                                        tw-py-2 tw-px-4 rounded"
+                                    >
                                         Xem chi tiết
                                     </button>
 
@@ -153,6 +157,7 @@ const UserDashboard = () => {
                                         </Link>
 
                                         <button
+                                            aria-label={`delete-user-${user.id}`}
                                             className='tw-text-blue-600 hover:tw-text-pink-500'
                                             onClick={(e) => handleDelete(e, user.id)}
                                             disabled={loading}
@@ -191,6 +196,7 @@ const UserDashboard = () => {
                             <div className="tw-flex tw-justify-between tw-items-center tw-mb-6">
                                 <h2 className="tw-text-xl tw-font-bold tw-text-gray-800">Chi tiết người dùng</h2>
                                 <button
+                                    aria-label="close-detail-modal"
                                     onClick={() => setOpenModal(false)}
                                     className="tw-text-gray-500 hover:tw-text-black tw-transition-colors"
                                 >

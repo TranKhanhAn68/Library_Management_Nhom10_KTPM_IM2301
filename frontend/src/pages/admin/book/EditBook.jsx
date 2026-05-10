@@ -61,6 +61,12 @@ const EditBook = () => {
             return
         }
 
+        if (totalQuantity < 0) {
+            setMessage("Số lượng phải lớn hơn 0")
+            setOpenModal(true)
+            return
+        }
+
         const formData = new FormData()
 
         formData.append("name", name)
@@ -86,7 +92,11 @@ const EditBook = () => {
             }
         } catch (err) {
             const error = getError(err)
-            setMessage(error)
+            setMessage(
+                Array.isArray(error)
+                    ? error[0] || "Không thể thêm người dùng"
+                    : error || "Lỗi server"
+            )
             setOpenModal(true)
         } finally {
             setLoading(false)

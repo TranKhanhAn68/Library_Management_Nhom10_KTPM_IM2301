@@ -342,3 +342,74 @@ test("renders fallback values correctly", () => {
     expect(screen.getAllByText("Chưa cập nhật").length).toBeGreaterThan(0);
 });
 
+test("sets preview when user has image", () => {
+    const userWithImage = {
+        ...contextValue.user,
+        image: "avatar.png"
+    };
+
+    render(
+        <AuthContent.Provider
+            value={{
+                ...contextValue,
+                user: userWithImage
+            }}
+        >
+            <InformationUser />
+        </AuthContent.Provider>
+    );
+
+    const image = screen.getByAltText(/avatar/i);
+
+    expect(image.getAttribute("src"))
+        .toContain("avatar.png");
+});
+
+test("shows error when gender is empty", async () => {
+    renderUI();
+
+    fireEvent.click(screen.getByText("Chỉnh sửa hồ sơ"));
+
+    const genderSelect = screen.getByDisplayValue("Nam");
+
+    fireEvent.change(genderSelect, {
+        target: {
+            value: ""
+        }
+    });
+
+    fireEvent.click(
+        screen.getByRole("button", {
+            name: /lưu thay đổi/i
+        })
+    );
+
+    expect(
+        await screen.findByText("Vui lòng chọn giới tính")
+    ).toBeInTheDocument();
+});
+
+
+test("shows invalid phone number error", async () => {
+    renderUI();
+
+    fireEvent.click(screen.getByText("Chỉnh sửa hồ sơ"));
+
+    const phoneInput = screen.getByDisplayValue("0123456789");
+
+    fireEvent.change(phoneInput, {
+        target: {
+            value: "123"
+        }
+    });
+
+    fireEvent.click(
+        screen.getByRole("button", {
+            name: /lưu thay đổi/i
+        })
+    );
+
+    expect(
+        await screen.findByText("Số điện thoại không hợp lệ")
+    ).toBeInTheDocument();
+});

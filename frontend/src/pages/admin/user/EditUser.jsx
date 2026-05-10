@@ -30,10 +30,8 @@ const Edituser = () => {
     const [loading, setLoading] = useState(true);
     const [openModal, setOpenModal] = useState(false)
     const [message, setMessage] = useState("")
+    const [isSuccess, setIsSuccess] = useState(false)
 
-    const isSuccess = message === "Cập nhật thành công";
-
-    // 2. Đổ dữ liệu từ API vào State khi có dữ liệu user
     useEffect(() => {
         if (user) {
             setPreview(user.image || '')
@@ -51,7 +49,6 @@ const Edituser = () => {
         }
     }, [user]);
 
-    // 3. Hàm xử lý Submit
     const handleSubmit = async (e) => {
         e.preventDefault();
         if (!email || !firstName || !lastName || !phone) {
@@ -76,10 +73,9 @@ const Edituser = () => {
         try {
             setLoading(true)
             const result = await UpdateUser(token, id, formData)
-            if (result) {
-                setMessage(result?.message)
-                setOpenModal(true)
-            }
+            setMessage(result?.message)
+            setIsSuccess(true)
+            setOpenModal(true)
         } catch (err) {
             const error = getError(err)
             setMessage(error[0])
@@ -118,17 +114,23 @@ const Edituser = () => {
                                     className="tw-w-24 tw-h-24 tw-rounded-full tw-object-cover tw-border-2 tw-border-gray-200"
                                 />
 
-                                <label className="tw-absolute  tw-bottom-0 tw-right-0 tw-bg-blue-600 tw-p-2 tw-rounded-full tw-text-white tw-cursor-pointer hover:tw-bg-blue-700 tw-shadow-lg">
+                                <label
+                                    htmlFor="image-upload"
+                                    className="tw-absolute tw-bottom-0 tw-right-0 tw-bg-blue-600 tw-p-2 tw-rounded-full tw-text-white tw-cursor-pointer hover:tw-bg-blue-700 tw-shadow-lg"
+                                >
                                     <svg xmlns="http://www.w3.org/2000/svg" className="tw-h-4 tw-w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                                        <path strokeLinecap="round" strokeLinejoin="round" stroke-width="2" d="M3 9a2 2 0 012-2h.93a2 2 0 001.664-.89l.812-1.22A2 2 0 0110.07 4h3.86a2 2 0 011.664.89l.812 1.22A2 2 0 0018.07 7H19a2 2 0 012 2v9a2 2 0 01-2 2H5a2 2 0 01-2-2V9z" />
-                                        <path strokeLinecap="round" strokeLinejoin="round" stroke-width="2" d="M15 13a3 3 0 11-6 0 3 3 0 016 0z" />
+                                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M3 9a2 2 0 012-2h.93a2 2 0 001.664-.89l.812-1.22A2 2 0 0110.07 4h3.86a2 2 0 011.664.89l.812 1.22A2 2 0 0018.07 7H19a2 2 0 012 2v9a2 2 0 01-2 2H5a2 2 0 01-2-2V9z" />
+                                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M15 13a3 3 0 11-6 0 3 3 0 016 0z" />
                                     </svg>
+
                                     <input
+                                        id="image-upload"
                                         type="file"
                                         className="tw-hidden"
                                         accept="image/*"
                                         onChange={(e) => {
                                             const file = e.target.files[0]
+
                                             if (file) {
                                                 setImageFile(file)
                                                 setPreview(URL.createObjectURL(file))
@@ -151,8 +153,15 @@ const Edituser = () => {
                         <div className="tw-grid tw-grid-cols-1 md:tw-grid-cols-2 tw-gap-6">
 
                             <div className="tw-flex tw-flex-col tw-gap-2">
-                                <label className="tw-text-sm tw-font-semibold tw-text-gray-600">Username</label>
+                                <label
+                                    htmlFor="username"
+                                    className="tw-text-sm tw-font-semibold tw-text-gray-600"
+                                >
+                                    Username
+                                </label>
+
                                 <input
+                                    id="username"
                                     type="text"
                                     disabled
                                     className="tw-bg-gray-50 tw-border tw-border-gray-300 tw-text-gray-500 tw-text-sm tw-rounded-lg tw-p-2.5 tw-cursor-not-allowed"
@@ -161,10 +170,17 @@ const Edituser = () => {
                             </div>
 
                             <div className="tw-flex tw-flex-col tw-gap-2">
-                                <label className="tw-text-sm tw-font-semibold tw-text-gray-600">Password</label>
+                                <label
+                                    htmlFor="password"
+                                    className="tw-text-sm tw-font-semibold tw-text-gray-600"
+                                >
+                                    Password
+                                </label>
+
                                 <input
+                                    id="password"
                                     type="text"
-                                    className="tw-border tw-p-2.5 tw-rounded-lg outline-none "
+                                    className="tw-border tw-p-2.5 tw-rounded-lg outline-none"
                                     value={password}
                                     onChange={(e) => setPassword(e.target.value)}
                                 />
@@ -174,8 +190,15 @@ const Edituser = () => {
 
                         <div className="tw-grid tw-grid-cols-1 md:tw-grid-cols-2 tw-gap-6">
                             <div className="tw-flex tw-flex-col tw-gap-2">
-                                <label className="tw-text-sm tw-font-semibold tw-text-gray-600">Email</label>
+                                <label
+                                    htmlFor="email"
+                                    className="tw-text-sm tw-font-semibold tw-text-gray-600"
+                                >
+                                    Email
+                                </label>
+
                                 <input
+                                    id="email"
                                     type="email"
                                     className="tw-border tw-p-2.5 tw-rounded-lg outline-none"
                                     value={email}
@@ -184,8 +207,15 @@ const Edituser = () => {
                             </div>
 
                             <div className="tw-flex tw-flex-col tw-gap-2">
-                                <label className="tw-text-sm tw-font-semibold tw-text-gray-600">Họ</label>
+                                <label
+                                    htmlFor="first-name"
+                                    className="tw-text-sm tw-font-semibold tw-text-gray-600"
+                                >
+                                    Họ
+                                </label>
+
                                 <input
+                                    id="first-name"
                                     type="text"
                                     className="tw-border tw-p-2.5 tw-rounded-lg outline-none"
                                     value={firstName}
@@ -194,8 +224,15 @@ const Edituser = () => {
                             </div>
 
                             <div className="tw-flex tw-flex-col tw-gap-2">
-                                <label className="tw-text-sm tw-font-semibold tw-text-gray-600">Tên</label>
+                                <label
+                                    htmlFor="last-name"
+                                    className="tw-text-sm tw-font-semibold tw-text-gray-600"
+                                >
+                                    Tên
+                                </label>
+
                                 <input
+                                    id="last-name"
                                     type="text"
                                     className="tw-border tw-p-2.5 tw-rounded-lg outline-none"
                                     value={lastName}
@@ -203,10 +240,16 @@ const Edituser = () => {
                                 />
                             </div>
 
-                            {/* Số điện thoại */}
                             <div className="tw-flex tw-flex-col tw-gap-2">
-                                <label className="tw-text-sm tw-font-semibold tw-text-gray-600">Số điện thoại</label>
+                                <label
+                                    htmlFor="phone"
+                                    className="tw-text-sm tw-font-semibold tw-text-gray-600"
+                                >
+                                    Số điện thoại
+                                </label>
+
                                 <input
+                                    id="phone"
                                     type="text"
                                     className="tw-border tw-p-2.5 tw-rounded-lg outline-none"
                                     value={phone}
@@ -215,35 +258,49 @@ const Edituser = () => {
                             </div>
                         </div>
 
-                        {/* Quyền hạn - Sử dụng e.target.checked cho Checkbox */}
                         <div className="tw-grid tw-grid-cols-1 sm:tw-grid-cols-3 tw-gap-4">
-                            <label className="tw-flex tw-items-center tw-p-4 tw-border tw-rounded-xl tw-cursor-pointer">
+                            <label
+                                htmlFor="active"
+                                className="tw-flex tw-items-center tw-p-4 tw-border tw-rounded-xl tw-cursor-pointer"
+                            >
                                 <input
+                                    id="active"
                                     type="checkbox"
                                     checked={active}
                                     onChange={(e) => setActive(e.target.checked)}
                                     className="tw-w-4 tw-h-4"
                                 />
+
                                 <span className="tw-ml-3 tw-text-sm">Kích hoạt</span>
                             </label>
 
-                            <label className="tw-flex tw-items-center tw-p-4 tw-border tw-rounded-xl tw-cursor-pointer">
+                            <label
+                                htmlFor="staff"
+                                className="tw-flex tw-items-center tw-p-4 tw-border tw-rounded-xl tw-cursor-pointer"
+                            >
                                 <input
+                                    id="staff"
                                     type="checkbox"
                                     checked={isStaff}
                                     onChange={(e) => setIsStaff(e.target.checked)}
                                     className="tw-w-4 tw-h-4"
                                 />
+
                                 <span className="tw-ml-3 tw-text-sm">Nhân viên</span>
                             </label>
 
-                            <label className="tw-flex tw-items-center tw-p-4 tw-border tw-rounded-xl tw-cursor-pointer">
+                            <label
+                                htmlFor="superuser"
+                                className="tw-flex tw-items-center tw-p-4 tw-border tw-rounded-xl tw-cursor-pointer"
+                            >
                                 <input
+                                    id="superuser"
                                     type="checkbox"
                                     checked={isSuperuser}
                                     onChange={(e) => setIsSuperuser(e.target.checked)}
                                     className="tw-w-4 tw-h-4"
                                 />
+
                                 <span className="tw-ml-3 tw-text-sm">Quản trị tối cao</span>
                             </label>
                         </div>
@@ -251,27 +308,51 @@ const Edituser = () => {
                         {/* Các trường dành cho Nhân viên */}
                         {isStaff && (
                             <div className="tw-grid tw-grid-cols-1 md:tw-grid-cols-3 tw-gap-6 tw-bg-blue-50 tw-p-4 tw-rounded-xl">
+
                                 <div className="tw-flex tw-flex-col tw-gap-2">
-                                    <label className="tw-text-xs tw-font-bold">Mã nhân viên</label>
+                                    <label
+                                        htmlFor="employee-id"
+                                        className="tw-text-xs tw-font-bold"
+                                    >
+                                        Mã nhân viên
+                                    </label>
+
                                     <input
+                                        id="employee-id"
                                         type="text"
                                         value={employeeID}
                                         onChange={(e) => setEmployeeID(e.target.value)}
                                         className="tw-border tw-p-2 tw-rounded tw-bg-white"
                                     />
                                 </div>
+
                                 <div className="tw-flex tw-flex-col tw-gap-2">
-                                    <label className="tw-text-xs tw-font-bold">Ca làm việc</label>
+                                    <label
+                                        htmlFor="shift"
+                                        className="tw-text-xs tw-font-bold"
+                                    >
+                                        Ca làm việc
+                                    </label>
+
                                     <input
+                                        id="shift"
                                         type="text"
                                         value={shift}
                                         onChange={(e) => setShift(e.target.value)}
                                         className="tw-border tw-p-2 tw-rounded tw-bg-white"
                                     />
                                 </div>
+
                                 <div className="tw-flex tw-flex-col tw-gap-2">
-                                    <label className="tw-text-xs tw-font-bold">CCCD/CMND</label>
+                                    <label
+                                        htmlFor="identity-card"
+                                        className="tw-text-xs tw-font-bold"
+                                    >
+                                        CCCD/CMND
+                                    </label>
+
                                     <input
+                                        id="identity-card"
                                         type="text"
                                         value={identityCard}
                                         onChange={(e) => setIdentityCard(e.target.value)}

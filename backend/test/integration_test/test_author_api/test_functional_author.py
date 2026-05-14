@@ -1,5 +1,9 @@
+from unicodedata import category
+from urllib import response
+from xmlrpc import client
+
 import pytest
-from library_management.models import Author
+from library_management.models import Author, Book, Category, Publisher
 
 @pytest.mark.django_db
 class TestAuthorAPI:
@@ -89,3 +93,47 @@ class TestAuthorAPI:
 
         assert response.status_code == 204
         assert not Author.objects.filter(id=1).exists()
+
+    def test_search_book_by_author_name(self, auth_admin):
+
+        author1 = Author.objects.create(
+        name='Author A',
+        date_of_birth='2000-01-01',
+        biography='Bio'
+    )
+
+        author2 = Author.objects.create(
+        name='Author B',
+        date_of_birth='2001-01-01',
+        biography='Bio'
+    )
+
+        category = Category.objects.create(name="IT")
+
+        publisher = Publisher.objects.create(name="NXB")
+
+        Book.objects.create(
+        book_id='B001',
+        name='Python',
+        total_quantity=10,
+        category=category,
+        author=author1,
+        publisher=publisher
+    )
+
+        Book.objects.create(
+        book_id='B002',
+        name='Java',
+        total_quantity=10,
+        category=category,
+        author=author2,
+        publisher=publisher
+    )
+
+        client = auth_admin
+
+        response = client.get(
+        '/books/?author_name=Author A'
+    )
+
+        assert response.status_code == 200

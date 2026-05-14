@@ -1,5 +1,7 @@
+from urllib import response
+
 import pytest
-from library_management.models import Category
+from library_management.models import Author, Book, Category, Publisher
 
 @pytest.mark.django_db
 class TestCategoryAPI:
@@ -57,3 +59,53 @@ class TestCategoryAPI:
         response = client.delete('/categories/1/')
         assert response.status_code == 204        
         assert not Category.objects.filter(id=1).exists()
+
+    def test_search_book_by_category(self, auth_admin):
+
+        category1 = Category.objects.create(
+        id=1,
+        name='Dev'
+    )
+
+        category2 = Category.objects.create(
+        id=2,
+        name='Tester'
+    )
+
+        author = Author.objects.create(
+        name='Author A',
+        date_of_birth='2000-01-01',
+        biography='Bio'
+    )
+
+        publisher = Publisher.objects.create(
+        name='NXB A'
+    )
+
+        Book.objects.create(
+        book_id='B001',
+        name='Python',
+        total_quantity=10,
+        category=category1,
+        author=author,
+        publisher=publisher
+    )
+
+        Book.objects.create(
+        book_id='B002',
+        name='Java',
+        total_quantity=10,
+        category=category2,
+        author=author,
+        publisher=publisher
+    )
+
+        client = auth_admin
+
+        response = client.get(
+        '/books/?category_name=Dev'
+    )
+
+        assert response.status_code == 200
+        assert response.data['count'] == 2
+        

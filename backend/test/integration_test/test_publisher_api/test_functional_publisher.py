@@ -1,5 +1,9 @@
+from unicodedata import category
+from urllib import response
+from xmlrpc import client
+
 import pytest
-from library_management.models import Publisher
+from library_management.models import Author, Book, Category, Publisher
 
 @pytest.mark.django_db
 class TestPublisherAPI:
@@ -53,3 +57,58 @@ class TestPublisherAPI:
 
         assert response.status_code == 204
         assert not Publisher.objects.filter(id=1).exists()
+
+    def test_search_book_by_publisher_name(self, auth_admin):
+
+        publisher1 = Publisher.objects.create(
+        id=1,
+        name='NXB A'
+    )
+
+        publisher2 = Publisher.objects.create(
+        id=2,
+        name='NXB B'
+    )
+
+        category = Category.objects.create(
+        name="IT"
+    )
+
+        author = Author.objects.create(
+        name='Author A',
+        date_of_birth='2000-01-01',
+        biography='Bio'
+    )
+
+        Book.objects.create(
+        book_id='B001',
+        name='Python',
+        total_quantity=10,
+        category=category,
+        author=author,
+        publisher=publisher1
+    )
+
+        Book.objects.create(
+        book_id='B002',
+        name='Java',
+        total_quantity=10,
+        category=category,
+        author=author,
+        publisher=publisher2
+    )
+
+        client = auth_admin
+
+        response = client.get(
+        '/books/?publisher_name=NXB A'
+    )
+
+        assert response.status_code == 200
+
+        book_names = [
+        book['name']
+        for book in response.data['results']
+    ]
+
+        assert 'Python' in book_names

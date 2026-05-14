@@ -193,7 +193,6 @@ test("close modal resets message and success state", async () => {
 
     await user.click(dialog);
 
-    // check modal gone
     await waitFor(() => {
         expect(screen.queryByRole("dialog")).not.toBeInTheDocument();
     });

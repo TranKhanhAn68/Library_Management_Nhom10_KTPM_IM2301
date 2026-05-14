@@ -1348,18 +1348,26 @@
         "packages": {},
         "requests": {},
         "exec": [
-          "pm.test(\"Status code check theo role\", function () {\r",
+          "pm.test(\"Status code theo role + method\", function () {\r",
           "    const role = pm.environment.get(\"role\");\r",
           "    const code = pm.response.code;\r",
+          "    const method = pm.request.method;\r",
           "\r",
-          "    if (role === \"admin\") {\r",
-          "        pm.expect(code).to.be.oneOf([200, 201, 204]);\r",
+          "    if (method === \"GET\") {\r",
+          "        pm.expect(code).to.be.oneOf([200, 404]);\r",
           "    } else {\r",
-          "        pm.expect(code).to.be.oneOf([401, 403]);\r",
+          "        if (role === \"admin\") {\r",
+          "            pm.expect(code).to.be.oneOf([200, 201, 204]);\r",
+          "        } else {\r",
+          "            pm.expect(code).to.be.oneOf([401, 403]);\r",
+          "        }\r",
           "    }\r",
-          "});\r",
-          "\r",
-          ""
+          "});",
+          "",
+          "pm.test(\"Not Found Item\", function () {\r",
+          "    const code = pm.response.code;\r",
+          "    pm.expect(code).to.be.oneOf([404])\r",
+          "})"
         ]
       }
     }

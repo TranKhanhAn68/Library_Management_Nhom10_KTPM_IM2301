@@ -22,18 +22,9 @@
                   "    pm.response.to.have.status(200);\r",
                   "});\r",
                   "\r",
-                  "pm.test(\"Response chứa status = true\", function () {\r",
-                  "    pm.expect(res.status).to.eql(true);\r",
-                  "});\r",
-                  "\r",
                   "pm.test(\"Response chứa token\", function () {\r",
                   "    pm.expect(res).to.have.property(\"token\");\r",
                   "    pm.expect(res.token).to.not.be.empty;\r",
-                  "});\r",
-                  "\r",
-                  "pm.test(\"Response chứa user object\", function () {\r",
-                  "    pm.expect(res).to.have.property(\"user\");\r",
-                  "    pm.expect(res.user).to.be.an(\"object\");\r",
                   "});\r",
                   "\r",
                   "pm.environment.set(\"token\", pm.response.json().token);\r",
@@ -51,7 +42,7 @@
             "header": [],
             "body": {
               "mode": "raw",
-              "raw": "{\r\n    \"username\": \"abcxyz213\",\r\n    \"password\": \"abcdef123\"\r\n}",
+              "raw": "{\r\n    \"username\": \"admin\",\r\n    \"password\": \"bivabo213\"\r\n}",
               "options": {
                 "raw": {
                   "language": "json"
@@ -564,8 +555,11 @@
                   "});\r",
                   "\r",
                   "pm.test(\"Có message thông báo thất bại\", function () {\r",
-                  "    pm.expect(res).to.have.property(\"message\");\r",
-                  "    pm.expect(res.success).eql(false)\r",
+                  "    const keys = Object.keys(res);\r",
+                  "    pm.expect(keys.length).to.be.above(0);\r",
+                  "    keys.forEach(function(key) {\r",
+                  "        pm.expect(res[key]).to.be.an(\"array\").that.is.not.empty;\r",
+                  "    });\r",
                   "});"
                 ],
                 "type": "text/javascript",

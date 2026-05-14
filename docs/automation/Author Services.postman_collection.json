@@ -960,7 +960,12 @@
           "            pm.expect(code).to.be.oneOf([401, 403]);\r",
           "        }\r",
           "    }\r",
-          "});"
+          "});",
+          "",
+          "pm.test(\"Not Found Item\", function () {\r",
+          "    const code = pm.response.code;\r",
+          "    pm.expect(code).to.be.oneOf([404])\r",
+          "})"
         ]
       }
     }

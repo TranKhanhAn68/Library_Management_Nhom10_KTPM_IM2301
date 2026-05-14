@@ -413,3 +413,44 @@ test("shows invalid phone number error", async () => {
         await screen.findByText("Số điện thoại không hợp lệ")
     ).toBeInTheDocument();
 });
+
+test("append image when avatar exists", async () => {
+    fetch.mockResolvedValueOnce({
+        ok: true,
+        json: async () => ({})
+    });
+
+    global.URL.createObjectURL = vi.fn(() => "blob:url");
+
+    renderUI();
+
+    fireEvent.click(screen.getByText("Chỉnh sửa hồ sơ"));
+
+    const file = new File(
+        ["avatar"],
+        "avatar.png",
+        { type: "image/png" }
+    );
+
+    const input = document.querySelector(
+        'input[type="file"]'
+    );
+
+    fireEvent.change(input, {
+        target: {
+            name: "avatar",
+            files: [file]
+        }
+    });
+
+    fireEvent.click(
+        screen.getByRole("button", {
+            name: /lưu thay đổi/i
+        })
+    );
+
+    await waitFor(() => {
+        expect(fetch).toHaveBeenCalled();
+    });
+});
+

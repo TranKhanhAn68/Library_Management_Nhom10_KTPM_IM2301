@@ -44,7 +44,7 @@
           }
         ],
         "url": {
-          "raw": "{{URL_PATH}}/categories/?search=ABCDEF",
+          "raw": "{{URL_PATH}}/categories/?search=Khoa học",
           "host": [
             "{{URL_PATH}}"
           ],
@@ -55,7 +55,7 @@
           "query": [
             {
               "key": "search",
-              "value": "ABCDEF"
+              "value": "Khoa học"
             }
           ]
         }
@@ -238,7 +238,7 @@
               "        pm.expect(categories.length).to.be.greaterThan(0);\r",
               "    } else {\r",
               "        categories.forEach(cate => {\r",
-              "            pm.expect(cate.is_active).to.eql(true);\r",
+              "            pm.expect(cate.active).to.eql(true);\r",
               "        });\r",
               "    }\r",
               "});"
@@ -813,13 +813,13 @@
           }
         },
         "url": {
-          "raw": "{{URL_PATH}}/categories/20/",
+          "raw": "{{URL_PATH}}/categories/23/",
           "host": [
             "{{URL_PATH}}"
           ],
           "path": [
             "categories",
-            "20",
+            "23",
             ""
           ]
         }
@@ -1023,13 +1023,13 @@
           "raw": "{{payload}}"
         },
         "url": {
-          "raw": "{{URL_PATH}}/categories/20/",
+          "raw": "{{URL_PATH}}/categories/23/",
           "host": [
             "{{URL_PATH}}"
           ],
           "path": [
             "categories",
-            "20",
+            "23",
             ""
           ]
         }
@@ -1223,7 +1223,12 @@
           "            pm.expect(code).to.be.oneOf([401, 403]);\r",
           "        }\r",
           "    }\r",
-          "});"
+          "});",
+          "",
+          "pm.test(\"Not Found Item\", function () {\r",
+          "    const code = pm.response.code;\r",
+          "    pm.expect(code).to.be.oneOf([404])\r",
+          "})"
         ]
       }
     }

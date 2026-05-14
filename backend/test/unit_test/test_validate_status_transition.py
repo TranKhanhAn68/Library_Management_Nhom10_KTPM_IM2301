@@ -1,17 +1,14 @@
 import pytest
 from library_management.services import borrowing_services
 
-# test valid    
+# test valid
 VALID_CASES = [
     ("PENDING", "CONFIRMED"),
     ("PENDING", "CANCELLED"),
-
     ("CONFIRMED", "BORROWING"),
     ("CONFIRMED", "CANCELLED"),
-
     ("BORROWING", "RETURNED"),
     ("BORROWING", "OVERDUE"),
-
     ("OVERDUE", "RETURNED"),
 ]
 
@@ -22,7 +19,7 @@ INVALID_CASES = [
     ("CONFIRMED", "RETURNED"),
     ("RETURNED", "BORROWING"),
     ("CANCELLED", "PENDING"),
-    ("CONFIRMED", "CONFIRMED")
+    ("CONFIRMED", "CONFIRMED"),
 ]
 
 

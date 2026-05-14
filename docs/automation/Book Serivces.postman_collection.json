@@ -1,0 +1,1085 @@
+{
+  "info": {
+    "_postman_id": "a3d1577f-a692-4821-9c0f-a0c08da993b7",
+    "name": "Book Serivces",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+    "_exporter_id": "54519871"
+  },
+  "item": [
+    {
+      "name": "List Books",
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "exec": [
+              "pm.test(\"Check danh sách sách theo role\", function () {\r",
+              "    const role = pm.environment.get(\"role\");\r",
+              "    const res = pm.response.json();\r",
+              "\r",
+              "    const books = res.results\r",
+              "\r",
+              "    if (role === \"admin\") {\r",
+              "        pm.expect(books.length).to.be.greaterThan(0);\r",
+              "    } else {\r",
+              "        books.forEach(book => {\r",
+              "            pm.expect(book.is_active).to.eql(true);\r",
+              "        });\r",
+              "    }\r",
+              "});"
+            ],
+            "type": "text/javascript",
+            "packages": {},
+            "requests": {}
+          }
+        }
+      ],
+      "request": {
+        "method": "GET",
+        "header": [
+          {
+            "key": "Authorization",
+            "value": "token {{token}}",
+            "type": "text"
+          }
+        ],
+        "url": {
+          "raw": "{{URL_PATH}}/books/",
+          "host": [
+            "{{URL_PATH}}"
+          ],
+          "path": [
+            "books",
+            ""
+          ]
+        }
+      },
+      "response": [
+        {
+          "name": "List Books With Admin Role",
+          "originalRequest": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "token {{token}}",
+                "type": "text"
+              }
+            ],
+            "url": {
+              "raw": "{{URL_PATH}}/books/",
+              "host": [
+                "{{URL_PATH}}"
+              ],
+              "path": [
+                "books",
+                ""
+              ]
+            }
+          },
+          "status": "OK",
+          "code": 200,
+          "_postman_previewlanguage": null,
+          "header": [
+            {
+              "key": "Date",
+              "value": "Mon, 04 May 2026 05:49:05 GMT"
+            },
+            {
+              "key": "Server",
+              "value": "WSGIServer/0.2 CPython/3.13.2"
+            },
+            {
+              "key": "Content-Type",
+              "value": "application/json"
+            },
+            {
+              "key": "Vary",
+              "value": "Accept, origin"
+            },
+            {
+              "key": "Allow",
+              "value": "GET, POST, HEAD, OPTIONS"
+            },
+            {
+              "key": "Content-Length",
+              "value": "6778"
+            },
+            {
+              "key": "X-Frame-Options",
+              "value": "DENY"
+            },
+            {
+              "key": "X-Content-Type-Options",
+              "value": "nosniff"
+            },
+            {
+              "key": "Referrer-Policy",
+              "value": "same-origin"
+            },
+            {
+              "key": "Cross-Origin-Opener-Policy",
+              "value": "same-origin"
+            }
+          ],
+          "cookie": [],
+          "body": "{\n    \"count\": 41,\n    \"next\": \"http://127.0.0.1:8000/books/?page=2\",\n    \"previous\": null,\n    \"results\": [\n        {\n            \"id\": 42,\n            \"author\": {\n                \"id\": 12,\n                \"name\": \"Dale Carnegie\",\n                \"date_of_birth\": \"1888-11-24\",\n                \"date_of_death\": \"1955-11-01\",\n                \"biography\": \"Tác giả sách kỹ năng nổi tiếng.\",\n                \"image\": null,\n                \"description\": \"Đại diện sách kỹ năng sống.\"\n            },\n            \"publisher\": {\n                \"id\": 6,\n                \"name\": \"Nhà Xuất Bản Giáo Dục Việt Nam\"\n            },\n            \"category\": {\n                \"id\": 12,\n                \"name\": \"Sách kỹ năng sống\",\n                \"created_at\": \"2026-03-17T14:36:34.659344+07:00\",\n                \"updated_at\": \"2026-03-17T14:36:34.659364+07:00\",\n                \"active\": true\n            },\n            \"available_quantity\": 5,\n            \"created_at\": \"2026-04-12T11:13:07.179738+07:00\",\n            \"updated_at\": \"2026-04-12T11:13:07.179769+07:00\",\n            \"active\": true,\n            \"book_id\": null,\n            \"name\": \"abc\",\n            \"total_quantity\": 5,\n            \"image\": \"http://res.cloudinary.com/dm68sunrv/image/upload/v1775967188/books/wx0mnkcp3aoff8nqmqqz.png\",\n            \"description\": \"abc\"\n        },\n        {\n            \"id\": 1,\n            \"author\": {\n                \"id\": 1,\n                \"name\": \"Leo Tolstoy\",\n                \"date_of_birth\": \"1828-09-09\",\n                \"date_of_death\": \"1910-11-20\",\n                \"biography\": \"Nhà văn Nga nổi tiếng với các tác phẩm kinh điển như Chiến tranh và Hòa bình.\",\n                \"image\": null,\n                \"description\": \"Tác giả tiêu biểu của tiểu thuyết kinh điển.\"\n            },\n            \"publisher\": {\n                \"id\": 1,\n                \"name\": \"Penguin Random House\"\n            },\n            \"category\": {\n                \"id\": 1,\n                \"name\": \"Tiểu thuyết kinh điển\",\n                \"created_at\": \"2026-03-17T14:36:34.631099+07:00\",\n                \"updated_at\": \"2026-04-21T17:57:10.987930+07:00\",\n                \"active\": true\n            },\n            \"available_quantity\": 1,\n            \"created_at\": \"2026-03-17T20:00:00+07:00\",\n            \"updated_at\": \"2026-04-12T10:30:22.647722+07:00\",\n            \"active\": false,\n            \"book_id\": null,\n            \"name\": \"Chiến tranh và Hòa bình\",\n            \"total_quantity\": 1,\n            \"image\": \"http://res.cloudinary.com/dm68sunrv/image/upload/v1775370399/users/msoppddmcqs3nt7roh38.png\",\n            \"description\": \"Tiểu thuyết kinh điển của Leo Tolstoy.\"\n        },\n        {\n            \"id\": 2,\n            \"author\": {\n                \"id\": 2,\n                \"name\": \"Haruki Murakami\",\n                \"date_of_birth\": \"1949-01-12\",\n                \"date_of_death\": null,\n                \"biography\": \"Nhà văn Nhật Bản nổi tiếng với phong cách siêu thực và hiện đại.\",\n                \"image\": null,\n                \"description\": \"Đại diện tiêu biểu cho tiểu thuyết hiện đại.\"\n            },\n            \"publisher\": {\n                \"id\": 2,\n                \"name\": \"HarperCollins\"\n            },\n            \"category\": {\n                \"id\": 2,\n                \"name\": \"Tiểu thuyết hiện đại\",\n                \"created_at\": \"2026-03-17T14:36:34.642572+07:00\",\n                \"updated_at\": \"2026-03-17T14:36:34.642599+07:00\",\n                \"active\": true\n            },\n            \"available_quantity\": 1,\n            \"created_at\": \"2026-03-17T20:00:00+07:00\",\n            \"updated_at\": \"2026-03-17T20:00:00+07:00\",\n            \"active\": true,\n            \"book_id\": null,\n            \"name\": \"Rừng Na Uy\",\n            \"total_quantity\": 1,\n            \"image\": \"http://res.cloudinary.com/dm68sunrv/image/upload/v1775370399/users/msoppddmcqs3nt7roh38.png\",\n            \"description\": \"Tác phẩm nổi tiếng của Haruki Murakami.\"\n        },\n        {\n            \"id\": 3,\n            \"author\": {\n                \"id\": 3,\n                \"name\": \"Gabriel García Márquez\",\n                \"date_of_birth\": \"1927-03-06\",\n                \"date_of_death\": \"2014-04-17\",\n                \"biography\": \"Nhà văn Colombia, người tiên phong của chủ nghĩa hiện thực huyền ảo.\",\n                \"image\": null,\n                \"description\": \"Đại diện văn học nước ngoài.\"\n            },\n            \"publisher\": {\n                \"id\": 3,\n                \"name\": \"Simon & Schuster\"\n            },\n            \"category\": {\n                \"id\": 3,\n                \"name\": \"Văn học nước ngoài\",\n                \"created_at\": \"2026-03-17T14:36:34.644438+07:00\",\n                \"updated_at\": \"2026-03-17T14:36:34.644459+07:00\",\n                \"active\": true\n            },\n            \"available_quantity\": 1,\n            \"created_at\": \"2026-03-17T20:00:00+07:00\",\n            \"updated_at\": \"2026-03-17T20:00:00+07:00\",\n            \"active\": true,\n            \"book_id\": null,\n            \"name\": \"Trăm năm cô đơn\",\n            \"total_quantity\": 1,\n            \"image\": \"http://res.cloudinary.com/dm68sunrv/image/upload/v1775370399/users/msoppddmcqs3nt7roh38.png\",\n            \"description\": \"Kiệt tác của Gabriel García Márquez.\"\n        },\n        {\n            \"id\": 4,\n            \"author\": {\n                \"id\": 4,\n                \"name\": \"Nam Cao\",\n                \"date_of_birth\": \"1915-10-29\",\n                \"date_of_death\": \"1951-11-30\",\n                \"biography\": \"Nhà văn Việt Nam nổi tiếng với các tác phẩm hiện thực phê phán.\",\n                \"image\": null,\n                \"description\": \"Đại diện văn học Việt Nam.\"\n            },\n            \"publisher\": {\n                \"id\": 4,\n                \"name\": \"Nhà Xuất Bản Trẻ\"\n            },\n            \"category\": {\n                \"id\": 4,\n                \"name\": \"Văn học Việt Nam\",\n                \"created_at\": \"2026-03-17T14:36:34.646102+07:00\",\n                \"updated_at\": \"2026-03-17T14:36:34.646119+07:00\",\n                \"active\": true\n            },\n            \"available_quantity\": 1,\n            \"created_at\": \"2026-03-17T20:00:00+07:00\",\n            \"updated_at\": \"2026-03-17T20:00:00+07:00\",\n            \"active\": true,\n            \"book_id\": null,\n            \"name\": \"Chí Phèo\",\n            \"total_quantity\": 1,\n            \"image\": \"http://res.cloudinary.com/dm68sunrv/image/upload/v1775370399/users/msoppddmcqs3nt7roh38.png\",\n            \"description\": \"Tác phẩm nổi tiếng của Nam Cao.\"\n        },\n        {\n            \"id\": 5,\n            \"author\": {\n                \"id\": 5,\n                \"name\": \"Agatha Christie\",\n                \"date_of_birth\": \"1890-09-15\",\n                \"date_of_death\": \"1976-01-12\",\n                \"biography\": \"Nữ hoàng trinh thám với hàng loạt tác phẩm nổi tiếng.\",\n                \"image\": null,\n                \"description\": \"Tác giả tiêu biểu thể loại trinh thám.\"\n            },\n            \"publisher\": {\n                \"id\": 1,\n                \"name\": \"Penguin Random House\"\n            },\n            \"category\": {\n                \"id\": 5,\n                \"name\": \"Trinh thám - hình sự\",\n                \"created_at\": \"2026-03-17T14:36:34.647605+07:00\",\n                \"updated_at\": \"2026-03-17T14:36:34.647617+07:00\",\n                \"active\": true\n            },\n            \"available_quantity\": 0,\n            \"created_at\": \"2026-03-17T20:00:00+07:00\",\n            \"updated_at\": \"2026-03-17T20:00:00+07:00\",\n            \"active\": true,\n            \"book_id\": null,\n            \"name\": \"Án mạng trên chuyến tàu tốc hành phương Đông\",\n            \"total_quantity\": 1,\n            \"image\": \"http://res.cloudinary.com/dm68sunrv/image/upload/v1775370399/users/msoppddmcqs3nt7roh38.png\",\n            \"description\": \"Truyện trinh thám của Agatha Christie.\"\n        },\n        {\n            \"id\": 6,\n            \"author\": {\n                \"id\": 6,\n                \"name\": \"Isaac Asimov\",\n                \"date_of_birth\": \"1920-01-02\",\n                \"date_of_death\": \"1992-04-06\",\n                \"biography\": \"Nhà văn khoa học viễn tưởng nổi tiếng với series Foundation.\",\n                \"image\": null,\n                \"description\": \"Đại diện khoa học viễn tưởng.\"\n            },\n            \"publisher\": {\n                \"id\": 2,\n                \"name\": \"HarperCollins\"\n            },\n            \"category\": {\n                \"id\": 6,\n                \"name\": \"Khoa học viễn tưởng\",\n                \"created_at\": \"2026-03-17T14:36:34.648996+07:00\",\n                \"updated_at\": \"2026-03-17T14:36:34.649009+07:00\",\n                \"active\": true\n            },\n            \"available_quantity\": 1,\n            \"created_at\": \"2026-03-17T20:00:00+07:00\",\n            \"updated_at\": \"2026-03-17T20:00:00+07:00\",\n            \"active\": true,\n            \"book_id\": null,\n            \"name\": \"Foundation\",\n            \"total_quantity\": 1,\n            \"image\": \"http://res.cloudinary.com/dm68sunrv/image/upload/v1775370399/users/msoppddmcqs3nt7roh38.png\",\n            \"description\": \"Tác phẩm khoa học viễn tưởng của Isaac Asimov.\"\n        },\n        {\n            \"id\": 7,\n            \"author\": {\n                \"id\": 7,\n                \"name\": \"J. R. R. Tolkien\",\n                \"date_of_birth\": \"1892-01-03\",\n                \"date_of_death\": \"1973-09-02\",\n                \"biography\": \"Tác giả của Chúa tể những chiếc nhẫn.\",\n                \"image\": null,\n                \"description\": \"Đại diện thể loại fantasy.\"\n            },\n            \"publisher\": {\n                \"id\": 1,\n                \"name\": \"Penguin Random House\"\n            },\n            \"category\": {\n                \"id\": 7,\n                \"name\": \"Giả tưởng (Fantasy)\",\n                \"created_at\": \"2026-03-17T14:36:34.650641+07:00\",\n                \"updated_at\": \"2026-03-17T14:36:34.650656+07:00\",\n                \"active\": true\n            },\n            \"available_quantity\": 1,\n            \"created_at\": \"2026-03-17T20:00:00+07:00\",\n            \"updated_at\": \"2026-03-17T20:00:00+07:00\",\n            \"active\": true,\n            \"book_id\": null,\n            \"name\": \"Chúa tể những chiếc nhẫn\",\n            \"total_quantity\": 1,\n            \"image\": \"http://res.cloudinary.com/dm68sunrv/image/upload/v1775370399/users/msoppddmcqs3nt7roh38.png\",\n            \"description\": \"Tác phẩm fantasy nổi tiếng của Tolkien.\"\n        }\n    ]\n}"
+        },
+        {
+          "name": "List Books User Role",
+          "originalRequest": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "token {{token}}",
+                "type": "text"
+              }
+            ],
+            "url": {
+              "raw": "{{URL_PATH}}/books/",
+              "host": [
+                "{{URL_PATH}}"
+              ],
+              "path": [
+                "books",
+                ""
+              ]
+            }
+          },
+          "status": "OK",
+          "code": 200,
+          "_postman_previewlanguage": null,
+          "header": [
+            {
+              "key": "Date",
+              "value": "Mon, 04 May 2026 05:50:52 GMT"
+            },
+            {
+              "key": "Server",
+              "value": "WSGIServer/0.2 CPython/3.13.2"
+            },
+            {
+              "key": "Content-Type",
+              "value": "application/json"
+            },
+            {
+              "key": "Vary",
+              "value": "Accept, origin"
+            },
+            {
+              "key": "Allow",
+              "value": "GET, POST, HEAD, OPTIONS"
+            },
+            {
+              "key": "Content-Length",
+              "value": "4943"
+            },
+            {
+              "key": "X-Frame-Options",
+              "value": "DENY"
+            },
+            {
+              "key": "X-Content-Type-Options",
+              "value": "nosniff"
+            },
+            {
+              "key": "Referrer-Policy",
+              "value": "same-origin"
+            },
+            {
+              "key": "Cross-Origin-Opener-Policy",
+              "value": "same-origin"
+            }
+          ],
+          "cookie": [],
+          "body": "{\n    \"count\": 39,\n    \"next\": \"http://127.0.0.1:8000/books/?page=2\",\n    \"previous\": null,\n    \"results\": [\n        {\n            \"id\": 42,\n            \"author\": {\n                \"id\": 12,\n                \"name\": \"Dale Carnegie\",\n                \"date_of_birth\": \"1888-11-24\",\n                \"date_of_death\": \"1955-11-01\",\n                \"biography\": \"Tác giả sách kỹ năng nổi tiếng.\",\n                \"image\": null,\n                \"description\": \"Đại diện sách kỹ năng sống.\"\n            },\n            \"publisher\": {\n                \"id\": 6,\n                \"name\": \"Nhà Xuất Bản Giáo Dục Việt Nam\"\n            },\n            \"category\": {\n                \"id\": 12,\n                \"name\": \"Sách kỹ năng sống\"\n            },\n            \"available_quantity\": 5,\n            \"active\": true,\n            \"book_id\": null,\n            \"name\": \"abc\",\n            \"image\": \"http://res.cloudinary.com/dm68sunrv/image/upload/v1775967188/books/wx0mnkcp3aoff8nqmqqz.png\",\n            \"description\": \"abc\"\n        },\n        {\n            \"id\": 2,\n            \"author\": {\n                \"id\": 2,\n                \"name\": \"Haruki Murakami\",\n                \"date_of_birth\": \"1949-01-12\",\n                \"date_of_death\": null,\n                \"biography\": \"Nhà văn Nhật Bản nổi tiếng với phong cách siêu thực và hiện đại.\",\n                \"image\": null,\n                \"description\": \"Đại diện tiêu biểu cho tiểu thuyết hiện đại.\"\n            },\n            \"publisher\": {\n                \"id\": 2,\n                \"name\": \"HarperCollins\"\n            },\n            \"category\": {\n                \"id\": 2,\n                \"name\": \"Tiểu thuyết hiện đại\"\n            },\n            \"available_quantity\": 1,\n            \"active\": true,\n            \"book_id\": null,\n            \"name\": \"Rừng Na Uy\",\n            \"image\": \"http://res.cloudinary.com/dm68sunrv/image/upload/v1775370399/users/msoppddmcqs3nt7roh38.png\",\n            \"description\": \"Tác phẩm nổi tiếng của Haruki Murakami.\"\n        },\n        {\n            \"id\": 3,\n            \"author\": {\n                \"id\": 3,\n                \"name\": \"Gabriel García Márquez\",\n                \"date_of_birth\": \"1927-03-06\",\n                \"date_of_death\": \"2014-04-17\",\n                \"biography\": \"Nhà văn Colombia, người tiên phong của chủ nghĩa hiện thực huyền ảo.\",\n                \"image\": null,\n                \"description\": \"Đại diện văn học nước ngoài.\"\n            },\n            \"publisher\": {\n                \"id\": 3,\n                \"name\": \"Simon & Schuster\"\n            },\n            \"category\": {\n                \"id\": 3,\n                \"name\": \"Văn học nước ngoài\"\n            },\n            \"available_quantity\": 1,\n            \"active\": true,\n            \"book_id\": null,\n            \"name\": \"Trăm năm cô đơn\",\n            \"image\": \"http://res.cloudinary.com/dm68sunrv/image/upload/v1775370399/users/msoppddmcqs3nt7roh38.png\",\n            \"description\": \"Kiệt tác của Gabriel García Márquez.\"\n        },\n        {\n            \"id\": 4,\n            \"author\": {\n                \"id\": 4,\n                \"name\": \"Nam Cao\",\n                \"date_of_birth\": \"1915-10-29\",\n                \"date_of_death\": \"1951-11-30\",\n                \"biography\": \"Nhà văn Việt Nam nổi tiếng với các tác phẩm hiện thực phê phán.\",\n                \"image\": null,\n                \"description\": \"Đại diện văn học Việt Nam.\"\n            },\n            \"publisher\": {\n                \"id\": 4,\n                \"name\": \"Nhà Xuất Bản Trẻ\"\n            },\n            \"category\": {\n                \"id\": 4,\n                \"name\": \"Văn học Việt Nam\"\n            },\n            \"available_quantity\": 1,\n            \"active\": true,\n            \"book_id\": null,\n            \"name\": \"Chí Phèo\",\n            \"image\": \"http://res.cloudinary.com/dm68sunrv/image/upload/v1775370399/users/msoppddmcqs3nt7roh38.png\",\n            \"description\": \"Tác phẩm nổi tiếng của Nam Cao.\"\n        },\n        {\n            \"id\": 5,\n            \"author\": {\n                \"id\": 5,\n                \"name\": \"Agatha Christie\",\n                \"date_of_birth\": \"1890-09-15\",\n                \"date_of_death\": \"1976-01-12\",\n                \"biography\": \"Nữ hoàng trinh thám với hàng loạt tác phẩm nổi tiếng.\",\n                \"image\": null,\n                \"description\": \"Tác giả tiêu biểu thể loại trinh thám.\"\n            },\n            \"publisher\": {\n                \"id\": 1,\n                \"name\": \"Penguin Random House\"\n            },\n            \"category\": {\n                \"id\": 5,\n                \"name\": \"Trinh thám - hình sự\"\n            },\n            \"available_quantity\": 0,\n            \"active\": true,\n            \"book_id\": null,\n            \"name\": \"Án mạng trên chuyến tàu tốc hành phương Đông\",\n            \"image\": \"http://res.cloudinary.com/dm68sunrv/image/upload/v1775370399/users/msoppddmcqs3nt7roh38.png\",\n            \"description\": \"Truyện trinh thám của Agatha Christie.\"\n        },\n        {\n            \"id\": 6,\n            \"author\": {\n                \"id\": 6,\n                \"name\": \"Isaac Asimov\",\n                \"date_of_birth\": \"1920-01-02\",\n                \"date_of_death\": \"1992-04-06\",\n                \"biography\": \"Nhà văn khoa học viễn tưởng nổi tiếng với series Foundation.\",\n                \"image\": null,\n                \"description\": \"Đại diện khoa học viễn tưởng.\"\n            },\n            \"publisher\": {\n                \"id\": 2,\n                \"name\": \"HarperCollins\"\n            },\n            \"category\": {\n                \"id\": 6,\n                \"name\": \"Khoa học viễn tưởng\"\n            },\n            \"available_quantity\": 1,\n            \"active\": true,\n            \"book_id\": null,\n            \"name\": \"Foundation\",\n            \"image\": \"http://res.cloudinary.com/dm68sunrv/image/upload/v1775370399/users/msoppddmcqs3nt7roh38.png\",\n            \"description\": \"Tác phẩm khoa học viễn tưởng của Isaac Asimov.\"\n        },\n        {\n            \"id\": 7,\n            \"author\": {\n                \"id\": 7,\n                \"name\": \"J. R. R. Tolkien\",\n                \"date_of_birth\": \"1892-01-03\",\n                \"date_of_death\": \"1973-09-02\",\n                \"biography\": \"Tác giả của Chúa tể những chiếc nhẫn.\",\n                \"image\": null,\n                \"description\": \"Đại diện thể loại fantasy.\"\n            },\n            \"publisher\": {\n                \"id\": 1,\n                \"name\": \"Penguin Random House\"\n            },\n            \"category\": {\n                \"id\": 7,\n                \"name\": \"Giả tưởng (Fantasy)\"\n            },\n            \"available_quantity\": 1,\n            \"active\": true,\n            \"book_id\": null,\n            \"name\": \"Chúa tể những chiếc nhẫn\",\n            \"image\": \"http://res.cloudinary.com/dm68sunrv/image/upload/v1775370399/users/msoppddmcqs3nt7roh38.png\",\n            \"description\": \"Tác phẩm fantasy nổi tiếng của Tolkien.\"\n        },\n        {\n            \"id\": 8,\n            \"author\": {\n                \"id\": 8,\n                \"name\": \"Stephen King\",\n                \"date_of_birth\": \"1947-09-21\",\n                \"date_of_death\": null,\n                \"biography\": \"Nhà văn Mỹ nổi tiếng với các tác phẩm kinh dị.\",\n                \"image\": null,\n                \"description\": \"Ông hoàng truyện kinh dị.\"\n            },\n            \"publisher\": {\n                \"id\": 2,\n                \"name\": \"HarperCollins\"\n            },\n            \"category\": {\n                \"id\": 8,\n                \"name\": \"Kinh dị\"\n            },\n            \"available_quantity\": 1,\n            \"active\": true,\n            \"book_id\": null,\n            \"name\": \"It\",\n            \"image\": \"http://res.cloudinary.com/dm68sunrv/image/upload/v1775370399/users/msoppddmcqs3nt7roh38.png\",\n            \"description\": \"Tiểu thuyết kinh dị của Stephen King.\"\n        }\n    ]\n}"
+        }
+      ]
+    },
+    {
+      "name": "Specific Book",
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "exec": [
+              "const role = pm.environment.get(\"role\");\r",
+              "const code = pm.response.code;\r",
+              "\r",
+              "pm.test(\"Lấy book cụ thể\", function() {\r",
+              "    const book = pm.response.json();\r",
+              "    pm.expect(book).to.be.an('object');\r",
+              "    pm.expect(book).to.have.property('id');\r",
+              "    pm.expect(book).to.have.property('name');\r",
+              "    pm.expect(book).to.have.property('author');\r",
+              "    pm.expect(book).to.have.property('publisher');\r",
+              "    pm.expect(book).to.have.property('category');})\r",
+              "\r",
+              "pm.test(\"Lấy book đã bị inactive\", function() {\r",
+              "    if (role === \"admin\") {\r",
+              "        pm.expect(code).to.eql(200)\r",
+              "    } else {\r",
+              "        pm.expect(code).to.eql(404);\r",
+              "    }\r",
+              "})"
+            ],
+            "type": "text/javascript",
+            "packages": {},
+            "requests": {}
+          }
+        }
+      ],
+      "request": {
+        "method": "GET",
+        "header": [
+          {
+            "key": "Authorization",
+            "value": "token {{token}}",
+            "type": "text"
+          }
+        ],
+        "url": {
+          "raw": "{{URL_PATH}}/books/2/",
+          "host": [
+            "{{URL_PATH}}"
+          ],
+          "path": [
+            "books",
+            "2",
+            ""
+          ]
+        }
+      },
+      "response": [
+        {
+          "name": "Specific Book With Admin Role",
+          "originalRequest": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "token {{token}}",
+                "type": "text"
+              }
+            ],
+            "url": {
+              "raw": "{{URL_PATH}}/books/1/",
+              "host": [
+                "{{URL_PATH}}"
+              ],
+              "path": [
+                "books",
+                "1",
+                ""
+              ]
+            }
+          },
+          "status": "OK",
+          "code": 200,
+          "_postman_previewlanguage": null,
+          "header": [
+            {
+              "key": "Date",
+              "value": "Mon, 04 May 2026 06:26:31 GMT"
+            },
+            {
+              "key": "Server",
+              "value": "WSGIServer/0.2 CPython/3.13.2"
+            },
+            {
+              "key": "Content-Type",
+              "value": "application/json"
+            },
+            {
+              "key": "Vary",
+              "value": "Accept, origin"
+            },
+            {
+              "key": "Allow",
+              "value": "GET, PUT, PATCH, DELETE, HEAD, OPTIONS"
+            },
+            {
+              "key": "Content-Length",
+              "value": "891"
+            },
+            {
+              "key": "X-Frame-Options",
+              "value": "DENY"
+            },
+            {
+              "key": "X-Content-Type-Options",
+              "value": "nosniff"
+            },
+            {
+              "key": "Referrer-Policy",
+              "value": "same-origin"
+            },
+            {
+              "key": "Cross-Origin-Opener-Policy",
+              "value": "same-origin"
+            }
+          ],
+          "cookie": [],
+          "body": "{\n    \"id\": 1,\n    \"author\": {\n        \"id\": 1,\n        \"name\": \"Leo Tolstoy\",\n        \"date_of_birth\": \"1828-09-09\",\n        \"date_of_death\": \"1910-11-20\",\n        \"biography\": \"Nhà văn Nga nổi tiếng với các tác phẩm kinh điển như Chiến tranh và Hòa bình.\",\n        \"image\": null,\n        \"description\": \"Tác giả tiêu biểu của tiểu thuyết kinh điển.\"\n    },\n    \"publisher\": {\n        \"id\": 1,\n        \"name\": \"Penguin Random House\"\n    },\n    \"category\": {\n        \"id\": 1,\n        \"name\": \"Tiểu thuyết kinh điển\",\n        \"created_at\": \"2026-03-17T14:36:34.631099+07:00\",\n        \"updated_at\": \"2026-04-21T17:57:10.987930+07:00\",\n        \"active\": true\n    },\n    \"available_quantity\": 1,\n    \"created_at\": \"2026-03-17T20:00:00+07:00\",\n    \"updated_at\": \"2026-04-12T10:30:22.647722+07:00\",\n    \"active\": false,\n    \"book_id\": null,\n    \"name\": \"Chiến tranh và Hòa bình\",\n    \"total_quantity\": 1,\n    \"image\": \"http://res.cloudinary.com/dm68sunrv/image/upload/v1775370399/users/msoppddmcqs3nt7roh38.png\",\n    \"description\": \"Tiểu thuyết kinh điển của Leo Tolstoy.\"\n}"
+        },
+        {
+          "name": "Specific Book Without Admin Role Taking Book Not Active",
+          "originalRequest": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "token {{token}}",
+                "type": "text"
+              }
+            ],
+            "url": {
+              "raw": "{{URL_PATH}}/books/1/",
+              "host": [
+                "{{URL_PATH}}"
+              ],
+              "path": [
+                "books",
+                "1",
+                ""
+              ]
+            }
+          },
+          "status": "Not Found",
+          "code": 404,
+          "_postman_previewlanguage": null,
+          "header": [
+            {
+              "key": "Date",
+              "value": "Mon, 04 May 2026 06:29:42 GMT"
+            },
+            {
+              "key": "Server",
+              "value": "WSGIServer/0.2 CPython/3.13.2"
+            },
+            {
+              "key": "Content-Type",
+              "value": "application/json"
+            },
+            {
+              "key": "Vary",
+              "value": "Accept, origin"
+            },
+            {
+              "key": "Allow",
+              "value": "GET, PUT, PATCH, DELETE, HEAD, OPTIONS"
+            },
+            {
+              "key": "Content-Length",
+              "value": "45"
+            },
+            {
+              "key": "X-Frame-Options",
+              "value": "DENY"
+            },
+            {
+              "key": "X-Content-Type-Options",
+              "value": "nosniff"
+            },
+            {
+              "key": "Referrer-Policy",
+              "value": "same-origin"
+            },
+            {
+              "key": "Cross-Origin-Opener-Policy",
+              "value": "same-origin"
+            }
+          ],
+          "cookie": [],
+          "body": "{\n    \"detail\": \"No Book matches the given query.\"\n}"
+        },
+        {
+          "name": "Specific Book Without Admin Role Taking Book Active",
+          "originalRequest": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "token {{token}}",
+                "type": "text"
+              }
+            ],
+            "url": {
+              "raw": "{{URL_PATH}}/books/2/",
+              "host": [
+                "{{URL_PATH}}"
+              ],
+              "path": [
+                "books",
+                "2",
+                ""
+              ]
+            }
+          },
+          "status": "OK",
+          "code": 200,
+          "_postman_previewlanguage": null,
+          "header": [
+            {
+              "key": "Date",
+              "value": "Mon, 04 May 2026 06:33:15 GMT"
+            },
+            {
+              "key": "Server",
+              "value": "WSGIServer/0.2 CPython/3.13.2"
+            },
+            {
+              "key": "Content-Type",
+              "value": "application/json"
+            },
+            {
+              "key": "Vary",
+              "value": "Accept, origin"
+            },
+            {
+              "key": "Allow",
+              "value": "GET, PUT, PATCH, DELETE, HEAD, OPTIONS"
+            },
+            {
+              "key": "Content-Length",
+              "value": "637"
+            },
+            {
+              "key": "X-Frame-Options",
+              "value": "DENY"
+            },
+            {
+              "key": "X-Content-Type-Options",
+              "value": "nosniff"
+            },
+            {
+              "key": "Referrer-Policy",
+              "value": "same-origin"
+            },
+            {
+              "key": "Cross-Origin-Opener-Policy",
+              "value": "same-origin"
+            }
+          ],
+          "cookie": [],
+          "body": "{\n    \"id\": 2,\n    \"author\": {\n        \"id\": 2,\n        \"name\": \"Haruki Murakami\",\n        \"date_of_birth\": \"1949-01-12\",\n        \"date_of_death\": null,\n        \"biography\": \"Nhà văn Nhật Bản nổi tiếng với phong cách siêu thực và hiện đại.\",\n        \"image\": null,\n        \"description\": \"Đại diện tiêu biểu cho tiểu thuyết hiện đại.\"\n    },\n    \"publisher\": {\n        \"id\": 2,\n        \"name\": \"HarperCollins\"\n    },\n    \"category\": {\n        \"id\": 2,\n        \"name\": \"Tiểu thuyết hiện đại\"\n    },\n    \"available_quantity\": 1,\n    \"active\": true,\n    \"book_id\": null,\n    \"name\": \"Rừng Na Uy\",\n    \"image\": \"http://res.cloudinary.com/dm68sunrv/image/upload/v1775370399/users/msoppddmcqs3nt7roh38.png\",\n    \"description\": \"Tác phẩm nổi tiếng của Haruki Murakami.\"\n}"
+        }
+      ]
+    },
+    {
+      "name": "Create Book",
+      "event": [
+        {
+          "listen": "prerequest",
+          "script": {
+            "exec": [
+              "const payload = {\r",
+              "    \"name\": \"Tác phẩm Tắt đèn\",\r",
+              "    \"author_id\": 2,\r",
+              "    \"publisher_id\": 4,\r",
+              "    \"category_id\": 5\r",
+              "}\r",
+              "\r",
+              "pm.environment.set(\"payload\", JSON.stringify(payload));\r",
+              ""
+            ],
+            "type": "text/javascript",
+            "packages": {},
+            "requests": {}
+          }
+        },
+        {
+          "listen": "test",
+          "script": {
+            "exec": [
+              "\r",
+              "if (pm.environment.get(\"role\") === \"admin\") {\r",
+              "    pm.test(\"Create thành công phải có data trả về\", function () {\r",
+              "        const json = pm.response.json();\r",
+              "        pm.expect(json).to.include(\"Tạo mới thành công\")\r",
+              "    });\r",
+              "}"
+            ],
+            "type": "text/javascript",
+            "packages": {},
+            "requests": {}
+          }
+        }
+      ],
+      "request": {
+        "method": "POST",
+        "header": [
+          {
+            "key": "Authorization",
+            "value": "token {{token}}",
+            "type": "text"
+          }
+        ],
+        "body": {
+          "mode": "raw",
+          "raw": "{{payload}}",
+          "options": {
+            "raw": {
+              "language": "json"
+            }
+          }
+        },
+        "url": {
+          "raw": "{{URL_PATH}}/books/",
+          "host": [
+            "{{URL_PATH}}"
+          ],
+          "path": [
+            "books",
+            ""
+          ]
+        }
+      },
+      "response": [
+        {
+          "name": "Create Book With Admin Role",
+          "originalRequest": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "token {{token}}",
+                "type": "text"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{{payload}}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "{{URL_PATH}}/books/",
+              "host": [
+                "{{URL_PATH}}"
+              ],
+              "path": [
+                "books",
+                ""
+              ]
+            }
+          },
+          "status": "Created",
+          "code": 201,
+          "_postman_previewlanguage": null,
+          "header": [
+            {
+              "key": "Date",
+              "value": "Mon, 04 May 2026 06:49:29 GMT"
+            },
+            {
+              "key": "Server",
+              "value": "WSGIServer/0.2 CPython/3.13.2"
+            },
+            {
+              "key": "Content-Type",
+              "value": "application/json"
+            },
+            {
+              "key": "Vary",
+              "value": "Accept, origin"
+            },
+            {
+              "key": "Allow",
+              "value": "GET, POST, HEAD, OPTIONS"
+            },
+            {
+              "key": "Content-Length",
+              "value": "791"
+            },
+            {
+              "key": "X-Frame-Options",
+              "value": "DENY"
+            },
+            {
+              "key": "X-Content-Type-Options",
+              "value": "nosniff"
+            },
+            {
+              "key": "Referrer-Policy",
+              "value": "same-origin"
+            },
+            {
+              "key": "Cross-Origin-Opener-Policy",
+              "value": "same-origin"
+            }
+          ],
+          "cookie": [],
+          "body": "{\n    \"message\": \"Tạo mới thành công!\",\n    \"data\": {\n        \"id\": 48,\n        \"author\": {\n            \"id\": 2,\n            \"name\": \"Haruki Murakami\",\n            \"date_of_birth\": \"1949-01-12\",\n            \"date_of_death\": null,\n            \"biography\": \"Nhà văn Nhật Bản nổi tiếng với phong cách siêu thực và hiện đại.\",\n            \"image\": null,\n            \"description\": \"Đại diện tiêu biểu cho tiểu thuyết hiện đại.\"\n        },\n        \"publisher\": {\n            \"id\": 4,\n            \"name\": \"Nhà Xuất Bản Trẻ\"\n        },\n        \"category\": {\n            \"id\": 5,\n            \"name\": \"Trinh thám - hình sự\",\n            \"created_at\": \"2026-03-17T14:36:34.647605+07:00\",\n            \"updated_at\": \"2026-03-17T14:36:34.647617+07:00\",\n            \"active\": true\n        },\n        \"available_quantity\": 1,\n        \"created_at\": \"2026-05-04T13:49:28.991552+07:00\",\n        \"updated_at\": \"2026-05-04T13:49:28.991587+07:00\",\n        \"active\": true,\n        \"book_id\": null,\n        \"name\": \"Tác phẩm Tắt đèn\",\n        \"total_quantity\": 1,\n        \"image\": null,\n        \"description\": null\n    }\n}"
+        },
+        {
+          "name": "Create Book Without Admin Role",
+          "originalRequest": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "token {{token}}",
+                "type": "text"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{{payload}}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "{{URL_PATH}}/books/",
+              "host": [
+                "{{URL_PATH}}"
+              ],
+              "path": [
+                "books",
+                ""
+              ]
+            }
+          },
+          "status": "Forbidden",
+          "code": 403,
+          "_postman_previewlanguage": null,
+          "header": [
+            {
+              "key": "Date",
+              "value": "Mon, 04 May 2026 06:52:43 GMT"
+            },
+            {
+              "key": "Server",
+              "value": "WSGIServer/0.2 CPython/3.13.2"
+            },
+            {
+              "key": "Content-Type",
+              "value": "application/json"
+            },
+            {
+              "key": "Vary",
+              "value": "Accept, origin"
+            },
+            {
+              "key": "Allow",
+              "value": "GET, POST, HEAD, OPTIONS"
+            },
+            {
+              "key": "Content-Length",
+              "value": "63"
+            },
+            {
+              "key": "X-Frame-Options",
+              "value": "DENY"
+            },
+            {
+              "key": "X-Content-Type-Options",
+              "value": "nosniff"
+            },
+            {
+              "key": "Referrer-Policy",
+              "value": "same-origin"
+            },
+            {
+              "key": "Cross-Origin-Opener-Policy",
+              "value": "same-origin"
+            }
+          ],
+          "cookie": [],
+          "body": "{\n    \"detail\": \"You do not have permission to perform this action.\"\n}"
+        }
+      ]
+    },
+    {
+      "name": "Update Book",
+      "event": [
+        {
+          "listen": "prerequest",
+          "script": {
+            "exec": [
+              "const payload = {\r",
+              "    \"first_name\": \"B\",\r",
+              "    \"last_name\": \"Nguyễn Văn\",\r",
+              "    \"username\": \"bnguyenvan123\",\r",
+              "    \"password\": \"bnguyenvan123\",\r",
+              "    \"email\": \"bnguyenvan123@gmail.com\"\r",
+              "}\r",
+              "\r",
+              "pm.environment.set(\"payload\", JSON.stringify(payload));\r",
+              ""
+            ],
+            "type": "text/javascript",
+            "packages": {},
+            "requests": {}
+          }
+        },
+        {
+          "listen": "test",
+          "script": {
+            "exec": [
+              ""
+            ],
+            "type": "text/javascript",
+            "packages": {},
+            "requests": {}
+          }
+        }
+      ],
+      "request": {
+        "method": "PATCH",
+        "header": [
+          {
+            "key": "Authorization",
+            "value": "token {{token}}",
+            "type": "text"
+          }
+        ],
+        "body": {
+          "mode": "raw",
+          "raw": "{{payload}}",
+          "options": {
+            "raw": {
+              "language": "json"
+            }
+          }
+        },
+        "url": {
+          "raw": "{{URL_PATH}}/books/48/",
+          "host": [
+            "{{URL_PATH}}"
+          ],
+          "path": [
+            "books",
+            "48",
+            ""
+          ]
+        }
+      },
+      "response": [
+        {
+          "name": "Update Book With Admin Role",
+          "originalRequest": {
+            "method": "PATCH",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "token {{token}}",
+                "type": "text"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{{payload}}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "{{URL_PATH}}/books/48/",
+              "host": [
+                "{{URL_PATH}}"
+              ],
+              "path": [
+                "books",
+                "48",
+                ""
+              ]
+            }
+          },
+          "status": "OK",
+          "code": 200,
+          "_postman_previewlanguage": null,
+          "header": [
+            {
+              "key": "Date",
+              "value": "Mon, 04 May 2026 06:56:59 GMT"
+            },
+            {
+              "key": "Server",
+              "value": "WSGIServer/0.2 CPython/3.13.2"
+            },
+            {
+              "key": "Content-Type",
+              "value": "application/json"
+            },
+            {
+              "key": "Vary",
+              "value": "Accept, origin"
+            },
+            {
+              "key": "Allow",
+              "value": "GET, PUT, PATCH, DELETE, HEAD, OPTIONS"
+            },
+            {
+              "key": "Content-Length",
+              "value": "39"
+            },
+            {
+              "key": "X-Frame-Options",
+              "value": "DENY"
+            },
+            {
+              "key": "X-Content-Type-Options",
+              "value": "nosniff"
+            },
+            {
+              "key": "Referrer-Policy",
+              "value": "same-origin"
+            },
+            {
+              "key": "Cross-Origin-Opener-Policy",
+              "value": "same-origin"
+            }
+          ],
+          "cookie": [],
+          "body": "{\n    \"message\": \"Cập nhật thành công\"\n}"
+        },
+        {
+          "name": "Update Book Without Admin Role",
+          "originalRequest": {
+            "method": "PATCH",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "token {{token}}",
+                "type": "text"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{{payload}}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "{{URL_PATH}}/books/48/",
+              "host": [
+                "{{URL_PATH}}"
+              ],
+              "path": [
+                "books",
+                "48",
+                ""
+              ]
+            }
+          },
+          "status": "Forbidden",
+          "code": 403,
+          "_postman_previewlanguage": null,
+          "header": [
+            {
+              "key": "Date",
+              "value": "Mon, 04 May 2026 06:57:35 GMT"
+            },
+            {
+              "key": "Server",
+              "value": "WSGIServer/0.2 CPython/3.13.2"
+            },
+            {
+              "key": "Content-Type",
+              "value": "application/json"
+            },
+            {
+              "key": "Vary",
+              "value": "Accept, origin"
+            },
+            {
+              "key": "Allow",
+              "value": "GET, PUT, PATCH, DELETE, HEAD, OPTIONS"
+            },
+            {
+              "key": "Content-Length",
+              "value": "63"
+            },
+            {
+              "key": "X-Frame-Options",
+              "value": "DENY"
+            },
+            {
+              "key": "X-Content-Type-Options",
+              "value": "nosniff"
+            },
+            {
+              "key": "Referrer-Policy",
+              "value": "same-origin"
+            },
+            {
+              "key": "Cross-Origin-Opener-Policy",
+              "value": "same-origin"
+            }
+          ],
+          "cookie": [],
+          "body": "{\n    \"detail\": \"You do not have permission to perform this action.\"\n}"
+        }
+      ]
+    },
+    {
+      "name": "Delete Book",
+      "request": {
+        "method": "DELETE",
+        "header": [
+          {
+            "key": "Authorization",
+            "value": "token {{token}}",
+            "type": "text"
+          }
+        ],
+        "url": {
+          "raw": "{{URL_PATH}}/books/48/",
+          "host": [
+            "{{URL_PATH}}"
+          ],
+          "path": [
+            "books",
+            "48",
+            ""
+          ]
+        }
+      },
+      "response": [
+        {
+          "name": "Delete Book Without Admin Role",
+          "originalRequest": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "token {{token}}",
+                "type": "text"
+              }
+            ]
+          },
+          "_postman_previewlanguage": null,
+          "header": null,
+          "cookie": [],
+          "body": null
+        },
+        {
+          "name": "Delete Book With Admin Role",
+          "originalRequest": {
+            "method": "DELETE",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "token {{token}}",
+                "type": "text"
+              }
+            ],
+            "url": {
+              "raw": "{{URL_PATH}}/books/48/",
+              "host": [
+                "{{URL_PATH}}"
+              ],
+              "path": [
+                "books",
+                "48",
+                ""
+              ]
+            }
+          },
+          "status": "No Content",
+          "code": 204,
+          "_postman_previewlanguage": null,
+          "header": [
+            {
+              "key": "Date",
+              "value": "Mon, 04 May 2026 07:00:34 GMT"
+            },
+            {
+              "key": "Server",
+              "value": "WSGIServer/0.2 CPython/3.13.2"
+            },
+            {
+              "key": "Vary",
+              "value": "Accept, origin"
+            },
+            {
+              "key": "Allow",
+              "value": "GET, PUT, PATCH, DELETE, HEAD, OPTIONS"
+            },
+            {
+              "key": "Content-Length",
+              "value": "0"
+            },
+            {
+              "key": "X-Frame-Options",
+              "value": "DENY"
+            },
+            {
+              "key": "X-Content-Type-Options",
+              "value": "nosniff"
+            },
+            {
+              "key": "Referrer-Policy",
+              "value": "same-origin"
+            },
+            {
+              "key": "Cross-Origin-Opener-Policy",
+              "value": "same-origin"
+            }
+          ],
+          "cookie": [],
+          "body": null
+        }
+      ]
+    }
+  ],
+  "event": [
+    {
+      "listen": "prerequest",
+      "script": {
+        "type": "text/javascript",
+        "packages": {},
+        "requests": {},
+        "exec": [
+          "role = pm.environment.set(\"role\", \"admin\")\r",
+          "role = pm.environment.get(\"role\");\r",
+          "if (role === \"admin\") {\r",
+          "    pm.environment.set(\"token\", pm.environment.get(\"admin_token\"));\r",
+          "} else {\r",
+          "    pm.environment.set(\"token\", pm.environment.get(\"user_token\"))\r",
+          "}\r",
+          "\r",
+          ""
+        ]
+      }
+    },
+    {
+      "listen": "test",
+      "script": {
+        "type": "text/javascript",
+        "packages": {},
+        "requests": {},
+        "exec": [
+          "pm.test(\"Status code theo role + method\", function () {\r",
+          "    const role = pm.environment.get(\"role\");\r",
+          "    const code = pm.response.code;\r",
+          "    const method = pm.request.method;\r",
+          "\r",
+          "    if (method === \"GET\") {\r",
+          "        pm.expect(code).to.be.oneOf([200, 404]);\r",
+          "    } else {\r",
+          "        if (role === \"admin\") {\r",
+          "            pm.expect(code).to.be.oneOf([200, 201, 204]);\r",
+          "        } else {\r",
+          "            pm.expect(code).to.be.oneOf([401, 403]);\r",
+          "        }\r",
+          "    }\r",
+          "});"
+        ]
+      }
+    }
+  ]
+}

@@ -1,0 +1,1046 @@
+{
+  "info": {
+    "_postman_id": "33dd1a15-cae6-4a19-8a2e-af141202ee88",
+    "name": "Publisher Services",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+    "_exporter_id": "54519871"
+  },
+  "item": [
+    {
+      "name": "Search publisher",
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "exec": [
+              "const publishers = pm.response.json();\r",
+              "pm.test(\"Trả về danh sách nhà xuất bản\", function() {\r",
+              "    pm.expect(publishers).to.have.an(\"array\")\r",
+              "});\r",
+              "\r",
+              "pm.test(\"Tìm kiếm theo name\", function() {\r",
+              "    pm.expect(publishers[0].name).to.contain(\"Nhà Xuất Bản Trẻ\")\r",
+              "})"
+            ],
+            "type": "text/javascript",
+            "packages": {},
+            "requests": {}
+          }
+        }
+      ],
+      "request": {
+        "method": "GET",
+        "header": [
+          {
+            "key": "Authorization",
+            "value": "token {{token}}",
+            "type": "text"
+          }
+        ],
+        "url": {
+          "raw": "{{URL_PATH}}/publishers/?search=ABCDE",
+          "host": [
+            "{{URL_PATH}}"
+          ],
+          "path": [
+            "publishers",
+            ""
+          ],
+          "query": [
+            {
+              "key": "search",
+              "value": "ABCDE"
+            }
+          ]
+        }
+      },
+      "response": [
+        {
+          "name": "Search Publisher Success",
+          "originalRequest": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "token {{token}}",
+                "type": "text"
+              }
+            ],
+            "url": {
+              "raw": "{{URL_PATH}}/publishers/?search=Nhà Xuất Bản Trẻ",
+              "host": [
+                "{{URL_PATH}}"
+              ],
+              "path": [
+                "publishers",
+                ""
+              ],
+              "query": [
+                {
+                  "key": "search",
+                  "value": "Nhà Xuất Bản Trẻ"
+                }
+              ]
+            }
+          },
+          "status": "OK",
+          "code": 200,
+          "_postman_previewlanguage": null,
+          "header": [
+            {
+              "key": "Date",
+              "value": "Mon, 04 May 2026 18:19:34 GMT"
+            },
+            {
+              "key": "Server",
+              "value": "WSGIServer/0.2 CPython/3.13.2"
+            },
+            {
+              "key": "Content-Type",
+              "value": "application/json"
+            },
+            {
+              "key": "Vary",
+              "value": "Accept, origin"
+            },
+            {
+              "key": "Allow",
+              "value": "GET, POST, HEAD, OPTIONS"
+            },
+            {
+              "key": "Content-Length",
+              "value": "43"
+            },
+            {
+              "key": "X-Frame-Options",
+              "value": "DENY"
+            },
+            {
+              "key": "X-Content-Type-Options",
+              "value": "nosniff"
+            },
+            {
+              "key": "Referrer-Policy",
+              "value": "same-origin"
+            },
+            {
+              "key": "Cross-Origin-Opener-Policy",
+              "value": "same-origin"
+            }
+          ],
+          "cookie": [],
+          "body": "[\n    {\n        \"id\": 4,\n        \"name\": \"Nhà Xuất Bản Trẻ\"\n    }\n]"
+        },
+        {
+          "name": "Search publisher Failed",
+          "originalRequest": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "token {{token}}",
+                "type": "text"
+              }
+            ],
+            "url": {
+              "raw": "{{URL_PATH}}/publishers/?search=ABCDE",
+              "host": [
+                "{{URL_PATH}}"
+              ],
+              "path": [
+                "publishers",
+                ""
+              ],
+              "query": [
+                {
+                  "key": "search",
+                  "value": "ABCDE"
+                }
+              ]
+            }
+          },
+          "status": "OK",
+          "code": 200,
+          "_postman_previewlanguage": null,
+          "header": [
+            {
+              "key": "Date",
+              "value": "Mon, 04 May 2026 18:20:15 GMT"
+            },
+            {
+              "key": "Server",
+              "value": "WSGIServer/0.2 CPython/3.13.2"
+            },
+            {
+              "key": "Content-Type",
+              "value": "application/json"
+            },
+            {
+              "key": "Vary",
+              "value": "Accept, origin"
+            },
+            {
+              "key": "Allow",
+              "value": "GET, POST, HEAD, OPTIONS"
+            },
+            {
+              "key": "Content-Length",
+              "value": "2"
+            },
+            {
+              "key": "X-Frame-Options",
+              "value": "DENY"
+            },
+            {
+              "key": "X-Content-Type-Options",
+              "value": "nosniff"
+            },
+            {
+              "key": "Referrer-Policy",
+              "value": "same-origin"
+            },
+            {
+              "key": "Cross-Origin-Opener-Policy",
+              "value": "same-origin"
+            }
+          ],
+          "cookie": [],
+          "body": "[]"
+        }
+      ]
+    },
+    {
+      "name": "List Publisher",
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "exec": [
+              "pm.test(\"List publisher\", function () {\r",
+              "    const res = pm.response.json();\r",
+              "\r",
+              "    pm.response.to.have.status(200);\r",
+              "    pm.expect(res).to.have.property(\"results\");\r",
+              "\r",
+              "    const publishers = res.results;\r",
+              "\r",
+              "    pm.expect(publishers).to.be.an(\"array\");\r",
+              "});"
+            ],
+            "type": "text/javascript",
+            "packages": {},
+            "requests": {}
+          }
+        }
+      ],
+      "request": {
+        "method": "GET",
+        "header": [],
+        "url": {
+          "raw": "{{URL_PATH}}/publishers/",
+          "host": [
+            "{{URL_PATH}}"
+          ],
+          "path": [
+            "publishers",
+            ""
+          ]
+        }
+      },
+      "response": [
+        {
+          "name": "List Publisher",
+          "originalRequest": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{URL_PATH}}/publishers/",
+              "host": [
+                "{{URL_PATH}}"
+              ],
+              "path": [
+                "publishers",
+                ""
+              ]
+            }
+          },
+          "status": "OK",
+          "code": 200,
+          "_postman_previewlanguage": null,
+          "header": [
+            {
+              "key": "Date",
+              "value": "Fri, 08 May 2026 02:43:01 GMT"
+            },
+            {
+              "key": "Server",
+              "value": "WSGIServer/0.2 CPython/3.13.9"
+            },
+            {
+              "key": "Content-Type",
+              "value": "application/json"
+            },
+            {
+              "key": "Vary",
+              "value": "Accept, origin"
+            },
+            {
+              "key": "Allow",
+              "value": "GET, POST, HEAD, OPTIONS"
+            },
+            {
+              "key": "Content-Length",
+              "value": "323"
+            },
+            {
+              "key": "X-Frame-Options",
+              "value": "DENY"
+            },
+            {
+              "key": "X-Content-Type-Options",
+              "value": "nosniff"
+            },
+            {
+              "key": "Referrer-Policy",
+              "value": "same-origin"
+            },
+            {
+              "key": "Cross-Origin-Opener-Policy",
+              "value": "same-origin"
+            }
+          ],
+          "cookie": [],
+          "body": "[\n    {\n        \"id\": 1,\n        \"name\": \"NXB Trẻ Updated\"\n    },\n    {\n        \"id\": 2,\n        \"name\": \"HarperCollins\"\n    },\n    {\n        \"id\": 3,\n        \"name\": \"Simon & Schuster\"\n    },\n    {\n        \"id\": 4,\n        \"name\": \"Nhà Xuất Bản Trẻ\"\n    },\n    {\n        \"id\": 5,\n        \"name\": \"Nhà Xuất Bản Kim Đồng\"\n    },\n    {\n        \"id\": 6,\n        \"name\": \"Nhà Xuất Bản Giáo Dục Việt Nam\"\n    },\n    {\n        \"id\": 7,\n        \"name\": \"NXB Hội Nhà Văn\"\n    },\n    {\n        \"id\": 8,\n        \"name\": \"Vintage Books\"\n    }\n]"
+        }
+      ]
+    },
+    {
+      "name": "Specific Publisher",
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "exec": [
+              "const role = pm.environment.get(\"role\");\r",
+              "const code = pm.response.code;\r",
+              "\r",
+              "pm.test(\"Lấy publisher cụ thể\", function () {\r",
+              "    if (code === 200) {\r",
+              "        const json = pm.response.json();\r",
+              "\r",
+              "        pm.expect(json).to.be.an(\"object\");\r",
+              "        pm.expect(json).to.have.property(\"id\");\r",
+              "        pm.expect(json).to.have.property(\"name\");\r",
+              "    }\r",
+              "});\r",
+              "\r",
+              "pm.test(\"Publisher inactive\", function () {\r",
+              "    if (role === \"admin\") {\r",
+              "        pm.expect(code).to.eql(200);\r",
+              "    } else {\r",
+              "        pm.expect(code).to.eql(404);\r",
+              "    }\r",
+              "});"
+            ],
+            "type": "text/javascript",
+            "packages": {},
+            "requests": {}
+          }
+        }
+      ],
+      "request": {
+        "method": "GET",
+        "header": [],
+        "url": {
+          "raw": "{{URL_PATH}}/publishers/1/",
+          "host": [
+            "{{URL_PATH}}"
+          ],
+          "path": [
+            "publishers",
+            "1",
+            ""
+          ]
+        }
+      },
+      "response": [
+        {
+          "name": "Specific Publisher",
+          "originalRequest": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{URL_PATH}}/publishers/1/",
+              "host": [
+                "{{URL_PATH}}"
+              ],
+              "path": [
+                "publishers",
+                "1",
+                ""
+              ]
+            }
+          },
+          "status": "OK",
+          "code": 200,
+          "_postman_previewlanguage": null,
+          "header": [
+            {
+              "key": "Date",
+              "value": "Fri, 08 May 2026 02:54:38 GMT"
+            },
+            {
+              "key": "Server",
+              "value": "WSGIServer/0.2 CPython/3.13.9"
+            },
+            {
+              "key": "Content-Type",
+              "value": "application/json"
+            },
+            {
+              "key": "Vary",
+              "value": "Accept, origin"
+            },
+            {
+              "key": "Allow",
+              "value": "GET, PUT, PATCH, DELETE, HEAD, OPTIONS"
+            },
+            {
+              "key": "Content-Length",
+              "value": "35"
+            },
+            {
+              "key": "X-Frame-Options",
+              "value": "DENY"
+            },
+            {
+              "key": "X-Content-Type-Options",
+              "value": "nosniff"
+            },
+            {
+              "key": "Referrer-Policy",
+              "value": "same-origin"
+            },
+            {
+              "key": "Cross-Origin-Opener-Policy",
+              "value": "same-origin"
+            }
+          ],
+          "cookie": [],
+          "body": "{\n    \"id\": 1,\n    \"name\": \"NXB Trẻ Updated\"\n}"
+        }
+      ]
+    },
+    {
+      "name": "Create Publisher",
+      "event": [
+        {
+          "listen": "prerequest",
+          "script": {
+            "exec": [
+              "const payload = {\r",
+              "    \"name\": \"NXB Trẻ\"\r",
+              "};\r",
+              "\r",
+              "pm.environment.set(\"payload\", JSON.stringify(payload));"
+            ],
+            "type": "text/javascript",
+            "packages": {},
+            "requests": {}
+          }
+        },
+        {
+          "listen": "test",
+          "script": {
+            "exec": [
+              "if (pm.environment.get(\"role\") === \"admin\") {\r",
+              "    pm.test(\"Create publisher thành công\", function () {\r",
+              "        const json = pm.response.json();\r",
+              "\r",
+              "        pm.response.to.have.status(201);\r",
+              "        pm.expect(json).to.have.property(\"id\");\r",
+              "        pm.expect(json).to.have.property(\"name\");\r",
+              "    });\r",
+              "} else {\r",
+              "    pm.test(\"User không được tạo publisher\", function () {\r",
+              "        pm.expect(pm.response.code).to.be.oneOf([401, 403]);\r",
+              "    });\r",
+              "}"
+            ],
+            "type": "text/javascript",
+            "packages": {},
+            "requests": {}
+          }
+        }
+      ],
+      "request": {
+        "method": "POST",
+        "header": [
+          {
+            "key": "Authorization",
+            "value": "token {{token}}",
+            "type": "text"
+          }
+        ],
+        "body": {
+          "mode": "raw",
+          "raw": "{{payload}}",
+          "options": {
+            "raw": {
+              "language": "json"
+            }
+          }
+        },
+        "url": {
+          "raw": "{{URL_PATH}}/publishers/",
+          "host": [
+            "{{URL_PATH}}"
+          ],
+          "path": [
+            "publishers",
+            ""
+          ]
+        }
+      },
+      "response": [
+        {
+          "name": "Create Publisher With Admin Role",
+          "originalRequest": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "token {{token}}",
+                "type": "text"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{{payload}}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "{{URL_PATH}}/publishers/",
+              "host": [
+                "{{URL_PATH}}"
+              ],
+              "path": [
+                "publishers",
+                ""
+              ]
+            }
+          },
+          "status": "Created",
+          "code": 201,
+          "_postman_previewlanguage": null,
+          "header": [
+            {
+              "key": "Date",
+              "value": "Wed, 06 May 2026 15:52:56 GMT"
+            },
+            {
+              "key": "Server",
+              "value": "WSGIServer/0.2 CPython/3.13.9"
+            },
+            {
+              "key": "Content-Type",
+              "value": "application/json"
+            },
+            {
+              "key": "Vary",
+              "value": "Accept, origin"
+            },
+            {
+              "key": "Allow",
+              "value": "GET, POST, HEAD, OPTIONS"
+            },
+            {
+              "key": "Content-Length",
+              "value": "74"
+            },
+            {
+              "key": "X-Frame-Options",
+              "value": "DENY"
+            },
+            {
+              "key": "X-Content-Type-Options",
+              "value": "nosniff"
+            },
+            {
+              "key": "Referrer-Policy",
+              "value": "same-origin"
+            },
+            {
+              "key": "Cross-Origin-Opener-Policy",
+              "value": "same-origin"
+            }
+          ],
+          "cookie": [],
+          "body": "{\n    \"message\": \"Tạo mới thành công\",\n    \"data\": {\n        \"id\": 10,\n        \"name\": \"NXB Trẻ\"\n    }\n}"
+        },
+        {
+          "name": "Create Publisher With User Role",
+          "originalRequest": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "token {{token}}",
+                "type": "text"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{{payload}}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "{{URL_PATH}}/publishers/",
+              "host": [
+                "{{URL_PATH}}"
+              ],
+              "path": [
+                "publishers",
+                ""
+              ]
+            }
+          },
+          "status": "Forbidden",
+          "code": 403,
+          "_postman_previewlanguage": null,
+          "header": [
+            {
+              "key": "Date",
+              "value": "Wed, 06 May 2026 17:41:07 GMT"
+            },
+            {
+              "key": "Server",
+              "value": "WSGIServer/0.2 CPython/3.13.9"
+            },
+            {
+              "key": "Content-Type",
+              "value": "application/json"
+            },
+            {
+              "key": "Vary",
+              "value": "Accept, origin"
+            },
+            {
+              "key": "Allow",
+              "value": "GET, POST, HEAD, OPTIONS"
+            },
+            {
+              "key": "Content-Length",
+              "value": "63"
+            },
+            {
+              "key": "X-Frame-Options",
+              "value": "DENY"
+            },
+            {
+              "key": "X-Content-Type-Options",
+              "value": "nosniff"
+            },
+            {
+              "key": "Referrer-Policy",
+              "value": "same-origin"
+            },
+            {
+              "key": "Cross-Origin-Opener-Policy",
+              "value": "same-origin"
+            }
+          ],
+          "cookie": [],
+          "body": "{\n    \"detail\": \"You do not have permission to perform this action.\"\n}"
+        }
+      ]
+    },
+    {
+      "name": "Update Publisher",
+      "event": [
+        {
+          "listen": "prerequest",
+          "script": {
+            "exec": [
+              "const payload = {\r",
+              "    \"name\": \"NXB Trẻ Updated\"\r",
+              "};\r",
+              "\r",
+              "pm.environment.set(\"payload\", JSON.stringify(payload));"
+            ],
+            "type": "text/javascript",
+            "packages": {},
+            "requests": {}
+          }
+        },
+        {
+          "listen": "test",
+          "script": {
+            "exec": [
+              "if (pm.environment.get(\"role\") === \"admin\") {\r",
+              "    pm.test(\"Update publisher thành công\", function () {\r",
+              "        const json = pm.response.json();\r",
+              "\r",
+              "        pm.response.to.have.status(200);\r",
+              "        pm.expect(json.name).to.include(\"Updated\");\r",
+              "    });\r",
+              "} else {\r",
+              "    pm.test(\"User không được update publisher\", function () {\r",
+              "        pm.expect(pm.response.code).to.be.oneOf([401, 403]);\r",
+              "    });\r",
+              "}"
+            ],
+            "type": "text/javascript",
+            "packages": {},
+            "requests": {}
+          }
+        }
+      ],
+      "request": {
+        "method": "PATCH",
+        "header": [
+          {
+            "key": "Authorization",
+            "value": "token {{token}}",
+            "type": "text"
+          }
+        ],
+        "body": {
+          "mode": "raw",
+          "raw": "{{payload}}",
+          "options": {
+            "raw": {
+              "language": "json"
+            }
+          }
+        },
+        "url": {
+          "raw": "{{URL_PATH}}/publishers/11/",
+          "host": [
+            "{{URL_PATH}}"
+          ],
+          "path": [
+            "publishers",
+            "11",
+            ""
+          ]
+        }
+      },
+      "response": [
+        {
+          "name": "Update Publisher With Admin Role",
+          "originalRequest": {
+            "method": "PATCH",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "token {{token}}",
+                "type": "text"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{{payload}}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "{{URL_PATH}}/publishers/10/",
+              "host": [
+                "{{URL_PATH}}"
+              ],
+              "path": [
+                "publishers",
+                "10",
+                ""
+              ]
+            }
+          },
+          "status": "OK",
+          "code": 200,
+          "_postman_previewlanguage": null,
+          "header": [
+            {
+              "key": "Date",
+              "value": "Wed, 06 May 2026 15:53:38 GMT"
+            },
+            {
+              "key": "Server",
+              "value": "WSGIServer/0.2 CPython/3.13.9"
+            },
+            {
+              "key": "Content-Type",
+              "value": "application/json"
+            },
+            {
+              "key": "Vary",
+              "value": "Accept, origin"
+            },
+            {
+              "key": "Allow",
+              "value": "GET, PUT, PATCH, DELETE, HEAD, OPTIONS"
+            },
+            {
+              "key": "Content-Length",
+              "value": "39"
+            },
+            {
+              "key": "X-Frame-Options",
+              "value": "DENY"
+            },
+            {
+              "key": "X-Content-Type-Options",
+              "value": "nosniff"
+            },
+            {
+              "key": "Referrer-Policy",
+              "value": "same-origin"
+            },
+            {
+              "key": "Cross-Origin-Opener-Policy",
+              "value": "same-origin"
+            }
+          ],
+          "cookie": [],
+          "body": "{\n    \"message\": \"Cập nhật thành công\"\n}"
+        },
+        {
+          "name": "Update Publisher With User Role",
+          "originalRequest": {
+            "method": "PATCH",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "token {{token}}",
+                "type": "text"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{{payload}}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "{{URL_PATH}}/publishers/10/",
+              "host": [
+                "{{URL_PATH}}"
+              ],
+              "path": [
+                "publishers",
+                "10",
+                ""
+              ]
+            }
+          },
+          "status": "Forbidden",
+          "code": 403,
+          "_postman_previewlanguage": null,
+          "header": [
+            {
+              "key": "Date",
+              "value": "Wed, 06 May 2026 17:41:45 GMT"
+            },
+            {
+              "key": "Server",
+              "value": "WSGIServer/0.2 CPython/3.13.9"
+            },
+            {
+              "key": "Content-Type",
+              "value": "application/json"
+            },
+            {
+              "key": "Vary",
+              "value": "Accept, origin"
+            },
+            {
+              "key": "Allow",
+              "value": "GET, PUT, PATCH, DELETE, HEAD, OPTIONS"
+            },
+            {
+              "key": "Content-Length",
+              "value": "63"
+            },
+            {
+              "key": "X-Frame-Options",
+              "value": "DENY"
+            },
+            {
+              "key": "X-Content-Type-Options",
+              "value": "nosniff"
+            },
+            {
+              "key": "Referrer-Policy",
+              "value": "same-origin"
+            },
+            {
+              "key": "Cross-Origin-Opener-Policy",
+              "value": "same-origin"
+            }
+          ],
+          "cookie": [],
+          "body": "{\n    \"detail\": \"You do not have permission to perform this action.\"\n}"
+        }
+      ]
+    },
+    {
+      "name": "Delete Publisher With User Role",
+      "request": {
+        "method": "DELETE",
+        "header": [
+          {
+            "key": "Authorization",
+            "value": "token {{token}}",
+            "type": "text"
+          }
+        ],
+        "body": {
+          "mode": "raw",
+          "raw": "{{payload}}"
+        },
+        "url": {
+          "raw": "{{URL_PATH}}/publishers/10/",
+          "host": [
+            "{{URL_PATH}}"
+          ],
+          "path": [
+            "publishers",
+            "10",
+            ""
+          ]
+        }
+      },
+      "response": [
+        {
+          "name": "Delete Publisher With Admin Role",
+          "originalRequest": {
+            "method": "DELETE",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "token {{token}}",
+                "type": "text"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{{payload}}"
+            },
+            "url": {
+              "raw": "{{URL_PATH}}/publishers/10/",
+              "host": [
+                "{{URL_PATH}}"
+              ],
+              "path": [
+                "publishers",
+                "10",
+                ""
+              ]
+            }
+          },
+          "status": "No Content",
+          "code": 204,
+          "_postman_previewlanguage": null,
+          "header": [
+            {
+              "key": "Date",
+              "value": "Wed, 06 May 2026 15:54:29 GMT"
+            },
+            {
+              "key": "Server",
+              "value": "WSGIServer/0.2 CPython/3.13.9"
+            },
+            {
+              "key": "Vary",
+              "value": "Accept, origin"
+            },
+            {
+              "key": "Allow",
+              "value": "GET, PUT, PATCH, DELETE, HEAD, OPTIONS"
+            },
+            {
+              "key": "Content-Length",
+              "value": "0"
+            },
+            {
+              "key": "X-Frame-Options",
+              "value": "DENY"
+            },
+            {
+              "key": "X-Content-Type-Options",
+              "value": "nosniff"
+            },
+            {
+              "key": "Referrer-Policy",
+              "value": "same-origin"
+            },
+            {
+              "key": "Cross-Origin-Opener-Policy",
+              "value": "same-origin"
+            }
+          ],
+          "cookie": [],
+          "body": null
+        }
+      ]
+    }
+  ],
+  "event": [
+    {
+      "listen": "prerequest",
+      "script": {
+        "type": "text/javascript",
+        "packages": {},
+        "requests": {},
+        "exec": [
+          "role = pm.environment.set(\"role\", \"admin\")\r",
+          "role = pm.environment.get(\"role\");\r",
+          "if (role === \"admin\") {\r",
+          "    pm.environment.set(\"token\", pm.environment.get(\"admin_token\"));\r",
+          "} else {\r",
+          "    pm.environment.set(\"token\", pm.environment.get(\"user_token\"))\r",
+          "}"
+        ]
+      }
+    },
+    {
+      "listen": "test",
+      "script": {
+        "type": "text/javascript",
+        "packages": {},
+        "requests": {},
+        "exec": [
+          "pm.test(\"Status code theo role + method\", function () {\r",
+          "    const role = pm.environment.get(\"role\");\r",
+          "    const code = pm.response.code;\r",
+          "    const method = pm.request.method;\r",
+          "\r",
+          "    if (method === \"GET\") {\r",
+          "        pm.expect(code).to.be.oneOf([200, 404]);\r",
+          "    } else {\r",
+          "        if (role === \"admin\") {\r",
+          "            pm.expect(code).to.be.oneOf([200, 201, 204]);\r",
+          "        } else {\r",
+          "            pm.expect(code).to.be.oneOf([401, 403]);\r",
+          "        }\r",
+          "    }\r",
+          "});"
+        ]
+      }
+    }
+  ]
+}

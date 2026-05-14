@@ -1,0 +1,1367 @@
+{
+  "info": {
+    "_postman_id": "d7143379-40b1-40be-8627-3513f4ae0e09",
+    "name": "User Services",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+    "_exporter_id": "54519871"
+  },
+  "item": [
+    {
+      "name": "List Users",
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "exec": [
+              ""
+            ],
+            "type": "text/javascript",
+            "packages": {},
+            "requests": {}
+          }
+        },
+        {
+          "listen": "prerequest",
+          "script": {
+            "exec": [
+              ""
+            ],
+            "type": "text/javascript",
+            "packages": {},
+            "requests": {}
+          }
+        }
+      ],
+      "request": {
+        "method": "GET",
+        "header": [
+          {
+            "key": "Authorization",
+            "value": "token {{admin_token}}",
+            "type": "text"
+          }
+        ],
+        "url": {
+          "raw": "{{URL_PATH}}/users/",
+          "host": [
+            "{{URL_PATH}}"
+          ],
+          "path": [
+            "users",
+            ""
+          ]
+        }
+      },
+      "response": [
+        {
+          "name": "List Users With Admin Role",
+          "originalRequest": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "token {{admin_token}}",
+                "type": "text"
+              }
+            ],
+            "url": {
+              "raw": "{{URL_PATH}}/users/",
+              "host": [
+                "{{URL_PATH}}"
+              ],
+              "path": [
+                "users",
+                ""
+              ]
+            }
+          },
+          "status": "OK",
+          "code": 200,
+          "_postman_previewlanguage": null,
+          "header": [
+            {
+              "key": "Date",
+              "value": "Sun, 03 May 2026 17:37:22 GMT"
+            },
+            {
+              "key": "Server",
+              "value": "WSGIServer/0.2 CPython/3.13.2"
+            },
+            {
+              "key": "Content-Type",
+              "value": "application/json"
+            },
+            {
+              "key": "Vary",
+              "value": "Accept, origin"
+            },
+            {
+              "key": "Allow",
+              "value": "GET, POST, HEAD, OPTIONS"
+            },
+            {
+              "key": "Content-Length",
+              "value": "1962"
+            },
+            {
+              "key": "X-Frame-Options",
+              "value": "DENY"
+            },
+            {
+              "key": "X-Content-Type-Options",
+              "value": "nosniff"
+            },
+            {
+              "key": "Referrer-Policy",
+              "value": "same-origin"
+            },
+            {
+              "key": "Cross-Origin-Opener-Policy",
+              "value": "same-origin"
+            }
+          ],
+          "cookie": [],
+          "body": "{\n    \"count\": 5,\n    \"next\": null,\n    \"previous\": null,\n    \"results\": [\n        {\n            \"id\": 1,\n            \"last_login\": \"2026-05-03T15:42:49.478042+07:00\",\n            \"is_superuser\": true,\n            \"username\": \"admin\",\n            \"first_name\": \"Nguyễn Văn\",\n            \"last_name\": \"A\",\n            \"email\": \"admin@ou.edu.vn\",\n            \"is_staff\": true,\n            \"is_active\": true,\n            \"date_joined\": \"2026-03-17T14:27:48+07:00\",\n            \"phone_number\": \"0789503500\",\n            \"image\": \"http://res.cloudinary.com/dm68sunrv/image/upload/v1775928210/users/ayjye9in7az1mzcz21fp.png\",\n            \"gender\": null,\n            \"dob\": null,\n            \"groups\": [],\n            \"user_permissions\": []\n        },\n        {\n            \"id\": 2,\n            \"last_login\": null,\n            \"is_superuser\": false,\n            \"username\": \"trankhanha53\",\n            \"first_name\": \"Trần Khánh\",\n            \"last_name\": \"An\",\n            \"email\": \"trankhanha53@gmail.com\",\n            \"is_staff\": true,\n            \"is_active\": true,\n            \"date_joined\": \"2026-03-18T12:40:33+07:00\",\n            \"phone_number\": \"123456\",\n            \"image\": \"http://res.cloudinary.com/dm68sunrv/image/upload/v1775370044/users/a2go4rryl0xhgddg3akf.png\",\n            \"gender\": \"male\",\n            \"dob\": null,\n            \"groups\": [],\n            \"user_permissions\": []\n        },\n        {\n            \"id\": 3,\n            \"last_login\": null,\n            \"is_superuser\": false,\n            \"username\": \"bivatai123\",\n            \"first_name\": \"Trần Khánh\",\n            \"last_name\": \"An\",\n            \"email\": \"bivabo213@gmail.com\",\n            \"is_staff\": false,\n            \"is_active\": true,\n            \"date_joined\": \"2026-03-21T11:51:32+07:00\",\n            \"phone_number\": \"0123456789\",\n            \"image\": \"http://res.cloudinary.com/dm68sunrv/image/upload/v1775370371/users/njyintmh57urg8bwtpwd.png\",\n            \"gender\": null,\n            \"dob\": null,\n            \"groups\": [],\n            \"user_permissions\": []\n        },\n        {\n            \"id\": 11,\n            \"last_login\": null,\n            \"is_superuser\": false,\n            \"username\": \"Antk0811\",\n            \"first_name\": \"An\",\n            \"last_name\": \"Trần Khánh\",\n            \"email\": \"abcdef@gmail.com\",\n            \"is_staff\": false,\n            \"is_active\": false,\n            \"date_joined\": \"2026-04-23T20:36:59+07:00\",\n            \"phone_number\": \"0954678921\",\n            \"image\": null,\n            \"gender\": \"Nam\",\n            \"dob\": \"2005-05-02\",\n            \"groups\": [],\n            \"user_permissions\": []\n        },\n        {\n            \"id\": 12,\n            \"last_login\": null,\n            \"is_superuser\": false,\n            \"username\": \"abcxyz213\",\n            \"first_name\": \"A\",\n            \"last_name\": \"Nguyễn Văn\",\n            \"email\": \"abcxyz123@gmail.com\",\n            \"is_staff\": false,\n            \"is_active\": true,\n            \"date_joined\": \"2026-05-03T16:25:13.696420+07:00\",\n            \"phone_number\": null,\n            \"image\": null,\n            \"gender\": null,\n            \"dob\": null,\n            \"groups\": [],\n            \"user_permissions\": []\n        }\n    ]\n}"
+        },
+        {
+          "name": "List Users Without Admin Role",
+          "originalRequest": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "token {{token}}",
+                "type": "text"
+              }
+            ],
+            "url": {
+              "raw": "{{URL_PATH}}/users/",
+              "host": [
+                "{{URL_PATH}}"
+              ],
+              "path": [
+                "users",
+                ""
+              ]
+            }
+          },
+          "status": "Forbidden",
+          "code": 403,
+          "_postman_previewlanguage": null,
+          "header": [
+            {
+              "key": "Date",
+              "value": "Sun, 03 May 2026 17:38:48 GMT"
+            },
+            {
+              "key": "Server",
+              "value": "WSGIServer/0.2 CPython/3.13.2"
+            },
+            {
+              "key": "Content-Type",
+              "value": "application/json"
+            },
+            {
+              "key": "Vary",
+              "value": "Accept, origin"
+            },
+            {
+              "key": "Allow",
+              "value": "GET, POST, HEAD, OPTIONS"
+            },
+            {
+              "key": "Content-Length",
+              "value": "63"
+            },
+            {
+              "key": "X-Frame-Options",
+              "value": "DENY"
+            },
+            {
+              "key": "X-Content-Type-Options",
+              "value": "nosniff"
+            },
+            {
+              "key": "Referrer-Policy",
+              "value": "same-origin"
+            },
+            {
+              "key": "Cross-Origin-Opener-Policy",
+              "value": "same-origin"
+            }
+          ],
+          "cookie": [],
+          "body": "{\n    \"detail\": \"You do not have permission to perform this action.\"\n}"
+        }
+      ]
+    },
+    {
+      "name": "Specific User",
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "exec": [
+              "const role = pm.environment.get(\"role\");\r",
+              "\r",
+              "if (role === \"admin\")\r",
+              "    pm.test(\"Create thành công phải có data trả về\", function () {\r",
+              "        const json = pm.response.json();\r",
+              "\r",
+              "        pm.expect(json).to.be.an(\"object\");\r",
+              "    });"
+            ],
+            "type": "text/javascript",
+            "packages": {},
+            "requests": {}
+          }
+        }
+      ],
+      "request": {
+        "method": "GET",
+        "header": [
+          {
+            "key": "Authorization",
+            "value": "token {{user_token}}",
+            "type": "text"
+          }
+        ],
+        "url": {
+          "raw": "{{URL_PATH}}/users/1/",
+          "host": [
+            "{{URL_PATH}}"
+          ],
+          "path": [
+            "users",
+            "1",
+            ""
+          ]
+        }
+      },
+      "response": [
+        {
+          "name": "Specific User With Admin Role",
+          "originalRequest": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "token {{admin_token}}",
+                "type": "text"
+              }
+            ],
+            "url": {
+              "raw": "{{URL_PATH}}/users/1/",
+              "host": [
+                "{{URL_PATH}}"
+              ],
+              "path": [
+                "users",
+                "1",
+                ""
+              ]
+            }
+          },
+          "status": "OK",
+          "code": 200,
+          "_postman_previewlanguage": null,
+          "header": [
+            {
+              "key": "Date",
+              "value": "Sun, 03 May 2026 18:25:12 GMT"
+            },
+            {
+              "key": "Server",
+              "value": "WSGIServer/0.2 CPython/3.13.2"
+            },
+            {
+              "key": "Content-Type",
+              "value": "application/json"
+            },
+            {
+              "key": "Vary",
+              "value": "Accept, origin"
+            },
+            {
+              "key": "Allow",
+              "value": "GET, PUT, PATCH, DELETE, HEAD, OPTIONS"
+            },
+            {
+              "key": "Content-Length",
+              "value": "430"
+            },
+            {
+              "key": "X-Frame-Options",
+              "value": "DENY"
+            },
+            {
+              "key": "X-Content-Type-Options",
+              "value": "nosniff"
+            },
+            {
+              "key": "Referrer-Policy",
+              "value": "same-origin"
+            },
+            {
+              "key": "Cross-Origin-Opener-Policy",
+              "value": "same-origin"
+            }
+          ],
+          "cookie": [],
+          "body": "{\n    \"id\": 1,\n    \"last_login\": \"2026-05-03T15:42:49.478042+07:00\",\n    \"is_superuser\": true,\n    \"username\": \"admin\",\n    \"first_name\": \"Nguyễn Văn\",\n    \"last_name\": \"A\",\n    \"email\": \"admin@ou.edu.vn\",\n    \"is_staff\": true,\n    \"is_active\": true,\n    \"date_joined\": \"2026-03-17T14:27:48+07:00\",\n    \"phone_number\": \"0789503500\",\n    \"image\": \"http://res.cloudinary.com/dm68sunrv/image/upload/v1775928210/users/ayjye9in7az1mzcz21fp.png\",\n    \"gender\": null,\n    \"dob\": null,\n    \"groups\": [],\n    \"user_permissions\": []\n}"
+        },
+        {
+          "name": "Specific User",
+          "originalRequest": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "token {{user_token}}",
+                "type": "text"
+              }
+            ],
+            "url": {
+              "raw": "{{URL_PATH}}/users/1/",
+              "host": [
+                "{{URL_PATH}}"
+              ],
+              "path": [
+                "users",
+                "1",
+                ""
+              ]
+            }
+          },
+          "status": "Forbidden",
+          "code": 403,
+          "_postman_previewlanguage": null,
+          "header": [
+            {
+              "key": "Date",
+              "value": "Sun, 03 May 2026 18:28:28 GMT"
+            },
+            {
+              "key": "Server",
+              "value": "WSGIServer/0.2 CPython/3.13.2"
+            },
+            {
+              "key": "Content-Type",
+              "value": "application/json"
+            },
+            {
+              "key": "Vary",
+              "value": "Accept, origin"
+            },
+            {
+              "key": "Allow",
+              "value": "GET, PUT, PATCH, DELETE, HEAD, OPTIONS"
+            },
+            {
+              "key": "Content-Length",
+              "value": "63"
+            },
+            {
+              "key": "X-Frame-Options",
+              "value": "DENY"
+            },
+            {
+              "key": "X-Content-Type-Options",
+              "value": "nosniff"
+            },
+            {
+              "key": "Referrer-Policy",
+              "value": "same-origin"
+            },
+            {
+              "key": "Cross-Origin-Opener-Policy",
+              "value": "same-origin"
+            }
+          ],
+          "cookie": [],
+          "body": "{\n    \"detail\": \"You do not have permission to perform this action.\"\n}"
+        }
+      ]
+    },
+    {
+      "name": "Create User",
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "exec": [
+              "\r",
+              "if (pm.environment.get(\"role\") === \"admin\") {\r",
+              "    pm.test(\"Create thành công phải có data trả về\", function () {\r",
+              "        const json = pm.response.json();\r",
+              "        pm.expect(json).to.include(\"Tạo mới thành công\")\r",
+              "    });\r",
+              "}"
+            ],
+            "type": "text/javascript",
+            "packages": {},
+            "requests": {}
+          }
+        },
+        {
+          "listen": "prerequest",
+          "script": {
+            "exec": [
+              "const payload = {\r",
+              "    \"first_name\": \"B\",\r",
+              "    \"last_name\": \"Nguyễn Văn\",\r",
+              "    \"username\": \"bnguyenvan123\",\r",
+              "    \"password\": \"bnguyenvan123\",\r",
+              "    \"email\": \"bnguyenvan123@gmail.com\"\r",
+              "}\r",
+              "\r",
+              "pm.environment.set(\"payload\", JSON.stringify(payload));\r",
+              ""
+            ],
+            "type": "text/javascript",
+            "packages": {},
+            "requests": {}
+          }
+        }
+      ],
+      "request": {
+        "method": "POST",
+        "header": [
+          {
+            "key": "Authorization",
+            "value": "token {{token}}",
+            "type": "text"
+          }
+        ],
+        "body": {
+          "mode": "raw",
+          "raw": "{{payload}}",
+          "options": {
+            "raw": {
+              "language": "json"
+            }
+          }
+        },
+        "url": {
+          "raw": "{{URL_PATH}}/users/",
+          "host": [
+            "{{URL_PATH}}"
+          ],
+          "path": [
+            "users",
+            ""
+          ]
+        }
+      },
+      "response": [
+        {
+          "name": "Create User",
+          "originalRequest": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "token {{admin_token}}",
+                "type": "text"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{{payload}}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "{{URL_PATH}}/users/",
+              "host": [
+                "{{URL_PATH}}"
+              ],
+              "path": [
+                "users",
+                ""
+              ]
+            }
+          },
+          "status": "Created",
+          "code": 201,
+          "_postman_previewlanguage": null,
+          "header": [
+            {
+              "key": "Date",
+              "value": "Sun, 03 May 2026 18:33:56 GMT"
+            },
+            {
+              "key": "Server",
+              "value": "WSGIServer/0.2 CPython/3.13.2"
+            },
+            {
+              "key": "Content-Type",
+              "value": "application/json"
+            },
+            {
+              "key": "Vary",
+              "value": "Accept, origin"
+            },
+            {
+              "key": "Allow",
+              "value": "GET, POST, HEAD, OPTIONS"
+            },
+            {
+              "key": "Content-Length",
+              "value": "376"
+            },
+            {
+              "key": "X-Frame-Options",
+              "value": "DENY"
+            },
+            {
+              "key": "X-Content-Type-Options",
+              "value": "nosniff"
+            },
+            {
+              "key": "Referrer-Policy",
+              "value": "same-origin"
+            },
+            {
+              "key": "Cross-Origin-Opener-Policy",
+              "value": "same-origin"
+            }
+          ],
+          "cookie": [],
+          "body": "{\n    \"message\": \"Tạo mới thành công!\",\n    \"data\": {\n        \"id\": 13,\n        \"last_login\": null,\n        \"is_superuser\": false,\n        \"username\": \"bnguyenvan123\",\n        \"first_name\": \"B\",\n        \"last_name\": \"Nguyễn Văn\",\n        \"email\": \"bnguyenvan123@gmail.com\",\n        \"is_staff\": false,\n        \"is_active\": true,\n        \"date_joined\": \"2026-05-04T01:33:55.819247+07:00\",\n        \"phone_number\": null,\n        \"image\": null,\n        \"gender\": null,\n        \"dob\": null,\n        \"groups\": [],\n        \"user_permissions\": []\n    }\n}"
+        }
+      ]
+    },
+    {
+      "name": "Update User",
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "exec": [
+              ""
+            ],
+            "type": "text/javascript",
+            "packages": {},
+            "requests": {}
+          }
+        },
+        {
+          "listen": "prerequest",
+          "script": {
+            "exec": [
+              "const payload = {\r",
+              "    \"first_name\": \"B\",\r",
+              "    \"last_name\": \"Trần Văn \",\r",
+              "    \"username\": \"bnguyenvan123\",\r",
+              "    \"password\": \"bnguyenvan123\",\r",
+              "    \"email\": \"bnguyenvan123@gmail.com\"\r",
+              "}\r",
+              "\r",
+              "pm.environment.set(\"payload\", JSON.stringify(payload));\r",
+              ""
+            ],
+            "type": "text/javascript",
+            "packages": {},
+            "requests": {}
+          }
+        }
+      ],
+      "request": {
+        "method": "PATCH",
+        "header": [
+          {
+            "key": "Authorization",
+            "value": "token {{token}}",
+            "type": "text"
+          }
+        ],
+        "url": {
+          "raw": "{{URL_PATH}}/users/1/",
+          "host": [
+            "{{URL_PATH}}"
+          ],
+          "path": [
+            "users",
+            "1",
+            ""
+          ]
+        }
+      },
+      "response": [
+        {
+          "name": "Update User With Admin Role",
+          "originalRequest": {
+            "method": "PATCH",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "token {{token}}",
+                "type": "text"
+              }
+            ],
+            "url": {
+              "raw": "{{URL_PATH}}/users/1/",
+              "host": [
+                "{{URL_PATH}}"
+              ],
+              "path": [
+                "users",
+                "1",
+                ""
+              ]
+            }
+          },
+          "status": "OK",
+          "code": 200,
+          "_postman_previewlanguage": null,
+          "header": [
+            {
+              "key": "Date",
+              "value": "Mon, 04 May 2026 04:51:07 GMT"
+            },
+            {
+              "key": "Server",
+              "value": "WSGIServer/0.2 CPython/3.13.2"
+            },
+            {
+              "key": "Content-Type",
+              "value": "application/json"
+            },
+            {
+              "key": "Vary",
+              "value": "Accept, origin"
+            },
+            {
+              "key": "Allow",
+              "value": "GET, PUT, PATCH, DELETE, HEAD, OPTIONS"
+            },
+            {
+              "key": "Content-Length",
+              "value": "39"
+            },
+            {
+              "key": "X-Frame-Options",
+              "value": "DENY"
+            },
+            {
+              "key": "X-Content-Type-Options",
+              "value": "nosniff"
+            },
+            {
+              "key": "Referrer-Policy",
+              "value": "same-origin"
+            },
+            {
+              "key": "Cross-Origin-Opener-Policy",
+              "value": "same-origin"
+            }
+          ],
+          "cookie": [],
+          "body": "{\n    \"message\": \"Cập nhật thành công\"\n}"
+        },
+        {
+          "name": "Update User Without Admin Role",
+          "originalRequest": {
+            "method": "PATCH",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "token {{token}}",
+                "type": "text"
+              }
+            ],
+            "url": {
+              "raw": "{{URL_PATH}}/users/1/",
+              "host": [
+                "{{URL_PATH}}"
+              ],
+              "path": [
+                "users",
+                "1",
+                ""
+              ]
+            }
+          },
+          "status": "Forbidden",
+          "code": 403,
+          "_postman_previewlanguage": null,
+          "header": [
+            {
+              "key": "Date",
+              "value": "Mon, 04 May 2026 04:51:35 GMT"
+            },
+            {
+              "key": "Server",
+              "value": "WSGIServer/0.2 CPython/3.13.2"
+            },
+            {
+              "key": "Content-Type",
+              "value": "application/json"
+            },
+            {
+              "key": "Vary",
+              "value": "Accept, origin"
+            },
+            {
+              "key": "Allow",
+              "value": "GET, PUT, PATCH, DELETE, HEAD, OPTIONS"
+            },
+            {
+              "key": "Content-Length",
+              "value": "63"
+            },
+            {
+              "key": "X-Frame-Options",
+              "value": "DENY"
+            },
+            {
+              "key": "X-Content-Type-Options",
+              "value": "nosniff"
+            },
+            {
+              "key": "Referrer-Policy",
+              "value": "same-origin"
+            },
+            {
+              "key": "Cross-Origin-Opener-Policy",
+              "value": "same-origin"
+            }
+          ],
+          "cookie": [],
+          "body": "{\n    \"detail\": \"You do not have permission to perform this action.\"\n}"
+        }
+      ]
+    },
+    {
+      "name": "Delete User",
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "exec": [
+              ""
+            ],
+            "type": "text/javascript",
+            "packages": {},
+            "requests": {}
+          }
+        }
+      ],
+      "request": {
+        "method": "DELETE",
+        "header": [
+          {
+            "key": "Authorization",
+            "value": "token {{token}}",
+            "type": "text"
+          }
+        ],
+        "url": {
+          "raw": "{{URL_PATH}}/users/11/",
+          "host": [
+            "{{URL_PATH}}"
+          ],
+          "path": [
+            "users",
+            "11",
+            ""
+          ]
+        }
+      },
+      "response": [
+        {
+          "name": "Delete User Without Admin Role",
+          "originalRequest": {
+            "method": "DELETE",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "token {{token}}",
+                "type": "text"
+              }
+            ],
+            "url": {
+              "raw": "{{URL_PATH}}/users/11/",
+              "host": [
+                "{{URL_PATH}}"
+              ],
+              "path": [
+                "users",
+                "11",
+                ""
+              ]
+            }
+          },
+          "status": "Forbidden",
+          "code": 403,
+          "_postman_previewlanguage": null,
+          "header": [
+            {
+              "key": "Date",
+              "value": "Mon, 04 May 2026 05:08:43 GMT"
+            },
+            {
+              "key": "Server",
+              "value": "WSGIServer/0.2 CPython/3.13.2"
+            },
+            {
+              "key": "Content-Type",
+              "value": "application/json"
+            },
+            {
+              "key": "Vary",
+              "value": "Accept, origin"
+            },
+            {
+              "key": "Allow",
+              "value": "GET, PUT, PATCH, DELETE, HEAD, OPTIONS"
+            },
+            {
+              "key": "Content-Length",
+              "value": "63"
+            },
+            {
+              "key": "X-Frame-Options",
+              "value": "DENY"
+            },
+            {
+              "key": "X-Content-Type-Options",
+              "value": "nosniff"
+            },
+            {
+              "key": "Referrer-Policy",
+              "value": "same-origin"
+            },
+            {
+              "key": "Cross-Origin-Opener-Policy",
+              "value": "same-origin"
+            }
+          ],
+          "cookie": [],
+          "body": "{\n    \"detail\": \"You do not have permission to perform this action.\"\n}"
+        },
+        {
+          "name": "Delete User With Admin Role",
+          "originalRequest": {
+            "method": "DELETE",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "token {{token}}",
+                "type": "text"
+              }
+            ],
+            "url": {
+              "raw": "{{URL_PATH}}/users/11/",
+              "host": [
+                "{{URL_PATH}}"
+              ],
+              "path": [
+                "users",
+                "11",
+                ""
+              ]
+            }
+          },
+          "status": "No Content",
+          "code": 204,
+          "_postman_previewlanguage": null,
+          "header": [
+            {
+              "key": "Date",
+              "value": "Mon, 04 May 2026 05:09:18 GMT"
+            },
+            {
+              "key": "Server",
+              "value": "WSGIServer/0.2 CPython/3.13.2"
+            },
+            {
+              "key": "Vary",
+              "value": "Accept, origin"
+            },
+            {
+              "key": "Allow",
+              "value": "GET, PUT, PATCH, DELETE, HEAD, OPTIONS"
+            },
+            {
+              "key": "Content-Length",
+              "value": "0"
+            },
+            {
+              "key": "X-Frame-Options",
+              "value": "DENY"
+            },
+            {
+              "key": "X-Content-Type-Options",
+              "value": "nosniff"
+            },
+            {
+              "key": "Referrer-Policy",
+              "value": "same-origin"
+            },
+            {
+              "key": "Cross-Origin-Opener-Policy",
+              "value": "same-origin"
+            }
+          ],
+          "cookie": [],
+          "body": null
+        }
+      ]
+    },
+    {
+      "name": "Search User By Name",
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "exec": [
+              "const users = pm.response.json().results;\r",
+              "const query = (pm.request.url.query.get(\"search\"))\r",
+              "    \r",
+              "pm.test(\"Trả về danh sách Users\", function () {\r",
+              "    pm.expect(users).to.be.an(\"array\");\r",
+              "});\r",
+              "\r",
+              "pm.test(\"Có kết quả chứa name\", function () {\r",
+              "    const decodedQuery = decodeURIComponent(query);\r",
+              "\r",
+              "    const found = users.some(u => {\r",
+              "        const full_name = `${u.first_name} ${u.last_name}`;\r",
+              "        return full_name.includes(decodedQuery);\r",
+              "    });\r",
+              "\r",
+              "    pm.expect(found).to.be.true;\r",
+              "});"
+            ],
+            "type": "text/javascript",
+            "packages": {},
+            "requests": {}
+          }
+        }
+      ],
+      "request": {
+        "method": "GET",
+        "header": [
+          {
+            "key": "Authorization",
+            "value": "token {{token}}",
+            "type": "text"
+          }
+        ],
+        "url": {
+          "raw": "{{URL_PATH}}/users/?search=Nguyễn Văn B",
+          "host": [
+            "{{URL_PATH}}"
+          ],
+          "path": [
+            "users",
+            ""
+          ],
+          "query": [
+            {
+              "key": "search",
+              "value": "Nguyễn Văn B"
+            }
+          ]
+        }
+      },
+      "response": [
+        {
+          "name": "Search User By Name Success",
+          "originalRequest": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "token {{token}}",
+                "type": "text"
+              }
+            ],
+            "url": {
+              "raw": "{{URL_PATH}}/users/?search=Trần Khánh",
+              "host": [
+                "{{URL_PATH}}"
+              ],
+              "path": [
+                "users",
+                ""
+              ],
+              "query": [
+                {
+                  "key": "search",
+                  "value": "Trần Khánh"
+                }
+              ]
+            }
+          },
+          "status": "OK",
+          "code": 200,
+          "_postman_previewlanguage": null,
+          "header": [
+            {
+              "key": "Date",
+              "value": "Tue, 05 May 2026 15:17:44 GMT"
+            },
+            {
+              "key": "Server",
+              "value": "WSGIServer/0.2 CPython/3.13.2"
+            },
+            {
+              "key": "Content-Type",
+              "value": "application/json"
+            },
+            {
+              "key": "Vary",
+              "value": "Accept, origin"
+            },
+            {
+              "key": "Allow",
+              "value": "GET, POST, HEAD, OPTIONS"
+            },
+            {
+              "key": "Content-Length",
+              "value": "879"
+            },
+            {
+              "key": "X-Frame-Options",
+              "value": "DENY"
+            },
+            {
+              "key": "X-Content-Type-Options",
+              "value": "nosniff"
+            },
+            {
+              "key": "Referrer-Policy",
+              "value": "same-origin"
+            },
+            {
+              "key": "Cross-Origin-Opener-Policy",
+              "value": "same-origin"
+            }
+          ],
+          "cookie": [],
+          "body": "{\n    \"count\": 2,\n    \"next\": null,\n    \"previous\": null,\n    \"results\": [\n        {\n            \"id\": 2,\n            \"last_login\": null,\n            \"is_superuser\": false,\n            \"username\": \"trankhanha53\",\n            \"first_name\": \"Trần Khánh\",\n            \"last_name\": \"An\",\n            \"email\": \"trankhanha53@gmail.com\",\n            \"is_staff\": true,\n            \"is_active\": true,\n            \"date_joined\": \"2026-03-18T12:40:33+07:00\",\n            \"phone_number\": \"123456\",\n            \"image\": \"http://res.cloudinary.com/dm68sunrv/image/upload/v1775370044/users/a2go4rryl0xhgddg3akf.png\",\n            \"gender\": \"male\",\n            \"dob\": null,\n            \"groups\": [],\n            \"user_permissions\": []\n        },\n        {\n            \"id\": 3,\n            \"last_login\": null,\n            \"is_superuser\": false,\n            \"username\": \"bivatai123\",\n            \"first_name\": \"Trần Khánh\",\n            \"last_name\": \"An\",\n            \"email\": \"bivabo213@gmail.com\",\n            \"is_staff\": false,\n            \"is_active\": true,\n            \"date_joined\": \"2026-03-21T11:51:32+07:00\",\n            \"phone_number\": \"0123456789\",\n            \"image\": \"http://res.cloudinary.com/dm68sunrv/image/upload/v1775370371/users/njyintmh57urg8bwtpwd.png\",\n            \"gender\": null,\n            \"dob\": null,\n            \"groups\": [],\n            \"user_permissions\": []\n        }\n    ]\n}"
+        },
+        {
+          "name": "Search User By Name Not Found",
+          "originalRequest": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "token {{token}}",
+                "type": "text"
+              }
+            ],
+            "url": {
+              "raw": "{{URL_PATH}}/users/?search=Nguyễn Văn B",
+              "host": [
+                "{{URL_PATH}}"
+              ],
+              "path": [
+                "users",
+                ""
+              ],
+              "query": [
+                {
+                  "key": "search",
+                  "value": "Nguyễn Văn B"
+                }
+              ]
+            }
+          },
+          "status": "OK",
+          "code": 200,
+          "_postman_previewlanguage": null,
+          "header": [
+            {
+              "key": "Date",
+              "value": "Tue, 05 May 2026 15:18:23 GMT"
+            },
+            {
+              "key": "Server",
+              "value": "WSGIServer/0.2 CPython/3.13.2"
+            },
+            {
+              "key": "Content-Type",
+              "value": "application/json"
+            },
+            {
+              "key": "Vary",
+              "value": "Accept, origin"
+            },
+            {
+              "key": "Allow",
+              "value": "GET, POST, HEAD, OPTIONS"
+            },
+            {
+              "key": "Content-Length",
+              "value": "52"
+            },
+            {
+              "key": "X-Frame-Options",
+              "value": "DENY"
+            },
+            {
+              "key": "X-Content-Type-Options",
+              "value": "nosniff"
+            },
+            {
+              "key": "Referrer-Policy",
+              "value": "same-origin"
+            },
+            {
+              "key": "Cross-Origin-Opener-Policy",
+              "value": "same-origin"
+            }
+          ],
+          "cookie": [],
+          "body": "{\n    \"count\": 0,\n    \"next\": null,\n    \"previous\": null,\n    \"results\": []\n}"
+        }
+      ]
+    },
+    {
+      "name": "List Borrowing By Current User",
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "exec": [
+              "const borrowing_list = pm.response.json().results;\r",
+              "\r",
+              "pm.test(\"Borrowing List là 1 array\", function() {\r",
+              "    borrowing_list.to.have.an(\"array\")\r",
+              "})"
+            ],
+            "type": "text/javascript",
+            "packages": {},
+            "requests": {}
+          }
+        }
+      ],
+      "request": {
+        "method": "GET",
+        "header": [
+          {
+            "key": "Authorization",
+            "value": "token {{token}}",
+            "type": "text"
+          }
+        ],
+        "url": {
+          "raw": "{{URL_PATH}}/users/current_user/borrowing_list/",
+          "host": [
+            "{{URL_PATH}}"
+          ],
+          "path": [
+            "users",
+            "current_user",
+            "borrowing_list",
+            ""
+          ]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "List Reservation By Current User",
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "exec": [
+              "const role = pm.environment.get(\"role\");\r",
+              "\r",
+              "pm.test(\"Create reservation theo role\", function () {\r",
+              "    const json = pm.response.json();\r",
+              "\r",
+              "    if (role === \"admin\") {\r",
+              "        // admin tạo được\r",
+              "        pm.response.to.have.status(201);\r",
+              "        pm.expect(json).to.have.property(\"id\");\r",
+              "        pm.expect(json).to.have.property(\"book\");\r",
+              "    } else if (role === \"user\") {\r",
+              "        // user cũng tạo được (theo spec)\r",
+              "        pm.response.to.have.status(201);\r",
+              "        pm.expect(json).to.have.property(\"id\");\r",
+              "        pm.expect(json).to.have.property(\"book\");\r",
+              "    } else {\r",
+              "        // nếu không login\r",
+              "        pm.expect(pm.response.code).to.be.oneOf([401, 403]);\r",
+              "    }\r",
+              "});"
+            ],
+            "type": "text/javascript",
+            "packages": {},
+            "requests": {}
+          }
+        },
+        {
+          "listen": "prerequest",
+          "script": {
+            "packages": {},
+            "type": "text/javascript"
+          }
+        }
+      ],
+      "protocolProfileBehavior": {
+        "disableBodyPruning": true
+      },
+      "request": {
+        "method": "GET",
+        "header": [
+          {
+            "key": "Authorization",
+            "value": "token {{token}}",
+            "type": "text"
+          }
+        ],
+        "body": {
+          "mode": "raw",
+          "raw": "{\r\n  \"book\": 1\r\n}",
+          "options": {
+            "raw": {
+              "language": "json"
+            }
+          }
+        },
+        "url": {
+          "raw": "{{URL_PATH}}/users/current_user/orders/",
+          "host": [
+            "{{URL_PATH}}"
+          ],
+          "path": [
+            "users",
+            "current_user",
+            "orders",
+            ""
+          ]
+        }
+      },
+      "response": [
+        {
+          "name": "List Reservation By Current User",
+          "originalRequest": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "token {{token}}",
+                "type": "text"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\r\n  \"book\": 1\r\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "{{URL_PATH}}/users/current_user/orders/",
+              "host": [
+                "{{URL_PATH}}"
+              ],
+              "path": [
+                "users",
+                "current_user",
+                "orders",
+                ""
+              ]
+            }
+          },
+          "status": "OK",
+          "code": 200,
+          "_postman_previewlanguage": null,
+          "header": [
+            {
+              "key": "Date",
+              "value": "Thu, 07 May 2026 16:05:10 GMT"
+            },
+            {
+              "key": "Server",
+              "value": "WSGIServer/0.2 CPython/3.13.9"
+            },
+            {
+              "key": "Content-Type",
+              "value": "application/json"
+            },
+            {
+              "key": "Vary",
+              "value": "Accept, origin"
+            },
+            {
+              "key": "Allow",
+              "value": "GET, HEAD, OPTIONS"
+            },
+            {
+              "key": "Content-Length",
+              "value": "1170"
+            },
+            {
+              "key": "X-Frame-Options",
+              "value": "DENY"
+            },
+            {
+              "key": "X-Content-Type-Options",
+              "value": "nosniff"
+            },
+            {
+              "key": "Referrer-Policy",
+              "value": "same-origin"
+            },
+            {
+              "key": "Cross-Origin-Opener-Policy",
+              "value": "same-origin"
+            }
+          ],
+          "cookie": [],
+          "body": "{\n    \"count\": 3,\n    \"next\": null,\n    \"previous\": null,\n    \"results\": [\n        {\n            \"id\": 4,\n            \"user\": {\n                \"id\": 1,\n                \"first_name\": \"\",\n                \"last_name\": \"\",\n                \"image\": null,\n                \"phone_number\": null,\n                \"gender\": null,\n                \"dob\": null\n            },\n            \"book\": {\n                \"name\": \"Chiến tranh và Hòa bình\",\n                \"image\": null\n            },\n            \"created_at\": \"2026-05-07T20:41:20.880713+07:00\",\n            \"updated_at\": \"2026-05-07T20:47:48.029541+07:00\",\n            \"borrowing_book_date\": null,\n            \"returning_book_date\": null,\n            \"due_date\": null,\n            \"status\": \"CANCELLED\",\n            \"note\": null\n        },\n        {\n            \"id\": 3,\n            \"user\": {\n                \"id\": 1,\n                \"first_name\": \"\",\n                \"last_name\": \"\",\n                \"image\": null,\n                \"phone_number\": null,\n                \"gender\": null,\n                \"dob\": null\n            },\n            \"book\": {\n                \"name\": \"Chiến tranh và Hòa bình\",\n                \"image\": null\n            },\n            \"created_at\": \"2026-05-07T20:30:54.257774+07:00\",\n            \"updated_at\": \"2026-05-07T20:49:19.472592+07:00\",\n            \"borrowing_book_date\": null,\n            \"returning_book_date\": null,\n            \"due_date\": null,\n            \"status\": \"CANCELLED\",\n            \"note\": null\n        },\n        {\n            \"id\": 1,\n            \"user\": {\n                \"id\": 1,\n                \"first_name\": \"\",\n                \"last_name\": \"\",\n                \"image\": null,\n                \"phone_number\": null,\n                \"gender\": null,\n                \"dob\": null\n            },\n            \"book\": {\n                \"name\": \"Chiến tranh và Hòa bình\",\n                \"image\": null\n            },\n            \"created_at\": \"2026-05-07T16:04:53.438310+07:00\",\n            \"updated_at\": \"2026-05-07T20:44:49.925319+07:00\",\n            \"borrowing_book_date\": null,\n            \"returning_book_date\": null,\n            \"due_date\": null,\n            \"status\": \"CANCELLED\",\n            \"note\": null\n        }\n    ]\n}"
+        }
+      ]
+    }
+  ],
+  "event": [
+    {
+      "listen": "prerequest",
+      "script": {
+        "type": "text/javascript",
+        "packages": {},
+        "requests": {},
+        "exec": [
+          "pm.environment.set(\"role\", \"user\");\r",
+          "pm.environment.set(\"token\", pm.environment.get(\"admin_token\"));"
+        ]
+      }
+    },
+    {
+      "listen": "test",
+      "script": {
+        "type": "text/javascript",
+        "packages": {},
+        "requests": {},
+        "exec": [
+          "pm.test(\"Status code check theo role\", function () {\r",
+          "    const role = pm.environment.get(\"role\");\r",
+          "    const code = pm.response.code;\r",
+          "\r",
+          "    if (role === \"admin\") {\r",
+          "        pm.expect(code).to.be.oneOf([200, 201, 204]);\r",
+          "    } else {\r",
+          "        pm.expect(code).to.be.oneOf([401, 403]);\r",
+          "    }\r",
+          "});\r",
+          "\r",
+          ""
+        ]
+      }
+    }
+  ]
+}

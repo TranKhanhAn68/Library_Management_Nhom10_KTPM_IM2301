@@ -1,0 +1,801 @@
+{
+  "info": {
+    "_postman_id": "c411b884-018a-4d5b-83e5-62a46cb35180",
+    "name": "Setting Services",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+    "_exporter_id": "54519871"
+  },
+  "item": [
+    {
+      "name": "List Setting",
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "exec": [
+              "pm.test(\"Lấy settings thành công\", function () {\r",
+              "    const res = pm.response.json();\r",
+              "\r",
+              "    pm.response.to.have.status(200);\r",
+              "    pm.expect(res).to.have.property(\"results\");\r",
+              "\r",
+              "    const settings = res.results;\r",
+              "    pm.expect(settings).to.be.an(\"array\");\r",
+              "\r",
+              "    if (settings.length > 0) {\r",
+              "        pm.expect(settings[0]).to.have.property(\"borrowing_days\");\r",
+              "        pm.expect(settings[0]).to.have.property(\"borrowing_fee\");\r",
+              "        pm.expect(settings[0]).to.have.property(\"borrowing_overdue_fine\");\r",
+              "    }\r",
+              "});"
+            ],
+            "type": "text/javascript",
+            "packages": {},
+            "requests": {}
+          }
+        }
+      ],
+      "request": {
+        "method": "GET",
+        "header": [
+          {
+            "key": "Authorization",
+            "value": "token {{token}}",
+            "type": "text"
+          }
+        ],
+        "url": {
+          "raw": "{{URL_PATH}}/settings/",
+          "host": [
+            "{{URL_PATH}}"
+          ],
+          "path": [
+            "settings",
+            ""
+          ]
+        }
+      },
+      "response": [
+        {
+          "name": "List Setting",
+          "originalRequest": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "token {{token}}",
+                "type": "text"
+              }
+            ],
+            "url": {
+              "raw": "{{URL_PATH}}/settings/",
+              "host": [
+                "{{URL_PATH}}"
+              ],
+              "path": [
+                "settings",
+                ""
+              ]
+            }
+          },
+          "status": "OK",
+          "code": 200,
+          "_postman_previewlanguage": null,
+          "header": [
+            {
+              "key": "Date",
+              "value": "Fri, 08 May 2026 03:52:21 GMT"
+            },
+            {
+              "key": "Server",
+              "value": "WSGIServer/0.2 CPython/3.13.9"
+            },
+            {
+              "key": "Content-Type",
+              "value": "application/json"
+            },
+            {
+              "key": "Vary",
+              "value": "Accept, origin"
+            },
+            {
+              "key": "Allow",
+              "value": "GET, POST, HEAD, OPTIONS"
+            },
+            {
+              "key": "Content-Length",
+              "value": "104"
+            },
+            {
+              "key": "X-Frame-Options",
+              "value": "DENY"
+            },
+            {
+              "key": "X-Content-Type-Options",
+              "value": "nosniff"
+            },
+            {
+              "key": "Referrer-Policy",
+              "value": "same-origin"
+            },
+            {
+              "key": "Cross-Origin-Opener-Policy",
+              "value": "same-origin"
+            }
+          ],
+          "cookie": [],
+          "body": "[\n    {\n        \"borrowing_days\": 7,\n        \"borrowing_fee\": \"1000.00\",\n        \"borrowing_overdue_fine\": \"5000.00\",\n        \"id\": 1,\n        \"active\": true\n    }\n]"
+        }
+      ]
+    },
+    {
+      "name": "Create Setting",
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "exec": [
+              "const role = pm.environment.get(\"role\");\r",
+              "\r",
+              "pm.test(\"Create setting theo role\", function () {\r",
+              "    if (role === \"admin\") {\r",
+              "        const json = pm.response.json();\r",
+              "\r",
+              "        pm.response.to.have.status(201);\r",
+              "        pm.expect(json).to.have.property(\"id\");\r",
+              "        pm.expect(json.borrowing_days).to.eql(10);\r",
+              "    } else {\r",
+              "        pm.expect(pm.response.code).to.be.oneOf([401, 403]);\r",
+              "    }\r",
+              "});"
+            ],
+            "type": "text/javascript",
+            "packages": {},
+            "requests": {}
+          }
+        }
+      ],
+      "request": {
+        "method": "POST",
+        "header": [
+          {
+            "key": "Authorization",
+            "value": "token {{token}}",
+            "type": "text"
+          }
+        ],
+        "body": {
+          "mode": "raw",
+          "raw": "{\r\n  \"borrowing_days\": 7,\r\n  \"borrowing_fee\": \"5000.00\",\r\n  \"borrowing_overdue_fine\": \"1000.00\",\r\n  \"active\": true\r\n}",
+          "options": {
+            "raw": {
+              "language": "json"
+            }
+          }
+        },
+        "url": {
+          "raw": "{{URL_PATH}}/settings/",
+          "host": [
+            "{{URL_PATH}}"
+          ],
+          "path": [
+            "settings",
+            ""
+          ]
+        }
+      },
+      "response": [
+        {
+          "name": "Create Setting With User Role",
+          "originalRequest": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "token {{token}}",
+                "type": "text"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\r\n  \"borrowing_days\": 7,\r\n  \"borrowing_fee\": \"5000.00\",\r\n  \"borrowing_overdue_fine\": \"1000.00\",\r\n  \"active\": true\r\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "{{URL_PATH}}/settings/",
+              "host": [
+                "{{URL_PATH}}"
+              ],
+              "path": [
+                "settings",
+                ""
+              ]
+            }
+          },
+          "status": "Forbidden",
+          "code": 403,
+          "_postman_previewlanguage": null,
+          "header": [
+            {
+              "key": "Date",
+              "value": "Thu, 07 May 2026 10:17:58 GMT"
+            },
+            {
+              "key": "Server",
+              "value": "WSGIServer/0.2 CPython/3.13.9"
+            },
+            {
+              "key": "Content-Type",
+              "value": "application/json"
+            },
+            {
+              "key": "Vary",
+              "value": "Accept, origin"
+            },
+            {
+              "key": "Allow",
+              "value": "GET, POST, HEAD, OPTIONS"
+            },
+            {
+              "key": "Content-Length",
+              "value": "63"
+            },
+            {
+              "key": "X-Frame-Options",
+              "value": "DENY"
+            },
+            {
+              "key": "X-Content-Type-Options",
+              "value": "nosniff"
+            },
+            {
+              "key": "Referrer-Policy",
+              "value": "same-origin"
+            },
+            {
+              "key": "Cross-Origin-Opener-Policy",
+              "value": "same-origin"
+            }
+          ],
+          "cookie": [],
+          "body": "{\n    \"detail\": \"You do not have permission to perform this action.\"\n}"
+        },
+        {
+          "name": "Create Setting Admin Role",
+          "originalRequest": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "token {{token}}",
+                "type": "text"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\r\n  \"borrowing_days\": 7,\r\n  \"borrowing_fee\": \"5000.00\",\r\n  \"borrowing_overdue_fine\": \"1000.00\",\r\n  \"active\": true\r\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "{{URL_PATH}}/settings/",
+              "host": [
+                "{{URL_PATH}}"
+              ],
+              "path": [
+                "settings",
+                ""
+              ]
+            }
+          },
+          "status": "Created",
+          "code": 201,
+          "_postman_previewlanguage": null,
+          "header": [
+            {
+              "key": "Date",
+              "value": "Fri, 08 May 2026 03:53:01 GMT"
+            },
+            {
+              "key": "Server",
+              "value": "WSGIServer/0.2 CPython/3.13.9"
+            },
+            {
+              "key": "Content-Type",
+              "value": "application/json"
+            },
+            {
+              "key": "Vary",
+              "value": "Accept, origin"
+            },
+            {
+              "key": "Allow",
+              "value": "GET, POST, HEAD, OPTIONS"
+            },
+            {
+              "key": "Content-Length",
+              "value": "148"
+            },
+            {
+              "key": "X-Frame-Options",
+              "value": "DENY"
+            },
+            {
+              "key": "X-Content-Type-Options",
+              "value": "nosniff"
+            },
+            {
+              "key": "Referrer-Policy",
+              "value": "same-origin"
+            },
+            {
+              "key": "Cross-Origin-Opener-Policy",
+              "value": "same-origin"
+            }
+          ],
+          "cookie": [],
+          "body": "{\n    \"message\": \"Tạo mới thành công\",\n    \"data\": {\n        \"borrowing_days\": 7,\n        \"borrowing_fee\": \"5000.00\",\n        \"borrowing_overdue_fine\": \"1000.00\",\n        \"id\": 3,\n        \"active\": true\n    }\n}"
+        }
+      ]
+    },
+    {
+      "name": "Update Setting",
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "exec": [
+              "const role = pm.environment.get(\"role\");\r",
+              "\r",
+              "pm.test(\"Update setting theo role\", function () {\r",
+              "    if (role === \"admin\") {\r",
+              "        const json = pm.response.json();\r",
+              "\r",
+              "        pm.response.to.have.status(200);\r",
+              "        pm.expect(json).to.have.property(\"borrowing_fee\");\r",
+              "        pm.expect(json.borrowing_fee).to.eql(3000);\r",
+              "    } else {\r",
+              "        pm.expect(pm.response.code).to.be.oneOf([401, 403]);\r",
+              "    }\r",
+              "});"
+            ],
+            "type": "text/javascript",
+            "packages": {},
+            "requests": {}
+          }
+        },
+        {
+          "listen": "prerequest",
+          "script": {
+            "packages": {},
+            "type": "text/javascript"
+          }
+        }
+      ],
+      "request": {
+        "method": "PATCH",
+        "header": [
+          {
+            "key": "Authorization",
+            "value": "token {{token}}",
+            "type": "text"
+          }
+        ],
+        "body": {
+          "mode": "raw",
+          "raw": "{\r\n  \"borrowing_fee\": \"7000.00\"\r\n}",
+          "options": {
+            "raw": {
+              "language": "json"
+            }
+          }
+        },
+        "url": {
+          "raw": "{{URL_PATH}}/settings/3/",
+          "host": [
+            "{{URL_PATH}}"
+          ],
+          "path": [
+            "settings",
+            "3",
+            ""
+          ]
+        }
+      },
+      "response": [
+        {
+          "name": "Update Setting With User Role",
+          "originalRequest": {
+            "method": "PATCH",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "token {{token}}",
+                "type": "text"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\r\n  \"borrowing_fee\": \"7000.00\"\r\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "{{URL_PATH}}/settings/2/",
+              "host": [
+                "{{URL_PATH}}"
+              ],
+              "path": [
+                "settings",
+                "2",
+                ""
+              ]
+            }
+          },
+          "status": "Forbidden",
+          "code": 403,
+          "_postman_previewlanguage": null,
+          "header": [
+            {
+              "key": "Date",
+              "value": "Thu, 07 May 2026 10:18:26 GMT"
+            },
+            {
+              "key": "Server",
+              "value": "WSGIServer/0.2 CPython/3.13.9"
+            },
+            {
+              "key": "Content-Type",
+              "value": "application/json"
+            },
+            {
+              "key": "Vary",
+              "value": "Accept, origin"
+            },
+            {
+              "key": "Allow",
+              "value": "GET, PUT, PATCH, DELETE, HEAD, OPTIONS"
+            },
+            {
+              "key": "Content-Length",
+              "value": "63"
+            },
+            {
+              "key": "X-Frame-Options",
+              "value": "DENY"
+            },
+            {
+              "key": "X-Content-Type-Options",
+              "value": "nosniff"
+            },
+            {
+              "key": "Referrer-Policy",
+              "value": "same-origin"
+            },
+            {
+              "key": "Cross-Origin-Opener-Policy",
+              "value": "same-origin"
+            }
+          ],
+          "cookie": [],
+          "body": "{\n    \"detail\": \"You do not have permission to perform this action.\"\n}"
+        },
+        {
+          "name": "Update Setting Admin Role",
+          "originalRequest": {
+            "method": "PATCH",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "token {{token}}",
+                "type": "text"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\r\n  \"borrowing_fee\": \"7000.00\"\r\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "{{URL_PATH}}/settings/3/",
+              "host": [
+                "{{URL_PATH}}"
+              ],
+              "path": [
+                "settings",
+                "3",
+                ""
+              ]
+            }
+          },
+          "status": "OK",
+          "code": 200,
+          "_postman_previewlanguage": null,
+          "header": [
+            {
+              "key": "Date",
+              "value": "Fri, 08 May 2026 03:54:25 GMT"
+            },
+            {
+              "key": "Server",
+              "value": "WSGIServer/0.2 CPython/3.13.9"
+            },
+            {
+              "key": "Content-Type",
+              "value": "application/json"
+            },
+            {
+              "key": "Vary",
+              "value": "Accept, origin"
+            },
+            {
+              "key": "Allow",
+              "value": "GET, PUT, PATCH, DELETE, HEAD, OPTIONS"
+            },
+            {
+              "key": "Content-Length",
+              "value": "39"
+            },
+            {
+              "key": "X-Frame-Options",
+              "value": "DENY"
+            },
+            {
+              "key": "X-Content-Type-Options",
+              "value": "nosniff"
+            },
+            {
+              "key": "Referrer-Policy",
+              "value": "same-origin"
+            },
+            {
+              "key": "Cross-Origin-Opener-Policy",
+              "value": "same-origin"
+            }
+          ],
+          "cookie": [],
+          "body": "{\n    \"message\": \"Cập nhật thành công\"\n}"
+        }
+      ]
+    },
+    {
+      "name": "Delete Setting",
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "exec": [
+              "if (pm.environment.get(\"role\") === \"admin\") {\r",
+              "    pm.test(\"Delete setting\", function () {\r",
+              "        pm.response.to.have.status(204);\r",
+              "    });\r",
+              "}"
+            ],
+            "type": "text/javascript",
+            "packages": {},
+            "requests": {}
+          }
+        }
+      ],
+      "request": {
+        "method": "DELETE",
+        "header": [
+          {
+            "key": "Authorization",
+            "value": "token {{token}}",
+            "type": "text"
+          }
+        ],
+        "url": {
+          "raw": "{{URL_PATH}}/settings/3/",
+          "host": [
+            "{{URL_PATH}}"
+          ],
+          "path": [
+            "settings",
+            "3",
+            ""
+          ]
+        }
+      },
+      "response": [
+        {
+          "name": "Delete Setting With User Role",
+          "originalRequest": {
+            "method": "DELETE",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "token {{token}}",
+                "type": "text"
+              }
+            ],
+            "url": {
+              "raw": "{{URL_PATH}}/settings/2/",
+              "host": [
+                "{{URL_PATH}}"
+              ],
+              "path": [
+                "settings",
+                "2",
+                ""
+              ]
+            }
+          },
+          "status": "Forbidden",
+          "code": 403,
+          "_postman_previewlanguage": null,
+          "header": [
+            {
+              "key": "Date",
+              "value": "Thu, 07 May 2026 10:19:01 GMT"
+            },
+            {
+              "key": "Server",
+              "value": "WSGIServer/0.2 CPython/3.13.9"
+            },
+            {
+              "key": "Content-Type",
+              "value": "application/json"
+            },
+            {
+              "key": "Vary",
+              "value": "Accept, origin"
+            },
+            {
+              "key": "Allow",
+              "value": "GET, PUT, PATCH, DELETE, HEAD, OPTIONS"
+            },
+            {
+              "key": "Content-Length",
+              "value": "63"
+            },
+            {
+              "key": "X-Frame-Options",
+              "value": "DENY"
+            },
+            {
+              "key": "X-Content-Type-Options",
+              "value": "nosniff"
+            },
+            {
+              "key": "Referrer-Policy",
+              "value": "same-origin"
+            },
+            {
+              "key": "Cross-Origin-Opener-Policy",
+              "value": "same-origin"
+            }
+          ],
+          "cookie": [],
+          "body": "{\n    \"detail\": \"You do not have permission to perform this action.\"\n}"
+        },
+        {
+          "name": "Delete Setting With Admin Role",
+          "originalRequest": {
+            "method": "DELETE",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "token {{token}}",
+                "type": "text"
+              }
+            ],
+            "url": {
+              "raw": "{{URL_PATH}}/settings/3/",
+              "host": [
+                "{{URL_PATH}}"
+              ],
+              "path": [
+                "settings",
+                "3",
+                ""
+              ]
+            }
+          },
+          "status": "No Content",
+          "code": 204,
+          "_postman_previewlanguage": null,
+          "header": [
+            {
+              "key": "Date",
+              "value": "Fri, 08 May 2026 03:58:13 GMT"
+            },
+            {
+              "key": "Server",
+              "value": "WSGIServer/0.2 CPython/3.13.9"
+            },
+            {
+              "key": "Vary",
+              "value": "Accept, origin"
+            },
+            {
+              "key": "Allow",
+              "value": "GET, PUT, PATCH, DELETE, HEAD, OPTIONS"
+            },
+            {
+              "key": "Content-Length",
+              "value": "0"
+            },
+            {
+              "key": "X-Frame-Options",
+              "value": "DENY"
+            },
+            {
+              "key": "X-Content-Type-Options",
+              "value": "nosniff"
+            },
+            {
+              "key": "Referrer-Policy",
+              "value": "same-origin"
+            },
+            {
+              "key": "Cross-Origin-Opener-Policy",
+              "value": "same-origin"
+            }
+          ],
+          "cookie": [],
+          "body": null
+        }
+      ]
+    }
+  ],
+  "event": [
+    {
+      "listen": "prerequest",
+      "script": {
+        "type": "text/javascript",
+        "packages": {},
+        "requests": {},
+        "exec": [
+          "role = pm.environment.set(\"role\", \"user\")\r",
+          "role = pm.environment.get(\"role\");\r",
+          "if (role === \"admin\") {\r",
+          "    pm.environment.set(\"token\", pm.environment.get(\"admin_token\"));\r",
+          "} else {\r",
+          "    pm.environment.set(\"token\", pm.environment.get(\"user_token\"))\r",
+          "}"
+        ]
+      }
+    },
+    {
+      "listen": "test",
+      "script": {
+        "type": "text/javascript",
+        "packages": {},
+        "requests": {},
+        "exec": [
+          "pm.test(\"Status code theo role + method\", function () {\r",
+          "    const role = pm.environment.get(\"role\");\r",
+          "    const code = pm.response.code;\r",
+          "    const method = pm.request.method;\r",
+          "\r",
+          "    if (method === \"GET\") {\r",
+          "        pm.expect(code).to.be.oneOf([200, 404]);\r",
+          "    } else {\r",
+          "        if (role === \"admin\") {\r",
+          "            pm.expect(code).to.be.oneOf([200, 201, 204]);\r",
+          "        } else {\r",
+          "            pm.expect(code).to.be.oneOf([401, 403]);\r",
+          "        }\r",
+          "    }\r",
+          "});"
+        ]
+      }
+    }
+  ]
+}

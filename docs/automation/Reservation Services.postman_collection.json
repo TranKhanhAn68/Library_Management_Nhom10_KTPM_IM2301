@@ -1,0 +1,902 @@
+{
+  "info": {
+    "_postman_id": "656040f5-0318-4085-816b-d297906e709b",
+    "name": "Reservation Services",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+    "_exporter_id": "54519871"
+  },
+  "item": [
+    {
+      "name": "Create Reservation",
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "exec": [
+              "const role = pm.environment.get(\"role\");\r",
+              "const res = pm.response.json();\r",
+              "\r",
+              "pm.test(\"Create reservation theo role\", function () {\r",
+              "\r",
+              "    if (role === \"user\") {\r",
+              "        pm.response.to.have.status(201);\r",
+              "        pm.expect(res).to.have.property(\"message\");\r",
+              "\r",
+              "    } else if (role === \"admin\" || role === \"staff\") {\r",
+              "        // staff vẫn tạo được (do IsAuthenticated)\r",
+              "        pm.response.to.have.status(201);\r",
+              "\r",
+              "    } else {\r",
+              "        pm.expect(pm.response.code).to.be.oneOf([401, 403]);\r",
+              "    }\r",
+              "});"
+            ],
+            "type": "text/javascript",
+            "packages": {},
+            "requests": {}
+          }
+        },
+        {
+          "listen": "prerequest",
+          "script": {
+            "exec": [
+              ""
+            ],
+            "type": "text/javascript",
+            "packages": {},
+            "requests": {}
+          }
+        }
+      ],
+      "request": {
+        "method": "POST",
+        "header": [
+          {
+            "key": "Authorization",
+            "value": "token {{token}}",
+            "type": "text"
+          }
+        ],
+        "body": {
+          "mode": "raw",
+          "raw": "{\r\n  \"book\": 1\r\n}",
+          "options": {
+            "raw": {
+              "language": "json"
+            }
+          }
+        },
+        "url": {
+          "raw": "{{URL_PATH}}/reservations/order/",
+          "host": [
+            "{{URL_PATH}}"
+          ],
+          "path": [
+            "reservations",
+            "order",
+            ""
+          ]
+        }
+      },
+      "response": [
+        {
+          "name": "Create Reservation With Admin Role",
+          "originalRequest": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "token {{token}}",
+                "type": "text"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\r\n  \"book\": 1\r\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "{{URL_PATH}}/reservations/order/",
+              "host": [
+                "{{URL_PATH}}"
+              ],
+              "path": [
+                "reservations",
+                "order",
+                ""
+              ]
+            }
+          },
+          "status": "Created",
+          "code": 201,
+          "_postman_previewlanguage": null,
+          "header": [
+            {
+              "key": "Date",
+              "value": "Fri, 08 May 2026 03:15:01 GMT"
+            },
+            {
+              "key": "Server",
+              "value": "WSGIServer/0.2 CPython/3.13.9"
+            },
+            {
+              "key": "Content-Type",
+              "value": "application/json"
+            },
+            {
+              "key": "Vary",
+              "value": "Accept, origin"
+            },
+            {
+              "key": "Allow",
+              "value": "POST, OPTIONS"
+            },
+            {
+              "key": "Content-Length",
+              "value": "48"
+            },
+            {
+              "key": "X-Frame-Options",
+              "value": "DENY"
+            },
+            {
+              "key": "X-Content-Type-Options",
+              "value": "nosniff"
+            },
+            {
+              "key": "Referrer-Policy",
+              "value": "same-origin"
+            },
+            {
+              "key": "Cross-Origin-Opener-Policy",
+              "value": "same-origin"
+            }
+          ],
+          "cookie": [],
+          "body": "{\n    \"message\": \"Đặt trước sách thành công\"\n}"
+        }
+      ]
+    },
+    {
+      "name": "List Reservation",
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "exec": [
+              "const role = pm.environment.get(\"role\");\r",
+              "\r",
+              "pm.test(\"List reservation theo role\", function () {\r",
+              "    const code = pm.response.code;\r",
+              "\r",
+              "    if (role === \"admin\" || role === \"staff\") {\r",
+              "        const res = pm.response.json();\r",
+              "\r",
+              "        pm.expect(code).to.eql(200);\r",
+              "        pm.expect(res).to.have.property(\"results\");\r",
+              "        pm.expect(res.results).to.be.an(\"array\");\r",
+              "\r",
+              "    } else {\r",
+              "        // user bị chặn\r",
+              "        pm.expect(code).to.eql(403);\r",
+              "    }\r",
+              "});"
+            ],
+            "type": "text/javascript",
+            "packages": {},
+            "requests": {}
+          }
+        }
+      ],
+      "request": {
+        "method": "GET",
+        "header": [
+          {
+            "key": "Authorization",
+            "value": "token {{token}}",
+            "type": "text"
+          }
+        ],
+        "url": {
+          "raw": "{{URL_PATH}}/reservations/",
+          "host": [
+            "{{URL_PATH}}"
+          ],
+          "path": [
+            "reservations",
+            ""
+          ]
+        }
+      },
+      "response": [
+        {
+          "name": "List Reservation With Admin Role",
+          "originalRequest": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "token {{token}}",
+                "type": "text"
+              }
+            ],
+            "url": {
+              "raw": "{{URL_PATH}}/reservations/",
+              "host": [
+                "{{URL_PATH}}"
+              ],
+              "path": [
+                "reservations",
+                ""
+              ]
+            }
+          },
+          "status": "OK",
+          "code": 200,
+          "_postman_previewlanguage": null,
+          "header": [
+            {
+              "key": "Date",
+              "value": "Fri, 08 May 2026 03:15:47 GMT"
+            },
+            {
+              "key": "Server",
+              "value": "WSGIServer/0.2 CPython/3.13.9"
+            },
+            {
+              "key": "Content-Type",
+              "value": "application/json"
+            },
+            {
+              "key": "Vary",
+              "value": "Accept, origin"
+            },
+            {
+              "key": "Allow",
+              "value": "GET, HEAD, OPTIONS"
+            },
+            {
+              "key": "Content-Length",
+              "value": "2531"
+            },
+            {
+              "key": "X-Frame-Options",
+              "value": "DENY"
+            },
+            {
+              "key": "X-Content-Type-Options",
+              "value": "nosniff"
+            },
+            {
+              "key": "Referrer-Policy",
+              "value": "same-origin"
+            },
+            {
+              "key": "Cross-Origin-Opener-Policy",
+              "value": "same-origin"
+            }
+          ],
+          "cookie": [],
+          "body": "{\n    \"count\": 6,\n    \"next\": null,\n    \"previous\": null,\n    \"results\": [\n        {\n            \"id\": 7,\n            \"reservation_date\": \"2026-05-08T10:15:01.011930+07:00\",\n            \"status\": \"WAITING\",\n            \"created_at\": \"2026-05-08T10:15:01.012106+07:00\",\n            \"updated_at\": \"2026-05-08T10:15:01.012122+07:00\",\n            \"user\": {\n                \"id\": 1,\n                \"username\": \"admin\",\n                \"email\": \"admin@example.com\",\n                \"is_active\": true,\n                \"first_name\": \"\",\n                \"last_name\": \"\",\n                \"image\": null,\n                \"phone_number\": null,\n                \"gender\": null,\n                \"dob\": null\n            },\n            \"book\": {\n                \"name\": \"Chiến tranh và Hòa bình\",\n                \"image\": null\n            }\n        },\n        {\n            \"id\": 5,\n            \"reservation_date\": \"2026-05-07T20:54:48.227178+07:00\",\n            \"status\": \"CANCELLED\",\n            \"created_at\": \"2026-05-07T20:54:48.227197+07:00\",\n            \"updated_at\": \"2026-05-07T21:11:05.817820+07:00\",\n            \"user\": {\n                \"id\": 2,\n                \"username\": \"abcxyz213\",\n                \"email\": \"abcxyz123@gmail.com\",\n                \"is_active\": true,\n                \"first_name\": \"Ngân\",\n                \"last_name\": \"Kim\",\n                \"image\": null,\n                \"phone_number\": null,\n                \"gender\": null,\n                \"dob\": null\n            },\n            \"book\": {\n                \"name\": \"Chiến tranh và Hòa bình\",\n                \"image\": null\n            }\n        },\n        {\n            \"id\": 4,\n            \"reservation_date\": \"2026-05-07T20:41:20.880690+07:00\",\n            \"status\": \"CANCELLED\",\n            \"created_at\": \"2026-05-07T20:41:20.880713+07:00\",\n            \"updated_at\": \"2026-05-07T20:47:48.029541+07:00\",\n            \"user\": {\n                \"id\": 1,\n                \"username\": \"admin\",\n                \"email\": \"admin@example.com\",\n                \"is_active\": true,\n                \"first_name\": \"\",\n                \"last_name\": \"\",\n                \"image\": null,\n                \"phone_number\": null,\n                \"gender\": null,\n                \"dob\": null\n            },\n            \"book\": {\n                \"name\": \"Chiến tranh và Hòa bình\",\n                \"image\": null\n            }\n        },\n        {\n            \"id\": 3,\n            \"reservation_date\": \"2026-05-07T20:30:54.257000+07:00\",\n            \"status\": \"CANCELLED\",\n            \"created_at\": \"2026-05-07T20:30:54.257774+07:00\",\n            \"updated_at\": \"2026-05-07T20:49:19.472592+07:00\",\n            \"user\": {\n                \"id\": 1,\n                \"username\": \"admin\",\n                \"email\": \"admin@example.com\",\n                \"is_active\": true,\n                \"first_name\": \"\",\n                \"last_name\": \"\",\n                \"image\": null,\n                \"phone_number\": null,\n                \"gender\": null,\n                \"dob\": null\n            },\n            \"book\": {\n                \"name\": \"Chiến tranh và Hòa bình\",\n                \"image\": null\n            }\n        },\n        {\n            \"id\": 2,\n            \"reservation_date\": \"2026-05-07T17:29:08.292560+07:00\",\n            \"status\": \"CANCELLED\",\n            \"created_at\": \"2026-05-07T17:29:08.296411+07:00\",\n            \"updated_at\": \"2026-05-07T20:54:10.333492+07:00\",\n            \"user\": {\n                \"id\": 2,\n                \"username\": \"abcxyz213\",\n                \"email\": \"abcxyz123@gmail.com\",\n                \"is_active\": true,\n                \"first_name\": \"Ngân\",\n                \"last_name\": \"Kim\",\n                \"image\": null,\n                \"phone_number\": null,\n                \"gender\": null,\n                \"dob\": null\n            },\n            \"book\": {\n                \"name\": \"Chiến tranh và Hòa bình\",\n                \"image\": null\n            }\n        },\n        {\n            \"id\": 1,\n            \"reservation_date\": \"2026-05-07T16:04:53.437826+07:00\",\n            \"status\": \"CANCELLED\",\n            \"created_at\": \"2026-05-07T16:04:53.438310+07:00\",\n            \"updated_at\": \"2026-05-07T20:44:49.925319+07:00\",\n            \"user\": {\n                \"id\": 1,\n                \"username\": \"admin\",\n                \"email\": \"admin@example.com\",\n                \"is_active\": true,\n                \"first_name\": \"\",\n                \"last_name\": \"\",\n                \"image\": null,\n                \"phone_number\": null,\n                \"gender\": null,\n                \"dob\": null\n            },\n            \"book\": {\n                \"name\": \"Chiến tranh và Hòa bình\",\n                \"image\": null\n            }\n        }\n    ]\n}"
+        }
+      ]
+    },
+    {
+      "name": "Specific Reservation",
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "exec": [
+              "const role = pm.environment.get(\"role\");\r",
+              "\r",
+              "pm.test(\"List reservation theo role\", function () {\r",
+              "    const code = pm.response.code;\r",
+              "\r",
+              "    if (role === \"admin\") {\r",
+              "        const res = pm.response.json();\r",
+              "\r",
+              "        pm.expect(code).to.eql(200);\r",
+              "        pm.expect(res).to.have.property(\"results\");\r",
+              "        pm.expect(res.results).to.be.an(\"array\");\r",
+              "\r",
+              "    } else {\r",
+              "        // user bị chặn\r",
+              "        pm.expect(code).to.eql(403);\r",
+              "    }\r",
+              "});"
+            ],
+            "type": "text/javascript",
+            "packages": {},
+            "requests": {}
+          }
+        }
+      ],
+      "request": {
+        "method": "GET",
+        "header": [
+          {
+            "key": "Authorization",
+            "value": "token {{token}}",
+            "type": "text"
+          }
+        ],
+        "url": {
+          "raw": "{{URL_PATH}}/reservations/1/",
+          "host": [
+            "{{URL_PATH}}"
+          ],
+          "path": [
+            "reservations",
+            "1",
+            ""
+          ]
+        }
+      },
+      "response": [
+        {
+          "name": "Specific Reservation With Admin Role",
+          "originalRequest": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "token {{token}}",
+                "type": "text"
+              }
+            ],
+            "url": {
+              "raw": "{{URL_PATH}}/reservations/1/",
+              "host": [
+                "{{URL_PATH}}"
+              ],
+              "path": [
+                "reservations",
+                "1",
+                ""
+              ]
+            }
+          },
+          "status": "OK",
+          "code": 200,
+          "_postman_previewlanguage": null,
+          "header": [
+            {
+              "key": "Date",
+              "value": "Fri, 08 May 2026 03:17:30 GMT"
+            },
+            {
+              "key": "Server",
+              "value": "WSGIServer/0.2 CPython/3.13.9"
+            },
+            {
+              "key": "Content-Type",
+              "value": "application/json"
+            },
+            {
+              "key": "Vary",
+              "value": "Accept, origin"
+            },
+            {
+              "key": "Allow",
+              "value": "GET, PUT, PATCH, HEAD, OPTIONS"
+            },
+            {
+              "key": "Content-Length",
+              "value": "408"
+            },
+            {
+              "key": "X-Frame-Options",
+              "value": "DENY"
+            },
+            {
+              "key": "X-Content-Type-Options",
+              "value": "nosniff"
+            },
+            {
+              "key": "Referrer-Policy",
+              "value": "same-origin"
+            },
+            {
+              "key": "Cross-Origin-Opener-Policy",
+              "value": "same-origin"
+            }
+          ],
+          "cookie": [],
+          "body": "{\n    \"id\": 1,\n    \"reservation_date\": \"2026-05-07T16:04:53.437826+07:00\",\n    \"status\": \"CANCELLED\",\n    \"created_at\": \"2026-05-07T16:04:53.438310+07:00\",\n    \"updated_at\": \"2026-05-07T20:44:49.925319+07:00\",\n    \"user\": {\n        \"id\": 1,\n        \"username\": \"admin\",\n        \"email\": \"admin@example.com\",\n        \"is_active\": true,\n        \"first_name\": \"\",\n        \"last_name\": \"\",\n        \"image\": null,\n        \"phone_number\": null,\n        \"gender\": null,\n        \"dob\": null\n    },\n    \"book\": {\n        \"name\": \"Chiến tranh và Hòa bình\",\n        \"image\": null\n    }\n}"
+        }
+      ]
+    },
+    {
+      "name": "Update Reservation",
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "exec": [
+              "const role = pm.environment.get(\"role\");\r",
+              "const res = pm.response.json();\r",
+              "\r",
+              "pm.test(\"Update reservation status theo role\", function () {\r",
+              "\r",
+              "    if (role === \"admin\") {\r",
+              "        pm.response.to.have.status(202);\r",
+              "        pm.expect(res).to.have.property(\"message\");\r",
+              "\r",
+              "    } else {\r",
+              "        pm.expect(pm.response.code).to.be.oneOf([401, 403]);\r",
+              "    }\r",
+              "});"
+            ],
+            "type": "text/javascript",
+            "packages": {},
+            "requests": {}
+          }
+        }
+      ],
+      "request": {
+        "method": "PATCH",
+        "header": [
+          {
+            "key": "Authorization",
+            "value": "token {{token}}",
+            "type": "text"
+          }
+        ],
+        "body": {
+          "mode": "raw",
+          "raw": "{\r\n  \"status\": \"CONFIRMED\"\r\n}",
+          "options": {
+            "raw": {
+              "language": "json"
+            }
+          }
+        },
+        "url": {
+          "raw": "{{URL_PATH}}/reservations/7/update_status/",
+          "host": [
+            "{{URL_PATH}}"
+          ],
+          "path": [
+            "reservations",
+            "7",
+            "update_status",
+            ""
+          ]
+        }
+      },
+      "response": [
+        {
+          "name": "Update Reservation With Admin Role",
+          "originalRequest": {
+            "method": "PATCH",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "token {{token}}",
+                "type": "text"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\r\n  \"status\": \"CONFIRMED\"\r\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "{{URL_PATH}}/reservations/7/update_status/",
+              "host": [
+                "{{URL_PATH}}"
+              ],
+              "path": [
+                "reservations",
+                "7",
+                "update_status",
+                ""
+              ]
+            }
+          },
+          "status": "Accepted",
+          "code": 202,
+          "_postman_previewlanguage": null,
+          "header": [
+            {
+              "key": "Date",
+              "value": "Fri, 08 May 2026 03:19:05 GMT"
+            },
+            {
+              "key": "Server",
+              "value": "WSGIServer/0.2 CPython/3.13.9"
+            },
+            {
+              "key": "Content-Type",
+              "value": "application/json"
+            },
+            {
+              "key": "Vary",
+              "value": "Accept, origin"
+            },
+            {
+              "key": "Allow",
+              "value": "PATCH, OPTIONS"
+            },
+            {
+              "key": "Content-Length",
+              "value": "53"
+            },
+            {
+              "key": "X-Frame-Options",
+              "value": "DENY"
+            },
+            {
+              "key": "X-Content-Type-Options",
+              "value": "nosniff"
+            },
+            {
+              "key": "Referrer-Policy",
+              "value": "same-origin"
+            },
+            {
+              "key": "Cross-Origin-Opener-Policy",
+              "value": "same-origin"
+            }
+          ],
+          "cookie": [],
+          "body": "{\n    \"message\": \"Cập nhật trạng thái thành công\"\n}"
+        },
+        {
+          "name": "Update Reservation With User Role",
+          "originalRequest": {
+            "method": "PATCH",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "token {{token}}",
+                "type": "text"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\r\n  \"status\": \"CONFIRMED\"\r\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "{{URL_PATH}}/reservations/1/update_status/",
+              "host": [
+                "{{URL_PATH}}"
+              ],
+              "path": [
+                "reservations",
+                "1",
+                "update_status",
+                ""
+              ]
+            }
+          },
+          "status": "Forbidden",
+          "code": 403,
+          "_postman_previewlanguage": null,
+          "header": [
+            {
+              "key": "Date",
+              "value": "Thu, 07 May 2026 10:31:18 GMT"
+            },
+            {
+              "key": "Server",
+              "value": "WSGIServer/0.2 CPython/3.13.9"
+            },
+            {
+              "key": "Content-Type",
+              "value": "application/json"
+            },
+            {
+              "key": "Vary",
+              "value": "Accept, origin"
+            },
+            {
+              "key": "Allow",
+              "value": "PATCH, OPTIONS"
+            },
+            {
+              "key": "Content-Length",
+              "value": "63"
+            },
+            {
+              "key": "X-Frame-Options",
+              "value": "DENY"
+            },
+            {
+              "key": "X-Content-Type-Options",
+              "value": "nosniff"
+            },
+            {
+              "key": "Referrer-Policy",
+              "value": "same-origin"
+            },
+            {
+              "key": "Cross-Origin-Opener-Policy",
+              "value": "same-origin"
+            }
+          ],
+          "cookie": [],
+          "body": "{\n    \"detail\": \"You do not have permission to perform this action.\"\n}"
+        }
+      ]
+    },
+    {
+      "name": "Delete Reservation",
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "exec": [
+              "const role = pm.environment.get(\"role\");\r",
+              "const res = pm.response.json();\r",
+              "\r",
+              "pm.test(\"Hủy reservation (cancel)\", function () {\r",
+              "\r",
+              "    if (role === \"admin\") {\r",
+              "        pm.response.to.have.status(202);\r",
+              "        pm.expect(res).to.have.property(\"message\");\r",
+              "\r",
+              "    } else {\r",
+              "        pm.expect(pm.response.code).to.be.oneOf([401, 403]);\r",
+              "    }\r",
+              "});"
+            ],
+            "type": "text/javascript",
+            "packages": {},
+            "requests": {}
+          }
+        }
+      ],
+      "request": {
+        "method": "PATCH",
+        "header": [
+          {
+            "key": "Authorization",
+            "value": "token {{token}}",
+            "type": "text"
+          }
+        ],
+        "body": {
+          "mode": "raw",
+          "raw": "{\r\n  \"status\": \"CANCELLED\"\r\n}",
+          "options": {
+            "raw": {
+              "language": "json"
+            }
+          }
+        },
+        "url": {
+          "raw": "{{URL_PATH}}/reservations/7/",
+          "host": [
+            "{{URL_PATH}}"
+          ],
+          "path": [
+            "reservations",
+            "7",
+            ""
+          ]
+        }
+      },
+      "response": [
+        {
+          "name": "Delete Reservation With User Role",
+          "originalRequest": {
+            "method": "PATCH",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "token {{token}}",
+                "type": "text"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\r\n  \"status\": \"CANCELLED\"\r\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "{{URL_PATH}}/reservations/1/",
+              "host": [
+                "{{URL_PATH}}"
+              ],
+              "path": [
+                "reservations",
+                "1",
+                ""
+              ]
+            }
+          },
+          "status": "Forbidden",
+          "code": 403,
+          "_postman_previewlanguage": null,
+          "header": [
+            {
+              "key": "Date",
+              "value": "Thu, 07 May 2026 10:32:11 GMT"
+            },
+            {
+              "key": "Server",
+              "value": "WSGIServer/0.2 CPython/3.13.9"
+            },
+            {
+              "key": "Content-Type",
+              "value": "application/json"
+            },
+            {
+              "key": "Vary",
+              "value": "Accept, origin"
+            },
+            {
+              "key": "Allow",
+              "value": "GET, PUT, PATCH, HEAD, OPTIONS"
+            },
+            {
+              "key": "Content-Length",
+              "value": "63"
+            },
+            {
+              "key": "X-Frame-Options",
+              "value": "DENY"
+            },
+            {
+              "key": "X-Content-Type-Options",
+              "value": "nosniff"
+            },
+            {
+              "key": "Referrer-Policy",
+              "value": "same-origin"
+            },
+            {
+              "key": "Cross-Origin-Opener-Policy",
+              "value": "same-origin"
+            }
+          ],
+          "cookie": [],
+          "body": "{\n    \"detail\": \"You do not have permission to perform this action.\"\n}"
+        },
+        {
+          "name": "Delete Reservation With Admin Role",
+          "originalRequest": {
+            "method": "PATCH",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "token {{token}}",
+                "type": "text"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\r\n  \"status\": \"CANCELLED\"\r\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "{{URL_PATH}}/reservations/7/",
+              "host": [
+                "{{URL_PATH}}"
+              ],
+              "path": [
+                "reservations",
+                "7",
+                ""
+              ]
+            }
+          },
+          "status": "OK",
+          "code": 200,
+          "_postman_previewlanguage": null,
+          "header": [
+            {
+              "key": "Date",
+              "value": "Fri, 08 May 2026 03:32:05 GMT"
+            },
+            {
+              "key": "Server",
+              "value": "WSGIServer/0.2 CPython/3.13.9"
+            },
+            {
+              "key": "Content-Type",
+              "value": "application/json"
+            },
+            {
+              "key": "Vary",
+              "value": "Accept, origin"
+            },
+            {
+              "key": "Allow",
+              "value": "GET, PUT, PATCH, HEAD, OPTIONS"
+            },
+            {
+              "key": "Content-Length",
+              "value": "408"
+            },
+            {
+              "key": "X-Frame-Options",
+              "value": "DENY"
+            },
+            {
+              "key": "X-Content-Type-Options",
+              "value": "nosniff"
+            },
+            {
+              "key": "Referrer-Policy",
+              "value": "same-origin"
+            },
+            {
+              "key": "Cross-Origin-Opener-Policy",
+              "value": "same-origin"
+            }
+          ],
+          "cookie": [],
+          "body": "{\n    \"id\": 7,\n    \"reservation_date\": \"2026-05-08T10:15:01.011930+07:00\",\n    \"status\": \"CANCELLED\",\n    \"created_at\": \"2026-05-08T10:15:01.012106+07:00\",\n    \"updated_at\": \"2026-05-08T10:32:05.503131+07:00\",\n    \"user\": {\n        \"id\": 1,\n        \"username\": \"admin\",\n        \"email\": \"admin@example.com\",\n        \"is_active\": true,\n        \"first_name\": \"\",\n        \"last_name\": \"\",\n        \"image\": null,\n        \"phone_number\": null,\n        \"gender\": null,\n        \"dob\": null\n    },\n    \"book\": {\n        \"name\": \"Chiến tranh và Hòa bình\",\n        \"image\": null\n    }\n}"
+        }
+      ]
+    }
+  ],
+  "event": [
+    {
+      "listen": "prerequest",
+      "script": {
+        "type": "text/javascript",
+        "packages": {},
+        "requests": {},
+        "exec": [
+          "role = pm.environment.set(\"role\", \"admin\")\r",
+          "role = pm.environment.get(\"role\");\r",
+          "if (role === \"admin\") {\r",
+          "    pm.environment.set(\"token\", pm.environment.get(\"admin_token\"));\r",
+          "} else {\r",
+          "    pm.environment.set(\"token\", pm.environment.get(\"user_token\"))\r",
+          "}"
+        ]
+      }
+    },
+    {
+      "listen": "test",
+      "script": {
+        "type": "text/javascript",
+        "packages": {},
+        "requests": {},
+        "exec": [
+          "pm.test(\"Status code theo role + method\", function () {\r",
+          "    const role = pm.environment.get(\"role\");\r",
+          "    const code = pm.response.code;\r",
+          "    const method = pm.request.method;\r",
+          "\r",
+          "    if (method === \"GET\") {\r",
+          "        pm.expect(code).to.be.oneOf([200, 404]);\r",
+          "    } else {\r",
+          "        if (role === \"admin\") {\r",
+          "            pm.expect(code).to.be.oneOf([200, 201, 204]);\r",
+          "        } else {\r",
+          "            pm.expect(code).to.be.oneOf([401, 403]);\r",
+          "        }\r",
+          "    }\r",
+          "});"
+        ]
+      }
+    }
+  ]
+}

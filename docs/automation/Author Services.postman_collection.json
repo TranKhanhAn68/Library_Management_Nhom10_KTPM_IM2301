@@ -1,0 +1,968 @@
+{
+  "info": {
+    "_postman_id": "0e056241-10b9-46ba-bb5e-da4ee3686748",
+    "name": "Author Services",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+    "_exporter_id": "54519871"
+  },
+  "item": [
+    {
+      "name": "List Authors",
+      "event": [
+        {
+          "listen": "prerequest",
+          "script": {
+            "exec": [
+              ""
+            ],
+            "type": "text/javascript",
+            "packages": {},
+            "requests": {}
+          }
+        },
+        {
+          "listen": "test",
+          "script": {
+            "exec": [
+              "pm.test(\"Check danh sách author theo role\", function () {\r",
+              "    const role = pm.environment.get(\"role\");\r",
+              "    const res = pm.response.json();\r",
+              "\r",
+              "    pm.response.to.have.status(200);\r",
+              "\r",
+              "    pm.expect(res).to.have.property(\"results\");\r",
+              "\r",
+              "    const authors = res.results;\r",
+              "\r",
+              "    pm.expect(authors).to.be.an(\"array\");\r",
+              "\r",
+              "    if (role === \"admin\") {\r",
+              "        pm.expect(authors.length).to.be.greaterThan(0);\r",
+              "    } \r",
+              "});"
+            ],
+            "type": "text/javascript",
+            "packages": {},
+            "requests": {}
+          }
+        }
+      ],
+      "request": {
+        "method": "GET",
+        "header": [
+          {
+            "key": "Authorization",
+            "value": "token {{token}}",
+            "type": "text"
+          }
+        ],
+        "url": {
+          "raw": "{{URL_PATH}}/authors/",
+          "host": [
+            "{{URL_PATH}}"
+          ],
+          "path": [
+            "authors",
+            ""
+          ]
+        }
+      },
+      "response": [
+        {
+          "name": "List Authors With Admin Role",
+          "originalRequest": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "token {{token}}",
+                "type": "text"
+              }
+            ],
+            "url": {
+              "raw": "{{URL_PATH}}/authors/",
+              "host": [
+                "{{URL_PATH}}"
+              ],
+              "path": [
+                "authors",
+                ""
+              ]
+            }
+          },
+          "status": "OK",
+          "code": 200,
+          "_postman_previewlanguage": null,
+          "header": [
+            {
+              "key": "Date",
+              "value": "Tue, 05 May 2026 16:44:41 GMT"
+            },
+            {
+              "key": "Server",
+              "value": "WSGIServer/0.2 CPython/3.13.9"
+            },
+            {
+              "key": "Content-Type",
+              "value": "application/json"
+            },
+            {
+              "key": "Vary",
+              "value": "Accept, origin"
+            },
+            {
+              "key": "Allow",
+              "value": "GET, POST, HEAD, OPTIONS"
+            },
+            {
+              "key": "Content-Length",
+              "value": "3594"
+            },
+            {
+              "key": "X-Frame-Options",
+              "value": "DENY"
+            },
+            {
+              "key": "X-Content-Type-Options",
+              "value": "nosniff"
+            },
+            {
+              "key": "Referrer-Policy",
+              "value": "same-origin"
+            },
+            {
+              "key": "Cross-Origin-Opener-Policy",
+              "value": "same-origin"
+            }
+          ],
+          "cookie": [],
+          "body": "[\n    {\n        \"id\": 1,\n        \"name\": \"Leo Tolstoy\",\n        \"date_of_birth\": \"1828-09-09\",\n        \"date_of_death\": \"1910-11-20\",\n        \"biography\": \"Nhà văn Nga nổi tiếng với các tác phẩm kinh điển như Chiến tranh và Hòa bình.\",\n        \"image\": null,\n        \"description\": \"Tác giả tiêu biểu của tiểu thuyết kinh điển.\"\n    },\n    {\n        \"id\": 2,\n        \"name\": \"Haruki Murakami\",\n        \"date_of_birth\": \"1949-01-12\",\n        \"date_of_death\": null,\n        \"biography\": \"Nhà văn Nhật Bản nổi tiếng với phong cách siêu thực và hiện đại.\",\n        \"image\": null,\n        \"description\": \"Đại diện tiêu biểu cho tiểu thuyết hiện đại.\"\n    },\n    {\n        \"id\": 3,\n        \"name\": \"Gabriel García Márquez\",\n        \"date_of_birth\": \"1927-03-06\",\n        \"date_of_death\": \"2014-04-17\",\n        \"biography\": \"Nhà văn Colombia, người tiên phong của chủ nghĩa hiện thực huyền ảo.\",\n        \"image\": null,\n        \"description\": \"Đại diện văn học nước ngoài.\"\n    },\n    {\n        \"id\": 4,\n        \"name\": \"Nam Cao\",\n        \"date_of_birth\": \"1915-10-29\",\n        \"date_of_death\": \"1951-11-30\",\n        \"biography\": \"Nhà văn Việt Nam nổi tiếng với các tác phẩm hiện thực phê phán.\",\n        \"image\": null,\n        \"description\": \"Đại diện văn học Việt Nam.\"\n    },\n    {\n        \"id\": 5,\n        \"name\": \"Agatha Christie\",\n        \"date_of_birth\": \"1890-09-15\",\n        \"date_of_death\": \"1976-01-12\",\n        \"biography\": \"Nữ hoàng trinh thám với hàng loạt tác phẩm nổi tiếng.\",\n        \"image\": null,\n        \"description\": \"Tác giả tiêu biểu thể loại trinh thám.\"\n    },\n    {\n        \"id\": 6,\n        \"name\": \"Isaac Asimov\",\n        \"date_of_birth\": \"1920-01-02\",\n        \"date_of_death\": \"1992-04-06\",\n        \"biography\": \"Nhà văn khoa học viễn tưởng nổi tiếng với series Foundation.\",\n        \"image\": null,\n        \"description\": \"Đại diện khoa học viễn tưởng.\"\n    },\n    {\n        \"id\": 7,\n        \"name\": \"J. R. R. Tolkien\",\n        \"date_of_birth\": \"1892-01-03\",\n        \"date_of_death\": \"1973-09-02\",\n        \"biography\": \"Tác giả của Chúa tể những chiếc nhẫn.\",\n        \"image\": null,\n        \"description\": \"Đại diện thể loại fantasy.\"\n    },\n    {\n        \"id\": 8,\n        \"name\": \"Stephen King\",\n        \"date_of_birth\": \"1947-09-21\",\n        \"date_of_death\": null,\n        \"biography\": \"Nhà văn Mỹ nổi tiếng với các tác phẩm kinh dị.\",\n        \"image\": null,\n        \"description\": \"Ông hoàng truyện kinh dị.\"\n    },\n    {\n        \"id\": 9,\n        \"name\": \"Nicholas Sparks\",\n        \"date_of_birth\": \"1965-12-31\",\n        \"date_of_death\": null,\n        \"biography\": \"Tác giả nổi tiếng với các tiểu thuyết tình cảm.\",\n        \"image\": null,\n        \"description\": \"Đại diện thể loại lãng mạn.\"\n    },\n    {\n        \"id\": 10,\n        \"name\": \"Roald Dahl\",\n        \"date_of_birth\": \"1916-09-13\",\n        \"date_of_death\": \"1990-11-23\",\n        \"biography\": \"Nhà văn nổi tiếng với truyện thiếu nhi như Charlie và nhà máy sô-cô-la.\",\n        \"image\": null,\n        \"description\": \"Tác giả sách thiếu nhi.\"\n    },\n    {\n        \"id\": 11,\n        \"name\": \"Michelle Obama\",\n        \"date_of_birth\": \"1964-01-17\",\n        \"date_of_death\": null,\n        \"biography\": \"Cựu Đệ nhất phu nhân Mỹ, tác giả hồi ký Becoming.\",\n        \"image\": null,\n        \"description\": \"Đại diện hồi ký - tự truyện.\"\n    },\n    {\n        \"id\": 12,\n        \"name\": \"Dale Carnegie\",\n        \"date_of_birth\": \"1888-11-24\",\n        \"date_of_death\": \"1955-11-01\",\n        \"biography\": \"Tác giả sách kỹ năng nổi tiếng.\",\n        \"image\": null,\n        \"description\": \"Đại diện sách kỹ năng sống.\"\n    },\n    {\n        \"id\": 13,\n        \"name\": \"Robert Kiyosaki\",\n        \"date_of_birth\": \"1947-04-08\",\n        \"date_of_death\": null,\n        \"biography\": \"Tác giả Cha giàu Cha nghèo.\",\n        \"image\": null,\n        \"description\": \"Đại diện sách kinh doanh.\"\n    },\n    {\n        \"id\": 14,\n        \"name\": \"Yuval Noah Harari\",\n        \"date_of_birth\": \"1976-02-24\",\n        \"date_of_death\": null,\n        \"biography\": \"Nhà sử học nổi tiếng với Sapiens.\",\n        \"image\": null,\n        \"description\": \"Đại diện sách lịch sử.\"\n    },\n    {\n        \"id\": 15,\n        \"name\": \"Stephen Hawking\",\n        \"date_of_birth\": \"1942-01-08\",\n        \"date_of_death\": \"2018-03-14\",\n        \"biography\": \"Nhà vật lý lý thuyết nổi tiếng.\",\n        \"image\": null,\n        \"description\": \"Đại diện sách khoa học phổ thông.\"\n    }\n]"
+        }
+      ]
+    },
+    {
+      "name": "Specific Author",
+      "event": [
+        {
+          "listen": "prerequest",
+          "script": {
+            "exec": [
+              ""
+            ],
+            "type": "text/javascript",
+            "packages": {},
+            "requests": {}
+          }
+        },
+        {
+          "listen": "test",
+          "script": {
+            "exec": [
+              "const role = pm.environment.get(\"role\");\r",
+              "const code = pm.response.code;\r",
+              "\r",
+              "pm.test(\"Lấy author cụ thể\", function () {\r",
+              "    const author = pm.response.json();\r",
+              "\r",
+              "    pm.expect(author).to.be.an('object');\r",
+              "    pm.expect(author).to.have.property('id');\r",
+              "    pm.expect(author).to.have.property('name');\r",
+              "\r",
+              "    // nếu API bạn có thêm field thì giữ, không thì xoá\r",
+              "    pm.expect(author).to.have.property('is_active');\r",
+              "});\r",
+              "\r",
+              "pm.test(\"Lấy author đã bị inactive\", function () {\r",
+              "    if (role === \"admin\") {\r",
+              "        pm.expect(code).to.eql(200);\r",
+              "    } else {\r",
+              "        pm.expect(code).to.eql(404);\r",
+              "    }\r",
+              "});"
+            ],
+            "type": "text/javascript",
+            "packages": {},
+            "requests": {}
+          }
+        }
+      ],
+      "request": {
+        "method": "GET",
+        "header": [
+          {
+            "key": "Authorization",
+            "value": "token {{token}}",
+            "type": "text"
+          }
+        ],
+        "url": {
+          "raw": "{{URL_PATH}}/authors/2/",
+          "host": [
+            "{{URL_PATH}}"
+          ],
+          "path": [
+            "authors",
+            "2",
+            ""
+          ]
+        }
+      },
+      "response": [
+        {
+          "name": "Specific Author With Admin Role",
+          "originalRequest": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{token}}",
+                "type": "text"
+              }
+            ],
+            "url": {
+              "raw": "{{URL_PATH}}/authors/2",
+              "host": [
+                "{{URL_PATH}}"
+              ],
+              "path": [
+                "authors",
+                "2"
+              ]
+            }
+          },
+          "status": "OK",
+          "code": 200,
+          "_postman_previewlanguage": null,
+          "header": [
+            {
+              "key": "Date",
+              "value": "Tue, 05 May 2026 17:13:12 GMT"
+            },
+            {
+              "key": "Server",
+              "value": "WSGIServer/0.2 CPython/3.13.9"
+            },
+            {
+              "key": "Content-Type",
+              "value": "application/json"
+            },
+            {
+              "key": "Vary",
+              "value": "Accept, origin"
+            },
+            {
+              "key": "Allow",
+              "value": "GET, PUT, PATCH, DELETE, HEAD, OPTIONS"
+            },
+            {
+              "key": "Content-Length",
+              "value": "275"
+            },
+            {
+              "key": "X-Frame-Options",
+              "value": "DENY"
+            },
+            {
+              "key": "X-Content-Type-Options",
+              "value": "nosniff"
+            },
+            {
+              "key": "Referrer-Policy",
+              "value": "same-origin"
+            },
+            {
+              "key": "Cross-Origin-Opener-Policy",
+              "value": "same-origin"
+            }
+          ],
+          "cookie": [],
+          "body": "{\n    \"id\": 2,\n    \"name\": \"Haruki Murakami\",\n    \"date_of_birth\": \"1949-01-12\",\n    \"date_of_death\": null,\n    \"biography\": \"Nhà văn Nhật Bản nổi tiếng với phong cách siêu thực và hiện đại.\",\n    \"image\": null,\n    \"description\": \"Đại diện tiêu biểu cho tiểu thuyết hiện đại.\"\n}"
+        }
+      ]
+    },
+    {
+      "name": "Create Author",
+      "event": [
+        {
+          "listen": "prerequest",
+          "script": {
+            "exec": [
+              "const payload = {\r",
+              "    \"name\": \"Nguyễn Nhật Ánh\",\r",
+              "    \"date_of_birth\": \"1955-05-07\",\r",
+              "    \"biography\": \"Nhà văn nổi tiếng Việt Nam\"\r",
+              "};\r",
+              "\r",
+              "pm.environment.set(\"payload\", JSON.stringify(payload));"
+            ],
+            "type": "text/javascript",
+            "packages": {},
+            "requests": {}
+          }
+        },
+        {
+          "listen": "test",
+          "script": {
+            "exec": [
+              "if (pm.environment.get(\"role\") === \"admin\") {\r",
+              "    pm.test(\"Create author thành công\", function () {\r",
+              "        const res = pm.response.json();\r",
+              "\r",
+              "        pm.response.to.have.status(201);\r",
+              "\r",
+              "        pm.expect(res).to.have.property(\"message\");\r",
+              "        pm.expect(res).to.have.property(\"data\");\r",
+              "\r",
+              "        pm.expect(res.data).to.have.property(\"id\");\r",
+              "        pm.expect(res.data).to.have.property(\"name\");\r",
+              "    });\r",
+              "} else {\r",
+              "    pm.test(\"User không được tạo author\", function () {\r",
+              "        pm.expect(pm.response.code).to.be.oneOf([401, 403]);\r",
+              "    });\r",
+              "}"
+            ],
+            "type": "text/javascript",
+            "packages": {},
+            "requests": {}
+          }
+        }
+      ],
+      "request": {
+        "method": "POST",
+        "header": [
+          {
+            "key": "Authorization",
+            "value": "token {{token}}",
+            "type": "text"
+          }
+        ],
+        "body": {
+          "mode": "raw",
+          "raw": "{{payload}}",
+          "options": {
+            "raw": {
+              "language": "json"
+            }
+          }
+        },
+        "url": {
+          "raw": "{{URL_PATH}}/authors/",
+          "host": [
+            "{{URL_PATH}}"
+          ],
+          "path": [
+            "authors",
+            ""
+          ]
+        }
+      },
+      "response": [
+        {
+          "name": "Create Author With Admin Role",
+          "originalRequest": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "token {{token}}",
+                "type": "text"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{{payload}}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "{{URL_PATH}}/authors/",
+              "host": [
+                "{{URL_PATH}}"
+              ],
+              "path": [
+                "authors",
+                ""
+              ]
+            }
+          },
+          "status": "Created",
+          "code": 201,
+          "_postman_previewlanguage": null,
+          "header": [
+            {
+              "key": "Date",
+              "value": "Thu, 07 May 2026 17:06:02 GMT"
+            },
+            {
+              "key": "Server",
+              "value": "WSGIServer/0.2 CPython/3.13.9"
+            },
+            {
+              "key": "Content-Type",
+              "value": "application/json"
+            },
+            {
+              "key": "Vary",
+              "value": "Accept, origin"
+            },
+            {
+              "key": "Allow",
+              "value": "GET, POST, HEAD, OPTIONS"
+            },
+            {
+              "key": "Content-Length",
+              "value": "216"
+            },
+            {
+              "key": "X-Frame-Options",
+              "value": "DENY"
+            },
+            {
+              "key": "X-Content-Type-Options",
+              "value": "nosniff"
+            },
+            {
+              "key": "Referrer-Policy",
+              "value": "same-origin"
+            },
+            {
+              "key": "Cross-Origin-Opener-Policy",
+              "value": "same-origin"
+            }
+          ],
+          "cookie": [],
+          "body": "{\n    \"message\": \"Tạo mới thành công\",\n    \"data\": {\n        \"id\": 18,\n        \"name\": \"Nguyễn Nhật Ánh\",\n        \"date_of_birth\": \"1955-05-07\",\n        \"date_of_death\": null,\n        \"biography\": \"Nhà văn nổi tiếng Việt Nam\",\n        \"image\": null,\n        \"description\": null\n    }\n}"
+        },
+        {
+          "name": "Create Author With User Role",
+          "originalRequest": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "token {{token}}",
+                "type": "text"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{{payload}}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "{{URL_PATH}}/authors/",
+              "host": [
+                "{{URL_PATH}}"
+              ],
+              "path": [
+                "authors",
+                ""
+              ]
+            }
+          },
+          "status": "Forbidden",
+          "code": 403,
+          "_postman_previewlanguage": null,
+          "header": [
+            {
+              "key": "Date",
+              "value": "Thu, 07 May 2026 17:12:26 GMT"
+            },
+            {
+              "key": "Server",
+              "value": "WSGIServer/0.2 CPython/3.13.9"
+            },
+            {
+              "key": "Content-Type",
+              "value": "application/json"
+            },
+            {
+              "key": "Vary",
+              "value": "Accept, origin"
+            },
+            {
+              "key": "Allow",
+              "value": "GET, POST, HEAD, OPTIONS"
+            },
+            {
+              "key": "Content-Length",
+              "value": "63"
+            },
+            {
+              "key": "X-Frame-Options",
+              "value": "DENY"
+            },
+            {
+              "key": "X-Content-Type-Options",
+              "value": "nosniff"
+            },
+            {
+              "key": "Referrer-Policy",
+              "value": "same-origin"
+            },
+            {
+              "key": "Cross-Origin-Opener-Policy",
+              "value": "same-origin"
+            }
+          ],
+          "cookie": [],
+          "body": "{\n    \"detail\": \"You do not have permission to perform this action.\"\n}"
+        }
+      ]
+    },
+    {
+      "name": "Update Author",
+      "event": [
+        {
+          "listen": "prerequest",
+          "script": {
+            "exec": [
+              "const payload = {\r",
+              "    \"name\": \"Nguyễn Nhật Ánh (Updated)\",\r",
+              "    \"date_of_birth\": \"1955-05-07\",\r",
+              "    \"biography\": \"Nhà văn nổi tiếng\"\r",
+              "};\r",
+              "\r",
+              "pm.environment.set(\"payload\", JSON.stringify(payload));"
+            ],
+            "type": "text/javascript",
+            "packages": {},
+            "requests": {}
+          }
+        },
+        {
+          "listen": "test",
+          "script": {
+            "exec": [
+              "if (pm.environment.get(\"role\") === \"admin\") {\r",
+              "    pm.test(\"Update author thành công\", function () {\r",
+              "        const res = pm.response.json();\r",
+              "\r",
+              "        pm.response.to.have.status(200);\r",
+              "        pm.expect(res).to.have.property(\"message\");\r",
+              "    });\r",
+              "} else {\r",
+              "    pm.test(\"User không được update author\", function () {\r",
+              "        pm.expect(pm.response.code).to.be.oneOf([401, 403]);\r",
+              "    });\r",
+              "}"
+            ],
+            "type": "text/javascript",
+            "packages": {},
+            "requests": {}
+          }
+        }
+      ],
+      "request": {
+        "method": "PATCH",
+        "header": [
+          {
+            "key": "Authorization",
+            "value": "token {{token}}",
+            "type": "text"
+          }
+        ],
+        "body": {
+          "mode": "raw",
+          "raw": "{{payload}}",
+          "options": {
+            "raw": {
+              "language": "json"
+            }
+          }
+        },
+        "url": {
+          "raw": "{{URL_PATH}}/authors/18/",
+          "host": [
+            "{{URL_PATH}}"
+          ],
+          "path": [
+            "authors",
+            "18",
+            ""
+          ]
+        }
+      },
+      "response": [
+        {
+          "name": "Update Author With Admin Role",
+          "originalRequest": {
+            "method": "PATCH",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "token {{token}}",
+                "type": "text"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{{payload}}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "{{URL_PATH}}/authors/18/",
+              "host": [
+                "{{URL_PATH}}"
+              ],
+              "path": [
+                "authors",
+                "18",
+                ""
+              ]
+            }
+          },
+          "status": "OK",
+          "code": 200,
+          "_postman_previewlanguage": null,
+          "header": [
+            {
+              "key": "Date",
+              "value": "Thu, 07 May 2026 17:07:21 GMT"
+            },
+            {
+              "key": "Server",
+              "value": "WSGIServer/0.2 CPython/3.13.9"
+            },
+            {
+              "key": "Content-Type",
+              "value": "application/json"
+            },
+            {
+              "key": "Vary",
+              "value": "Accept, origin"
+            },
+            {
+              "key": "Allow",
+              "value": "GET, PUT, PATCH, DELETE, HEAD, OPTIONS"
+            },
+            {
+              "key": "Content-Length",
+              "value": "39"
+            },
+            {
+              "key": "X-Frame-Options",
+              "value": "DENY"
+            },
+            {
+              "key": "X-Content-Type-Options",
+              "value": "nosniff"
+            },
+            {
+              "key": "Referrer-Policy",
+              "value": "same-origin"
+            },
+            {
+              "key": "Cross-Origin-Opener-Policy",
+              "value": "same-origin"
+            }
+          ],
+          "cookie": [],
+          "body": "{\n    \"message\": \"Cập nhật thành công\"\n}"
+        },
+        {
+          "name": "Update Author With User Role",
+          "originalRequest": {
+            "method": "PATCH",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "token {{token}}",
+                "type": "text"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{{payload}}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "{{URL_PATH}}/authors/18/",
+              "host": [
+                "{{URL_PATH}}"
+              ],
+              "path": [
+                "authors",
+                "18",
+                ""
+              ]
+            }
+          },
+          "status": "Forbidden",
+          "code": 403,
+          "_postman_previewlanguage": null,
+          "header": [
+            {
+              "key": "Date",
+              "value": "Thu, 07 May 2026 17:27:11 GMT"
+            },
+            {
+              "key": "Server",
+              "value": "WSGIServer/0.2 CPython/3.13.9"
+            },
+            {
+              "key": "Content-Type",
+              "value": "application/json"
+            },
+            {
+              "key": "Vary",
+              "value": "Accept, origin"
+            },
+            {
+              "key": "Allow",
+              "value": "GET, PUT, PATCH, DELETE, HEAD, OPTIONS"
+            },
+            {
+              "key": "Content-Length",
+              "value": "63"
+            },
+            {
+              "key": "X-Frame-Options",
+              "value": "DENY"
+            },
+            {
+              "key": "X-Content-Type-Options",
+              "value": "nosniff"
+            },
+            {
+              "key": "Referrer-Policy",
+              "value": "same-origin"
+            },
+            {
+              "key": "Cross-Origin-Opener-Policy",
+              "value": "same-origin"
+            }
+          ],
+          "cookie": [],
+          "body": "{\n    \"detail\": \"You do not have permission to perform this action.\"\n}"
+        }
+      ]
+    },
+    {
+      "name": "Delete Author",
+      "request": {
+        "method": "DELETE",
+        "header": [
+          {
+            "key": "Authorization",
+            "value": "token {{token}}",
+            "type": "text"
+          }
+        ],
+        "url": {
+          "raw": "{{URL_PATH}}/authors/16/",
+          "host": [
+            "{{URL_PATH}}"
+          ],
+          "path": [
+            "authors",
+            "16",
+            ""
+          ]
+        }
+      },
+      "response": [
+        {
+          "name": "Delete Author With Admin Role",
+          "originalRequest": {
+            "method": "DELETE",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "token {{token}}",
+                "type": "text"
+              }
+            ],
+            "url": {
+              "raw": "{{URL_PATH}}/authors/16/",
+              "host": [
+                "{{URL_PATH}}"
+              ],
+              "path": [
+                "authors",
+                "16",
+                ""
+              ]
+            }
+          },
+          "status": "No Content",
+          "code": 204,
+          "_postman_previewlanguage": null,
+          "header": [
+            {
+              "key": "Date",
+              "value": "Wed, 06 May 2026 14:28:05 GMT"
+            },
+            {
+              "key": "Server",
+              "value": "WSGIServer/0.2 CPython/3.13.9"
+            },
+            {
+              "key": "Vary",
+              "value": "Accept, origin"
+            },
+            {
+              "key": "Allow",
+              "value": "GET, PUT, PATCH, DELETE, HEAD, OPTIONS"
+            },
+            {
+              "key": "Content-Length",
+              "value": "0"
+            },
+            {
+              "key": "X-Frame-Options",
+              "value": "DENY"
+            },
+            {
+              "key": "X-Content-Type-Options",
+              "value": "nosniff"
+            },
+            {
+              "key": "Referrer-Policy",
+              "value": "same-origin"
+            },
+            {
+              "key": "Cross-Origin-Opener-Policy",
+              "value": "same-origin"
+            }
+          ],
+          "cookie": [],
+          "body": null
+        },
+        {
+          "name": "Delete Author With User Role",
+          "originalRequest": {
+            "method": "DELETE",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "token {{token}}",
+                "type": "text"
+              }
+            ],
+            "url": {
+              "raw": "{{URL_PATH}}/authors/16/",
+              "host": [
+                "{{URL_PATH}}"
+              ],
+              "path": [
+                "authors",
+                "16",
+                ""
+              ]
+            }
+          },
+          "status": "Forbidden",
+          "code": 403,
+          "_postman_previewlanguage": null,
+          "header": [
+            {
+              "key": "Date",
+              "value": "Wed, 06 May 2026 17:35:54 GMT"
+            },
+            {
+              "key": "Server",
+              "value": "WSGIServer/0.2 CPython/3.13.9"
+            },
+            {
+              "key": "Content-Type",
+              "value": "application/json"
+            },
+            {
+              "key": "Vary",
+              "value": "Accept, origin"
+            },
+            {
+              "key": "Allow",
+              "value": "GET, PUT, PATCH, DELETE, HEAD, OPTIONS"
+            },
+            {
+              "key": "Content-Length",
+              "value": "63"
+            },
+            {
+              "key": "X-Frame-Options",
+              "value": "DENY"
+            },
+            {
+              "key": "X-Content-Type-Options",
+              "value": "nosniff"
+            },
+            {
+              "key": "Referrer-Policy",
+              "value": "same-origin"
+            },
+            {
+              "key": "Cross-Origin-Opener-Policy",
+              "value": "same-origin"
+            }
+          ],
+          "cookie": [],
+          "body": "{\n    \"detail\": \"You do not have permission to perform this action.\"\n}"
+        }
+      ]
+    }
+  ],
+  "event": [
+    {
+      "listen": "prerequest",
+      "script": {
+        "type": "text/javascript",
+        "packages": {},
+        "requests": {},
+        "exec": [
+          "role = pm.environment.set(\"role\", \"user\")\r",
+          "role = pm.environment.get(\"role\");\r",
+          "if (role === \"admin\") {\r",
+          "    pm.environment.set(\"token\", pm.environment.get(\"admin_token\"));\r",
+          "} else {\r",
+          "    pm.environment.set(\"token\", pm.environment.get(\"user_token\"))\r",
+          "}\r",
+          "\r",
+          ""
+        ]
+      }
+    },
+    {
+      "listen": "test",
+      "script": {
+        "type": "text/javascript",
+        "packages": {},
+        "requests": {},
+        "exec": [
+          "pm.test(\"Status code theo role + method\", function () {\r",
+          "    const role = pm.environment.get(\"role\");\r",
+          "    const code = pm.response.code;\r",
+          "    const method = pm.request.method;\r",
+          "\r",
+          "    if (method === \"GET\") {\r",
+          "        pm.expect(code).to.be.oneOf([200, 404]);\r",
+          "    } else {\r",
+          "        if (role === \"admin\") {\r",
+          "            pm.expect(code).to.be.oneOf([200, 201, 204]);\r",
+          "        } else {\r",
+          "            pm.expect(code).to.be.oneOf([401, 403]);\r",
+          "        }\r",
+          "    }\r",
+          "});"
+        ]
+      }
+    }
+  ]
+}

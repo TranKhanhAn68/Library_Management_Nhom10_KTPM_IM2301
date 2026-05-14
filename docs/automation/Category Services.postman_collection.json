@@ -1,0 +1,1231 @@
+{
+  "info": {
+    "_postman_id": "7a05b457-8bcc-417a-aee1-d023d909d50b",
+    "name": "Category Services",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+    "_exporter_id": "54519871"
+  },
+  "item": [
+    {
+      "name": "Search Category",
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "exec": [
+              "const categories = pm.response.json();\r",
+              "const query = pm.request.url.query.get(\"search\");\r",
+              "\r",
+              "pm.test(\"Trả về danh sách Categories\", function () {\r",
+              "    pm.expect(categories).to.be.an(\"array\");\r",
+              "});\r",
+              "\r",
+              "pm.test(\"Có kết quả chứa name\", function () {\r",
+              "    const found = categories.some(cat =>\r",
+              "        cat.name.includes(query)\r",
+              "    );\r",
+              "\r",
+              "    pm.expect(found).to.be.true;\r",
+              "});"
+            ],
+            "type": "text/javascript",
+            "packages": {},
+            "requests": {}
+          }
+        }
+      ],
+      "request": {
+        "method": "GET",
+        "header": [
+          {
+            "key": "Authorization",
+            "value": "token {{token}}",
+            "type": "text"
+          }
+        ],
+        "url": {
+          "raw": "{{URL_PATH}}/categories/?search=ABCDEF",
+          "host": [
+            "{{URL_PATH}}"
+          ],
+          "path": [
+            "categories",
+            ""
+          ],
+          "query": [
+            {
+              "key": "search",
+              "value": "ABCDEF"
+            }
+          ]
+        }
+      },
+      "response": [
+        {
+          "name": "Search Category Success",
+          "originalRequest": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "token {{token}}",
+                "type": "text"
+              }
+            ],
+            "url": {
+              "raw": "{{URL_PATH}}/categories/?search=Tiểu thuyết",
+              "host": [
+                "{{URL_PATH}}"
+              ],
+              "path": [
+                "categories",
+                ""
+              ],
+              "query": [
+                {
+                  "key": "search",
+                  "value": "Tiểu thuyết"
+                }
+              ]
+            }
+          },
+          "status": "OK",
+          "code": 200,
+          "_postman_previewlanguage": null,
+          "header": [
+            {
+              "key": "Date",
+              "value": "Mon, 04 May 2026 18:46:01 GMT"
+            },
+            {
+              "key": "Server",
+              "value": "WSGIServer/0.2 CPython/3.13.2"
+            },
+            {
+              "key": "Content-Type",
+              "value": "application/json"
+            },
+            {
+              "key": "Vary",
+              "value": "Accept, origin"
+            },
+            {
+              "key": "Allow",
+              "value": "GET, POST, HEAD, OPTIONS"
+            },
+            {
+              "key": "Content-Length",
+              "value": "316"
+            },
+            {
+              "key": "X-Frame-Options",
+              "value": "DENY"
+            },
+            {
+              "key": "X-Content-Type-Options",
+              "value": "nosniff"
+            },
+            {
+              "key": "Referrer-Policy",
+              "value": "same-origin"
+            },
+            {
+              "key": "Cross-Origin-Opener-Policy",
+              "value": "same-origin"
+            }
+          ],
+          "cookie": [],
+          "body": "[\n    {\n        \"id\": 2,\n        \"name\": \"Tiểu thuyết hiện đại\",\n        \"created_at\": \"2026-03-17T14:36:34.642572+07:00\",\n        \"updated_at\": \"2026-03-17T14:36:34.642599+07:00\",\n        \"active\": true\n    },\n    {\n        \"id\": 1,\n        \"name\": \"Tiểu thuyết kinh điển\",\n        \"created_at\": \"2026-03-17T14:36:34.631099+07:00\",\n        \"updated_at\": \"2026-04-21T17:57:10.987930+07:00\",\n        \"active\": true\n    }\n]"
+        },
+        {
+          "name": "Search Category Failed",
+          "originalRequest": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "token {{token}}",
+                "type": "text"
+              }
+            ],
+            "url": {
+              "raw": "{{URL_PATH}}/categories/?search=ABCDEF",
+              "host": [
+                "{{URL_PATH}}"
+              ],
+              "path": [
+                "categories",
+                ""
+              ],
+              "query": [
+                {
+                  "key": "search",
+                  "value": "ABCDEF"
+                }
+              ]
+            }
+          },
+          "status": "OK",
+          "code": 200,
+          "_postman_previewlanguage": null,
+          "header": [
+            {
+              "key": "Date",
+              "value": "Mon, 04 May 2026 18:46:47 GMT"
+            },
+            {
+              "key": "Server",
+              "value": "WSGIServer/0.2 CPython/3.13.2"
+            },
+            {
+              "key": "Content-Type",
+              "value": "application/json"
+            },
+            {
+              "key": "Vary",
+              "value": "Accept, origin"
+            },
+            {
+              "key": "Allow",
+              "value": "GET, POST, HEAD, OPTIONS"
+            },
+            {
+              "key": "Content-Length",
+              "value": "2"
+            },
+            {
+              "key": "X-Frame-Options",
+              "value": "DENY"
+            },
+            {
+              "key": "X-Content-Type-Options",
+              "value": "nosniff"
+            },
+            {
+              "key": "Referrer-Policy",
+              "value": "same-origin"
+            },
+            {
+              "key": "Cross-Origin-Opener-Policy",
+              "value": "same-origin"
+            }
+          ],
+          "cookie": [],
+          "body": "[]"
+        }
+      ]
+    },
+    {
+      "name": "List Category",
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "exec": [
+              "const role = pm.environment.get(\"role\");\r",
+              "\r",
+              "pm.test(\"List category theo role\", function () {\r",
+              "    const res = pm.response.json();\r",
+              "\r",
+              "    pm.response.to.have.status(200);\r",
+              "    pm.expect(res).to.have.property(\"results\");\r",
+              "\r",
+              "    const categories = res.results;\r",
+              "\r",
+              "    pm.expect(categories).to.be.an(\"array\");\r",
+              "\r",
+              "    if (role === \"admin\") {\r",
+              "        pm.expect(categories.length).to.be.greaterThan(0);\r",
+              "    } else {\r",
+              "        categories.forEach(cate => {\r",
+              "            pm.expect(cate.is_active).to.eql(true);\r",
+              "        });\r",
+              "    }\r",
+              "});"
+            ],
+            "type": "text/javascript",
+            "packages": {},
+            "requests": {}
+          }
+        }
+      ],
+      "request": {
+        "method": "GET",
+        "header": [
+          {
+            "key": "Authorization",
+            "value": "token {{token}}",
+            "type": "text"
+          }
+        ],
+        "url": {
+          "raw": "{{URL_PATH}}/categories/",
+          "host": [
+            "{{URL_PATH}}"
+          ],
+          "path": [
+            "categories",
+            ""
+          ]
+        }
+      },
+      "response": [
+        {
+          "name": "List Categorys With Admin Role",
+          "originalRequest": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "token {{token}}",
+                "type": "text"
+              }
+            ],
+            "url": {
+              "raw": "{{URL_PATH}}/categories/",
+              "host": [
+                "{{URL_PATH}}"
+              ],
+              "path": [
+                "categories",
+                ""
+              ]
+            }
+          },
+          "status": "OK",
+          "code": 200,
+          "_postman_previewlanguage": null,
+          "header": [
+            {
+              "key": "Date",
+              "value": "Wed, 06 May 2026 15:05:12 GMT"
+            },
+            {
+              "key": "Server",
+              "value": "WSGIServer/0.2 CPython/3.13.9"
+            },
+            {
+              "key": "Content-Type",
+              "value": "application/json"
+            },
+            {
+              "key": "Vary",
+              "value": "Accept, origin"
+            },
+            {
+              "key": "Allow",
+              "value": "GET, POST, HEAD, OPTIONS"
+            },
+            {
+              "key": "Content-Length",
+              "value": "2070"
+            },
+            {
+              "key": "X-Frame-Options",
+              "value": "DENY"
+            },
+            {
+              "key": "X-Content-Type-Options",
+              "value": "nosniff"
+            },
+            {
+              "key": "Referrer-Policy",
+              "value": "same-origin"
+            },
+            {
+              "key": "Cross-Origin-Opener-Policy",
+              "value": "same-origin"
+            }
+          ],
+          "cookie": [],
+          "body": "[\n    {\n        \"id\": 1,\n        \"name\": \"Tiểu thuyết kinh điển\",\n        \"created_at\": \"2026-03-17T20:00:00+07:00\",\n        \"updated_at\": \"2026-03-17T20:00:00+07:00\",\n        \"active\": true\n    },\n    {\n        \"id\": 2,\n        \"name\": \"Tiểu thuyết hiện đại\",\n        \"created_at\": \"2026-03-17T20:00:00+07:00\",\n        \"updated_at\": \"2026-03-17T20:00:00+07:00\",\n        \"active\": true\n    },\n    {\n        \"id\": 3,\n        \"name\": \"Văn học nước ngoài\",\n        \"created_at\": \"2026-03-17T20:00:00+07:00\",\n        \"updated_at\": \"2026-03-17T20:00:00+07:00\",\n        \"active\": true\n    },\n    {\n        \"id\": 4,\n        \"name\": \"Văn học Việt Nam\",\n        \"created_at\": \"2026-03-17T20:00:00+07:00\",\n        \"updated_at\": \"2026-03-17T20:00:00+07:00\",\n        \"active\": true\n    },\n    {\n        \"id\": 5,\n        \"name\": \"Trinh thám - hình sự\",\n        \"created_at\": \"2026-03-17T20:00:00+07:00\",\n        \"updated_at\": \"2026-03-17T20:00:00+07:00\",\n        \"active\": true\n    },\n    {\n        \"id\": 6,\n        \"name\": \"Khoa học viễn tưởng\",\n        \"created_at\": \"2026-03-17T20:00:00+07:00\",\n        \"updated_at\": \"2026-03-17T20:00:00+07:00\",\n        \"active\": true\n    },\n    {\n        \"id\": 7,\n        \"name\": \"Giả tưởng (Fantasy)\",\n        \"created_at\": \"2026-03-17T20:00:00+07:00\",\n        \"updated_at\": \"2026-03-17T20:00:00+07:00\",\n        \"active\": true\n    },\n    {\n        \"id\": 8,\n        \"name\": \"Kinh dị\",\n        \"created_at\": \"2026-03-17T20:00:00+07:00\",\n        \"updated_at\": \"2026-03-17T20:00:00+07:00\",\n        \"active\": true\n    },\n    {\n        \"id\": 9,\n        \"name\": \"Tình cảm - lãng mạn\",\n        \"created_at\": \"2026-03-17T20:00:00+07:00\",\n        \"updated_at\": \"2026-03-17T20:00:00+07:00\",\n        \"active\": true\n    },\n    {\n        \"id\": 10,\n        \"name\": \"Sách thiếu nhi\",\n        \"created_at\": \"2026-03-17T20:00:00+07:00\",\n        \"updated_at\": \"2026-03-17T20:00:00+07:00\",\n        \"active\": true\n    },\n    {\n        \"id\": 11,\n        \"name\": \"Hồi ký - tự truyện\",\n        \"created_at\": \"2026-03-17T20:00:00+07:00\",\n        \"updated_at\": \"2026-03-17T20:00:00+07:00\",\n        \"active\": true\n    },\n    {\n        \"id\": 12,\n        \"name\": \"Sách kỹ năng sống\",\n        \"created_at\": \"2026-03-17T20:00:00+07:00\",\n        \"updated_at\": \"2026-03-17T20:00:00+07:00\",\n        \"active\": true\n    },\n    {\n        \"id\": 13,\n        \"name\": \"Sách kinh doanh\",\n        \"created_at\": \"2026-03-17T20:00:00+07:00\",\n        \"updated_at\": \"2026-03-17T20:00:00+07:00\",\n        \"active\": true\n    },\n    {\n        \"id\": 14,\n        \"name\": \"Sách lịch sử\",\n        \"created_at\": \"2026-03-17T20:00:00+07:00\",\n        \"updated_at\": \"2026-03-17T20:00:00+07:00\",\n        \"active\": true\n    },\n    {\n        \"id\": 15,\n        \"name\": \"Sách khoa học phổ thông\",\n        \"created_at\": \"2026-03-17T20:00:00+07:00\",\n        \"updated_at\": \"2026-03-17T20:00:00+07:00\",\n        \"active\": true\n    }\n]"
+        },
+        {
+          "name": "List Category With User Role",
+          "originalRequest": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "token {{token}}",
+                "type": "text"
+              }
+            ],
+            "url": {
+              "raw": "{{URL_PATH}}/categories/",
+              "host": [
+                "{{URL_PATH}}"
+              ],
+              "path": [
+                "categories",
+                ""
+              ]
+            }
+          },
+          "status": "OK",
+          "code": 200,
+          "_postman_previewlanguage": null,
+          "header": [
+            {
+              "key": "Date",
+              "value": "Thu, 07 May 2026 19:05:15 GMT"
+            },
+            {
+              "key": "Server",
+              "value": "WSGIServer/0.2 CPython/3.13.9"
+            },
+            {
+              "key": "Content-Type",
+              "value": "application/json"
+            },
+            {
+              "key": "Vary",
+              "value": "Accept, origin"
+            },
+            {
+              "key": "Allow",
+              "value": "GET, POST, HEAD, OPTIONS"
+            },
+            {
+              "key": "Content-Length",
+              "value": "665"
+            },
+            {
+              "key": "X-Frame-Options",
+              "value": "DENY"
+            },
+            {
+              "key": "X-Content-Type-Options",
+              "value": "nosniff"
+            },
+            {
+              "key": "Referrer-Policy",
+              "value": "same-origin"
+            },
+            {
+              "key": "Cross-Origin-Opener-Policy",
+              "value": "same-origin"
+            }
+          ],
+          "cookie": [],
+          "body": "[\n    {\n        \"id\": 17,\n        \"name\": \"Tiểu thuyết\"\n    },\n    {\n        \"id\": 1,\n        \"name\": \"Tiểu thuyết kinh điển\"\n    },\n    {\n        \"id\": 2,\n        \"name\": \"Tiểu thuyết hiện đại\"\n    },\n    {\n        \"id\": 3,\n        \"name\": \"Văn học nước ngoài\"\n    },\n    {\n        \"id\": 4,\n        \"name\": \"Văn học Việt Nam\"\n    },\n    {\n        \"id\": 5,\n        \"name\": \"Trinh thám - hình sự\"\n    },\n    {\n        \"id\": 6,\n        \"name\": \"Khoa học viễn tưởng\"\n    },\n    {\n        \"id\": 7,\n        \"name\": \"Giả tưởng (Fantasy)\"\n    },\n    {\n        \"id\": 8,\n        \"name\": \"Kinh dị\"\n    },\n    {\n        \"id\": 9,\n        \"name\": \"Tình cảm - lãng mạn\"\n    },\n    {\n        \"id\": 10,\n        \"name\": \"Sách thiếu nhi\"\n    },\n    {\n        \"id\": 11,\n        \"name\": \"Hồi ký - tự truyện\"\n    },\n    {\n        \"id\": 12,\n        \"name\": \"Sách kỹ năng sống\"\n    },\n    {\n        \"id\": 13,\n        \"name\": \"Sách kinh doanh\"\n    },\n    {\n        \"id\": 14,\n        \"name\": \"Sách lịch sử\"\n    },\n    {\n        \"id\": 15,\n        \"name\": \"Sách khoa học phổ thông\"\n    }\n]"
+        }
+      ]
+    },
+    {
+      "name": "Specific Category",
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "exec": [
+              "pm.test(\"Lấy category cụ thể\", function () {\r",
+              "    const code = pm.response.code;\r",
+              "\r",
+              "    if (code === 200) {\r",
+              "        const json = pm.response.json();\r",
+              "\r",
+              "        pm.expect(json).to.have.property(\"id\");\r",
+              "        pm.expect(json).to.have.property(\"name\");\r",
+              "    } else {\r",
+              "        pm.expect(code).to.eql(404);\r",
+              "    }\r",
+              "});"
+            ],
+            "type": "text/javascript",
+            "packages": {},
+            "requests": {}
+          }
+        }
+      ],
+      "request": {
+        "method": "GET",
+        "header": [],
+        "url": {
+          "raw": "{{URL_PATH}}/categories/1/",
+          "host": [
+            "{{URL_PATH}}"
+          ],
+          "path": [
+            "categories",
+            "1",
+            ""
+          ]
+        }
+      },
+      "response": [
+        {
+          "name": "Specific Category With Admin Role",
+          "originalRequest": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{URL_PATH}}/categories/1/",
+              "host": [
+                "{{URL_PATH}}"
+              ],
+              "path": [
+                "categories",
+                "1",
+                ""
+              ]
+            }
+          },
+          "status": "OK",
+          "code": 200,
+          "_postman_previewlanguage": null,
+          "header": [
+            {
+              "key": "Date",
+              "value": "Wed, 06 May 2026 15:06:56 GMT"
+            },
+            {
+              "key": "Server",
+              "value": "WSGIServer/0.2 CPython/3.13.9"
+            },
+            {
+              "key": "Content-Type",
+              "value": "application/json"
+            },
+            {
+              "key": "Vary",
+              "value": "Accept, origin"
+            },
+            {
+              "key": "Allow",
+              "value": "GET, PUT, PATCH, DELETE, HEAD, OPTIONS"
+            },
+            {
+              "key": "Content-Length",
+              "value": "46"
+            },
+            {
+              "key": "X-Frame-Options",
+              "value": "DENY"
+            },
+            {
+              "key": "X-Content-Type-Options",
+              "value": "nosniff"
+            },
+            {
+              "key": "Referrer-Policy",
+              "value": "same-origin"
+            },
+            {
+              "key": "Cross-Origin-Opener-Policy",
+              "value": "same-origin"
+            }
+          ],
+          "cookie": [],
+          "body": "{\n    \"id\": 1,\n    \"name\": \"Tiểu thuyết kinh điển\"\n}"
+        }
+      ]
+    },
+    {
+      "name": "Create Category",
+      "event": [
+        {
+          "listen": "prerequest",
+          "script": {
+            "exec": [
+              "const payload = {\r",
+              "    \"name\": \"Tiểu thuyết\"\r",
+              "};\r",
+              "\r",
+              "pm.environment.set(\"payload\", JSON.stringify(payload));"
+            ],
+            "type": "text/javascript",
+            "packages": {},
+            "requests": {}
+          }
+        },
+        {
+          "listen": "test",
+          "script": {
+            "exec": [
+              "if (pm.environment.get(\"role\") === \"admin\") {\r",
+              "    pm.test(\"Create category thành công\", function () {\r",
+              "        const json = pm.response.json();\r",
+              "\r",
+              "        pm.response.to.have.status(201);\r",
+              "        pm.expect(json).to.have.property(\"id\");\r",
+              "        pm.expect(json).to.have.property(\"name\");\r",
+              "    });\r",
+              "} else {\r",
+              "    pm.test(\"User không được tạo category\", function () {\r",
+              "        pm.expect(pm.response.code).to.be.oneOf([401, 403]);\r",
+              "    });\r",
+              "}"
+            ],
+            "type": "text/javascript",
+            "packages": {},
+            "requests": {}
+          }
+        }
+      ],
+      "request": {
+        "method": "POST",
+        "header": [
+          {
+            "key": "Authorization",
+            "value": "token {{token}}",
+            "type": "text"
+          }
+        ],
+        "body": {
+          "mode": "raw",
+          "raw": "{{payload}}",
+          "options": {
+            "raw": {
+              "language": "json"
+            }
+          }
+        },
+        "url": {
+          "raw": "{{URL_PATH}}/categories/",
+          "host": [
+            "{{URL_PATH}}"
+          ],
+          "path": [
+            "categories",
+            ""
+          ]
+        }
+      },
+      "response": [
+        {
+          "name": "Create Category With Admin Role",
+          "originalRequest": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "token {{token}}",
+                "type": "text"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{{payload}}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "{{URL_PATH}}/categories/",
+              "host": [
+                "{{URL_PATH}}"
+              ],
+              "path": [
+                "categories",
+                ""
+              ]
+            }
+          },
+          "status": "Created",
+          "code": 201,
+          "_postman_previewlanguage": null,
+          "header": [
+            {
+              "key": "Date",
+              "value": "Wed, 06 May 2026 15:42:43 GMT"
+            },
+            {
+              "key": "Server",
+              "value": "WSGIServer/0.2 CPython/3.13.9"
+            },
+            {
+              "key": "Content-Type",
+              "value": "application/json"
+            },
+            {
+              "key": "Vary",
+              "value": "Accept, origin"
+            },
+            {
+              "key": "Allow",
+              "value": "GET, POST, HEAD, OPTIONS"
+            },
+            {
+              "key": "Content-Length",
+              "value": "190"
+            },
+            {
+              "key": "X-Frame-Options",
+              "value": "DENY"
+            },
+            {
+              "key": "X-Content-Type-Options",
+              "value": "nosniff"
+            },
+            {
+              "key": "Referrer-Policy",
+              "value": "same-origin"
+            },
+            {
+              "key": "Cross-Origin-Opener-Policy",
+              "value": "same-origin"
+            }
+          ],
+          "cookie": [],
+          "body": "{\n    \"message\": \"Tạo mới thành công\",\n    \"data\": {\n        \"id\": 19,\n        \"name\": \"Tiểu thuyết\",\n        \"created_at\": \"2026-05-06T22:42:43.569304+07:00\",\n        \"updated_at\": \"2026-05-06T22:42:43.569360+07:00\",\n        \"active\": true\n    }\n}"
+        },
+        {
+          "name": "Create Category With User Role",
+          "originalRequest": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "token {{token}}",
+                "type": "text"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{{payload}}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "{{URL_PATH}}/categories/",
+              "host": [
+                "{{URL_PATH}}"
+              ],
+              "path": [
+                "categories",
+                ""
+              ]
+            }
+          },
+          "status": "Forbidden",
+          "code": 403,
+          "_postman_previewlanguage": null,
+          "header": [
+            {
+              "key": "Date",
+              "value": "Wed, 06 May 2026 17:38:12 GMT"
+            },
+            {
+              "key": "Server",
+              "value": "WSGIServer/0.2 CPython/3.13.9"
+            },
+            {
+              "key": "Content-Type",
+              "value": "application/json"
+            },
+            {
+              "key": "Vary",
+              "value": "Accept, origin"
+            },
+            {
+              "key": "Allow",
+              "value": "GET, POST, HEAD, OPTIONS"
+            },
+            {
+              "key": "Content-Length",
+              "value": "63"
+            },
+            {
+              "key": "X-Frame-Options",
+              "value": "DENY"
+            },
+            {
+              "key": "X-Content-Type-Options",
+              "value": "nosniff"
+            },
+            {
+              "key": "Referrer-Policy",
+              "value": "same-origin"
+            },
+            {
+              "key": "Cross-Origin-Opener-Policy",
+              "value": "same-origin"
+            }
+          ],
+          "cookie": [],
+          "body": "{\n    \"detail\": \"You do not have permission to perform this action.\"\n}"
+        }
+      ]
+    },
+    {
+      "name": "Update Category",
+      "event": [
+        {
+          "listen": "prerequest",
+          "script": {
+            "exec": [
+              "const payload = {\r",
+              "    \"name\": \"Tiểu thuyết Updated\"\r",
+              "};\r",
+              "\r",
+              "pm.environment.set(\"payload\", JSON.stringify(payload));"
+            ],
+            "type": "text/javascript",
+            "packages": {},
+            "requests": {}
+          }
+        },
+        {
+          "listen": "test",
+          "script": {
+            "exec": [
+              "if (pm.environment.get(\"role\") === \"admin\") {\r",
+              "    pm.test(\"Update category thành công\", function () {\r",
+              "        const res = pm.response.json();\r",
+              "\r",
+              "        pm.response.to.have.status(200);\r",
+              "        pm.expect(res).to.have.property(\"message\");\r",
+              "    });\r",
+              "} else {\r",
+              "    pm.test(\"User không được update category\", function () {\r",
+              "        pm.expect(pm.response.code).to.be.oneOf([401, 403]);\r",
+              "    });\r",
+              "}"
+            ],
+            "type": "text/javascript",
+            "packages": {},
+            "requests": {}
+          }
+        }
+      ],
+      "request": {
+        "method": "PATCH",
+        "header": [
+          {
+            "key": "Authorization",
+            "value": "token {{token}}",
+            "type": "text"
+          }
+        ],
+        "body": {
+          "mode": "raw",
+          "raw": "{{payload}}",
+          "options": {
+            "raw": {
+              "language": "json"
+            }
+          }
+        },
+        "url": {
+          "raw": "{{URL_PATH}}/categories/20/",
+          "host": [
+            "{{URL_PATH}}"
+          ],
+          "path": [
+            "categories",
+            "20",
+            ""
+          ]
+        }
+      },
+      "response": [
+        {
+          "name": "Update Category With Admin Role",
+          "originalRequest": {
+            "method": "PATCH",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "token {{token}}",
+                "type": "text"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{{payload}}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "{{URL_PATH}}/categories/19/",
+              "host": [
+                "{{URL_PATH}}"
+              ],
+              "path": [
+                "categories",
+                "19",
+                ""
+              ]
+            }
+          },
+          "status": "OK",
+          "code": 200,
+          "_postman_previewlanguage": null,
+          "header": [
+            {
+              "key": "Date",
+              "value": "Wed, 06 May 2026 15:42:58 GMT"
+            },
+            {
+              "key": "Server",
+              "value": "WSGIServer/0.2 CPython/3.13.9"
+            },
+            {
+              "key": "Content-Type",
+              "value": "application/json"
+            },
+            {
+              "key": "Vary",
+              "value": "Accept, origin"
+            },
+            {
+              "key": "Allow",
+              "value": "GET, PUT, PATCH, DELETE, HEAD, OPTIONS"
+            },
+            {
+              "key": "Content-Length",
+              "value": "39"
+            },
+            {
+              "key": "X-Frame-Options",
+              "value": "DENY"
+            },
+            {
+              "key": "X-Content-Type-Options",
+              "value": "nosniff"
+            },
+            {
+              "key": "Referrer-Policy",
+              "value": "same-origin"
+            },
+            {
+              "key": "Cross-Origin-Opener-Policy",
+              "value": "same-origin"
+            }
+          ],
+          "cookie": [],
+          "body": "{\n    \"message\": \"Cập nhật thành công\"\n}"
+        },
+        {
+          "name": "Update Category With User Role",
+          "originalRequest": {
+            "method": "PATCH",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "token {{token}}",
+                "type": "text"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{{payload}}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "{{URL_PATH}}/categories/19/",
+              "host": [
+                "{{URL_PATH}}"
+              ],
+              "path": [
+                "categories",
+                "19",
+                ""
+              ]
+            }
+          },
+          "status": "Forbidden",
+          "code": 403,
+          "_postman_previewlanguage": null,
+          "header": [
+            {
+              "key": "Date",
+              "value": "Wed, 06 May 2026 17:38:45 GMT"
+            },
+            {
+              "key": "Server",
+              "value": "WSGIServer/0.2 CPython/3.13.9"
+            },
+            {
+              "key": "Content-Type",
+              "value": "application/json"
+            },
+            {
+              "key": "Vary",
+              "value": "Accept, origin"
+            },
+            {
+              "key": "Allow",
+              "value": "GET, PUT, PATCH, DELETE, HEAD, OPTIONS"
+            },
+            {
+              "key": "Content-Length",
+              "value": "63"
+            },
+            {
+              "key": "X-Frame-Options",
+              "value": "DENY"
+            },
+            {
+              "key": "X-Content-Type-Options",
+              "value": "nosniff"
+            },
+            {
+              "key": "Referrer-Policy",
+              "value": "same-origin"
+            },
+            {
+              "key": "Cross-Origin-Opener-Policy",
+              "value": "same-origin"
+            }
+          ],
+          "cookie": [],
+          "body": "{\n    \"detail\": \"You do not have permission to perform this action.\"\n}"
+        }
+      ]
+    },
+    {
+      "name": "Delete Category",
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "exec": [
+              ""
+            ],
+            "type": "text/javascript",
+            "packages": {},
+            "requests": {}
+          }
+        },
+        {
+          "listen": "prerequest",
+          "script": {
+            "packages": {},
+            "type": "text/javascript"
+          }
+        }
+      ],
+      "request": {
+        "method": "DELETE",
+        "header": [
+          {
+            "key": "Authorization",
+            "value": "token {{token}}",
+            "type": "text"
+          }
+        ],
+        "body": {
+          "mode": "raw",
+          "raw": "{{payload}}"
+        },
+        "url": {
+          "raw": "{{URL_PATH}}/categories/20/",
+          "host": [
+            "{{URL_PATH}}"
+          ],
+          "path": [
+            "categories",
+            "20",
+            ""
+          ]
+        }
+      },
+      "response": [
+        {
+          "name": "Delete Category With Admin Role",
+          "originalRequest": {
+            "method": "DELETE",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "token {{token}}",
+                "type": "text"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{{payload}}"
+            },
+            "url": {
+              "raw": "{{URL_PATH}}/categories/19/",
+              "host": [
+                "{{URL_PATH}}"
+              ],
+              "path": [
+                "categories",
+                "19",
+                ""
+              ]
+            }
+          },
+          "status": "No Content",
+          "code": 204,
+          "_postman_previewlanguage": null,
+          "header": [
+            {
+              "key": "Date",
+              "value": "Wed, 06 May 2026 15:43:08 GMT"
+            },
+            {
+              "key": "Server",
+              "value": "WSGIServer/0.2 CPython/3.13.9"
+            },
+            {
+              "key": "Vary",
+              "value": "Accept, origin"
+            },
+            {
+              "key": "Allow",
+              "value": "GET, PUT, PATCH, DELETE, HEAD, OPTIONS"
+            },
+            {
+              "key": "Content-Length",
+              "value": "0"
+            },
+            {
+              "key": "X-Frame-Options",
+              "value": "DENY"
+            },
+            {
+              "key": "X-Content-Type-Options",
+              "value": "nosniff"
+            },
+            {
+              "key": "Referrer-Policy",
+              "value": "same-origin"
+            },
+            {
+              "key": "Cross-Origin-Opener-Policy",
+              "value": "same-origin"
+            }
+          ],
+          "cookie": [],
+          "body": null
+        },
+        {
+          "name": "Delete Category With User Role",
+          "originalRequest": {
+            "method": "DELETE",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "token {{token}}",
+                "type": "text"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{{payload}}"
+            },
+            "url": {
+              "raw": "{{URL_PATH}}/categories/19/",
+              "host": [
+                "{{URL_PATH}}"
+              ],
+              "path": [
+                "categories",
+                "19",
+                ""
+              ]
+            }
+          },
+          "status": "Forbidden",
+          "code": 403,
+          "_postman_previewlanguage": null,
+          "header": [
+            {
+              "key": "Date",
+              "value": "Wed, 06 May 2026 17:39:57 GMT"
+            },
+            {
+              "key": "Server",
+              "value": "WSGIServer/0.2 CPython/3.13.9"
+            },
+            {
+              "key": "Content-Type",
+              "value": "application/json"
+            },
+            {
+              "key": "Vary",
+              "value": "Accept, origin"
+            },
+            {
+              "key": "Allow",
+              "value": "GET, PUT, PATCH, DELETE, HEAD, OPTIONS"
+            },
+            {
+              "key": "Content-Length",
+              "value": "63"
+            },
+            {
+              "key": "X-Frame-Options",
+              "value": "DENY"
+            },
+            {
+              "key": "X-Content-Type-Options",
+              "value": "nosniff"
+            },
+            {
+              "key": "Referrer-Policy",
+              "value": "same-origin"
+            },
+            {
+              "key": "Cross-Origin-Opener-Policy",
+              "value": "same-origin"
+            }
+          ],
+          "cookie": [],
+          "body": "{\n    \"detail\": \"You do not have permission to perform this action.\"\n}"
+        }
+      ]
+    }
+  ],
+  "event": [
+    {
+      "listen": "prerequest",
+      "script": {
+        "type": "text/javascript",
+        "packages": {},
+        "requests": {},
+        "exec": [
+          "role = pm.environment.set(\"role\", \"admin\")\r",
+          "role = pm.environment.get(\"role\");\r",
+          "if (role === \"admin\") {\r",
+          "    pm.environment.set(\"token\", pm.environment.get(\"admin_token\"));\r",
+          "} else {\r",
+          "    pm.environment.set(\"token\", pm.environment.get(\"user_token\"))\r",
+          "}"
+        ]
+      }
+    },
+    {
+      "listen": "test",
+      "script": {
+        "type": "text/javascript",
+        "packages": {},
+        "requests": {},
+        "exec": [
+          "pm.test(\"Status code theo role + method\", function () {\r",
+          "    const role = pm.environment.get(\"role\");\r",
+          "    const code = pm.response.code;\r",
+          "    const method = pm.request.method;\r",
+          "\r",
+          "    if (method === \"GET\") {\r",
+          "        pm.expect(code).to.be.oneOf([200, 404]);\r",
+          "    } else {\r",
+          "        if (role === \"admin\") {\r",
+          "            pm.expect(code).to.be.oneOf([200, 201, 204]);\r",
+          "        } else {\r",
+          "            pm.expect(code).to.be.oneOf([401, 403]);\r",
+          "        }\r",
+          "    }\r",
+          "});"
+        ]
+      }
+    }
+  ]
+}

@@ -1,0 +1,1106 @@
+{
+  "info": {
+    "_postman_id": "11f6de60-7682-432e-9a3b-ff2460bca7e1",
+    "name": "Borrowing Services",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+    "_exporter_id": "54519871"
+  },
+  "item": [
+    {
+      "name": "List Borrowing",
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "exec": [
+              "const role = pm.environment.get(\"role\");\r",
+              "\r",
+              "pm.test(\"List borrowing\", function () {\r",
+              "    const res = pm.response.json();\r",
+              "\r",
+              "    pm.response.to.have.status(200);\r",
+              "    pm.expect(res).to.have.property(\"results\");\r",
+              "\r",
+              "    const borrows = res.results;\r",
+              "\r",
+              "    pm.expect(borrows).to.be.an(\"array\");\r",
+              "\r",
+              "    if (role === \"admin\") {\r",
+              "        pm.expect(borrows.length).to.be.greaterThan(0);\r",
+              "    } else {\r",
+              "        borrows.forEach(b => {\r",
+              "            pm.expect(b).to.have.property(\"user\");\r",
+              "        });\r",
+              "    }\r",
+              "});"
+            ],
+            "type": "text/javascript",
+            "packages": {},
+            "requests": {}
+          }
+        }
+      ],
+      "request": {
+        "method": "GET",
+        "header": [
+          {
+            "key": "Authorization",
+            "value": "token {{token}}",
+            "type": "text"
+          }
+        ],
+        "url": {
+          "raw": "{{URL_PATH}}/borrowing/",
+          "host": [
+            "{{URL_PATH}}"
+          ],
+          "path": [
+            "borrowing",
+            ""
+          ]
+        }
+      },
+      "response": [
+        {
+          "name": "List Borrowing",
+          "originalRequest": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "token {{token}}",
+                "type": "text"
+              }
+            ],
+            "url": {
+              "raw": "{{URL_PATH}}/borrowing/",
+              "host": [
+                "{{URL_PATH}}"
+              ],
+              "path": [
+                "borrowing",
+                ""
+              ]
+            }
+          },
+          "status": "OK",
+          "code": 200,
+          "_postman_previewlanguage": null,
+          "header": [
+            {
+              "key": "Date",
+              "value": "Wed, 06 May 2026 17:26:20 GMT"
+            },
+            {
+              "key": "Server",
+              "value": "WSGIServer/0.2 CPython/3.13.9"
+            },
+            {
+              "key": "Content-Type",
+              "value": "application/json"
+            },
+            {
+              "key": "Vary",
+              "value": "Accept, origin"
+            },
+            {
+              "key": "Allow",
+              "value": "GET, HEAD, OPTIONS"
+            },
+            {
+              "key": "Content-Length",
+              "value": "1617"
+            },
+            {
+              "key": "X-Frame-Options",
+              "value": "DENY"
+            },
+            {
+              "key": "X-Content-Type-Options",
+              "value": "nosniff"
+            },
+            {
+              "key": "Referrer-Policy",
+              "value": "same-origin"
+            },
+            {
+              "key": "Cross-Origin-Opener-Policy",
+              "value": "same-origin"
+            }
+          ],
+          "cookie": [],
+          "body": "{\n    \"count\": 3,\n    \"next\": null,\n    \"previous\": null,\n    \"results\": [\n        {\n            \"id\": 8,\n            \"user\": {\n                \"id\": 1,\n                \"first_name\": \"\",\n                \"last_name\": \"\",\n                \"image\": null,\n                \"phone_number\": null,\n                \"gender\": null,\n                \"dob\": null\n            },\n            \"book\": {\n                \"name\": \"Chiến tranh và Hòa bình\",\n                \"image\": null\n            },\n            \"fine\": {\n                \"late_dates\": 0,\n                \"setting\": {\n                    \"borrowing_days\": 7,\n                    \"borrowing_fee\": \"1000.00\",\n                    \"borrowing_overdue_fine\": \"5000.00\"\n                }\n            },\n            \"created_at\": \"2026-05-07T00:00:44.834538+07:00\",\n            \"updated_at\": \"2026-05-07T00:00:44.834580+07:00\",\n            \"borrowing_book_date\": null,\n            \"returning_book_date\": null,\n            \"due_date\": null,\n            \"borrowing_quantity\": 1,\n            \"price\": \"5000.00\",\n            \"status\": \"PENDING\",\n            \"note\": null\n        },\n        {\n            \"id\": 7,\n            \"user\": {\n                \"id\": 1,\n                \"first_name\": \"\",\n                \"last_name\": \"\",\n                \"image\": null,\n                \"phone_number\": null,\n                \"gender\": null,\n                \"dob\": null\n            },\n            \"book\": {\n                \"name\": \"After Dark\",\n                \"image\": null\n            },\n            \"fine\": {\n                \"late_dates\": 0,\n                \"setting\": {\n                    \"borrowing_days\": 7,\n                    \"borrowing_fee\": \"1000.00\",\n                    \"borrowing_overdue_fine\": \"5000.00\"\n                }\n            },\n            \"created_at\": \"2026-05-07T00:00:44.820488+07:00\",\n            \"updated_at\": \"2026-05-07T00:00:44.820608+07:00\",\n            \"borrowing_book_date\": null,\n            \"returning_book_date\": null,\n            \"due_date\": null,\n            \"borrowing_quantity\": 1,\n            \"price\": \"5000.00\",\n            \"status\": \"PENDING\",\n            \"note\": null\n        },\n        {\n            \"id\": 6,\n            \"user\": {\n                \"id\": 1,\n                \"first_name\": \"\",\n                \"last_name\": \"\",\n                \"image\": null,\n                \"phone_number\": null,\n                \"gender\": null,\n                \"dob\": null\n            },\n            \"book\": {\n                \"name\": \"Chí Phèo\",\n                \"image\": null\n            },\n            \"fine\": {\n                \"late_dates\": 0,\n                \"setting\": {\n                    \"borrowing_days\": 7,\n                    \"borrowing_fee\": \"1000.00\",\n                    \"borrowing_overdue_fine\": \"5000.00\"\n                }\n            },\n            \"created_at\": \"2026-05-07T00:00:44.807817+07:00\",\n            \"updated_at\": \"2026-05-07T00:13:31.806874+07:00\",\n            \"borrowing_book_date\": \"2026-05-07\",\n            \"returning_book_date\": null,\n            \"due_date\": \"2026-05-14\",\n            \"borrowing_quantity\": 1,\n            \"price\": \"5000.00\",\n            \"status\": \"CONFIRMED\",\n            \"note\": null\n        }\n    ]\n}"
+        },
+        {
+          "name": "List Borrowing With User Role",
+          "originalRequest": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "token {{token}}",
+                "type": "text"
+              }
+            ],
+            "url": {
+              "raw": "{{URL_PATH}}/borrowing/",
+              "host": [
+                "{{URL_PATH}}"
+              ],
+              "path": [
+                "borrowing",
+                ""
+              ]
+            }
+          },
+          "status": "Forbidden",
+          "code": 403,
+          "_postman_previewlanguage": null,
+          "header": [
+            {
+              "key": "Date",
+              "value": "Thu, 07 May 2026 10:47:04 GMT"
+            },
+            {
+              "key": "Server",
+              "value": "WSGIServer/0.2 CPython/3.13.9"
+            },
+            {
+              "key": "Content-Type",
+              "value": "application/json"
+            },
+            {
+              "key": "Vary",
+              "value": "Accept, origin"
+            },
+            {
+              "key": "Allow",
+              "value": "GET, HEAD, OPTIONS"
+            },
+            {
+              "key": "Content-Length",
+              "value": "63"
+            },
+            {
+              "key": "X-Frame-Options",
+              "value": "DENY"
+            },
+            {
+              "key": "X-Content-Type-Options",
+              "value": "nosniff"
+            },
+            {
+              "key": "Referrer-Policy",
+              "value": "same-origin"
+            },
+            {
+              "key": "Cross-Origin-Opener-Policy",
+              "value": "same-origin"
+            }
+          ],
+          "cookie": [],
+          "body": "{\n    \"detail\": \"You do not have permission to perform this action.\"\n}"
+        }
+      ]
+    },
+    {
+      "name": "Create Borrowing",
+      "event": [
+        {
+          "listen": "prerequest",
+          "script": {
+            "exec": [
+              ""
+            ],
+            "type": "text/javascript",
+            "packages": {},
+            "requests": {}
+          }
+        },
+        {
+          "listen": "test",
+          "script": {
+            "exec": [
+              "if (pm.environment.get(\"role\") === \"user\") {\r",
+              "    pm.test(\"User đặt thành công\", function () {\r",
+              "        const json = pm.response.json();\r",
+              "\r",
+              "        pm.response.to.have.status(201);\r",
+              "        pm.expect(json).to.have.property(\"id\");\r",
+              "        pm.expect(json).to.have.property(\"book\");\r",
+              "    });\r",
+              "}"
+            ],
+            "type": "text/javascript",
+            "packages": {},
+            "requests": {}
+          }
+        }
+      ],
+      "request": {
+        "method": "POST",
+        "header": [
+          {
+            "key": "Authorization",
+            "value": "token {{token}}",
+            "type": "text"
+          }
+        ],
+        "body": {
+          "mode": "raw",
+          "raw": "{\r\n    \"cart\": [\r\n  {\r\n    \"book_id\": 4,\r\n    \"borrowing_quantity\": 1,\r\n    \"date\": \"2026-05-06\",\r\n    \"image\": \"http://res.cloudinary.com/dm68sunrv/image/upload/v1775370399/users/msoppddmcqs3nt7roh38.png\",\r\n    \"name\": \"Chí Phèo\",\r\n    \"price\": 5000,\r\n    \"setting\": {\r\n      \"borrowing_days\": 7,\r\n      \"borrowing_fee\": \"5000.00\",\r\n      \"borrowing_overdue_fine\": \"1000.00\",\r\n      \"id\": 1,\r\n      \"active\": true\r\n    }\r\n  },\r\n  {\r\n    \"book_id\": 42,\r\n    \"borrowing_quantity\": 1,\r\n    \"date\": \"2026-05-06\",\r\n    \"image\": \"http://res.cloudinary.com/dm68sunrv/image/upload/v1775967188/books/wx0mnkcp3aoff8nqmqqz.png\",\r\n    \"name\": \"abc\",\r\n    \"price\": 5000,\r\n    \"setting\": {\r\n      \"borrowing_days\": 7,\r\n      \"borrowing_fee\": \"5000.00\",\r\n      \"borrowing_overdue_fine\": \"1000.00\",\r\n      \"id\": 1,\r\n      \"active\": true\r\n    }\r\n  },\r\n  {\r\n    \"book_id\": 1,\r\n    \"borrowing_quantity\": 1,\r\n    \"date\": \"2026-05-06\",\r\n    \"image\": \"http://res.cloudinary.com/dm68sunrv/image/upload/v1775370399/users/msoppddmcqs3nt7roh38.png\",\r\n    \"name\": \"Chiến tranh và Hòa bình\",\r\n    \"price\": 5000,\r\n    \"setting\": {\r\n      \"borrowing_days\": 7,\r\n      \"borrowing_fee\": \"5000.00\",\r\n      \"borrowing_overdue_fine\": \"1000.00\",\r\n      \"id\": 1,\r\n      \"active\": true\r\n    }\r\n  }\r\n]\r\n}",
+          "options": {
+            "raw": {
+              "language": "json"
+            }
+          }
+        },
+        "url": {
+          "raw": "{{URL_PATH}}/borrowing/cart/",
+          "host": [
+            "{{URL_PATH}}"
+          ],
+          "path": [
+            "borrowing",
+            "cart",
+            ""
+          ]
+        }
+      },
+      "response": [
+        {
+          "name": "Create Borrowing",
+          "originalRequest": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "token {{token}}",
+                "type": "text"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\r\n    \"cart\": [\r\n  {\r\n    \"book_id\": 4,\r\n    \"borrowing_quantity\": 1,\r\n    \"date\": \"2026-05-06\",\r\n    \"image\": \"http://res.cloudinary.com/dm68sunrv/image/upload/v1775370399/users/msoppddmcqs3nt7roh38.png\",\r\n    \"name\": \"Chí Phèo\",\r\n    \"price\": 5000,\r\n    \"setting\": {\r\n      \"borrowing_days\": 7,\r\n      \"borrowing_fee\": \"5000.00\",\r\n      \"borrowing_overdue_fine\": \"1000.00\",\r\n      \"id\": 1,\r\n      \"active\": true\r\n    }\r\n  },\r\n  {\r\n    \"book_id\": 42,\r\n    \"borrowing_quantity\": 1,\r\n    \"date\": \"2026-05-06\",\r\n    \"image\": \"http://res.cloudinary.com/dm68sunrv/image/upload/v1775967188/books/wx0mnkcp3aoff8nqmqqz.png\",\r\n    \"name\": \"abc\",\r\n    \"price\": 5000,\r\n    \"setting\": {\r\n      \"borrowing_days\": 7,\r\n      \"borrowing_fee\": \"5000.00\",\r\n      \"borrowing_overdue_fine\": \"1000.00\",\r\n      \"id\": 1,\r\n      \"active\": true\r\n    }\r\n  },\r\n  {\r\n    \"book_id\": 1,\r\n    \"borrowing_quantity\": 1,\r\n    \"date\": \"2026-05-06\",\r\n    \"image\": \"http://res.cloudinary.com/dm68sunrv/image/upload/v1775370399/users/msoppddmcqs3nt7roh38.png\",\r\n    \"name\": \"Chiến tranh và Hòa bình\",\r\n    \"price\": 5000,\r\n    \"setting\": {\r\n      \"borrowing_days\": 7,\r\n      \"borrowing_fee\": \"5000.00\",\r\n      \"borrowing_overdue_fine\": \"1000.00\",\r\n      \"id\": 1,\r\n      \"active\": true\r\n    }\r\n  }\r\n]\r\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "{{URL_PATH}}/borrowing/cart/",
+              "host": [
+                "{{URL_PATH}}"
+              ],
+              "path": [
+                "borrowing",
+                "cart",
+                ""
+              ]
+            }
+          },
+          "status": "Created",
+          "code": 201,
+          "_postman_previewlanguage": null,
+          "header": [
+            {
+              "key": "Date",
+              "value": "Wed, 06 May 2026 17:00:44 GMT"
+            },
+            {
+              "key": "Server",
+              "value": "WSGIServer/0.2 CPython/3.13.9"
+            },
+            {
+              "key": "Content-Type",
+              "value": "application/json"
+            },
+            {
+              "key": "Vary",
+              "value": "Accept, origin"
+            },
+            {
+              "key": "Allow",
+              "value": "POST, OPTIONS"
+            },
+            {
+              "key": "Content-Length",
+              "value": "54"
+            },
+            {
+              "key": "X-Frame-Options",
+              "value": "DENY"
+            },
+            {
+              "key": "X-Content-Type-Options",
+              "value": "nosniff"
+            },
+            {
+              "key": "Referrer-Policy",
+              "value": "same-origin"
+            },
+            {
+              "key": "Cross-Origin-Opener-Policy",
+              "value": "same-origin"
+            }
+          ],
+          "cookie": [],
+          "body": "{\n    \"success\": true,\n    \"message\": \"Đặt sách thành công\"\n}"
+        },
+        {
+          "name": "Create Borrowing With User Role",
+          "originalRequest": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "token {{token}}",
+                "type": "text"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\r\n    \"cart\": [\r\n  {\r\n    \"book_id\": 4,\r\n    \"borrowing_quantity\": 1,\r\n    \"date\": \"2026-05-06\",\r\n    \"image\": \"http://res.cloudinary.com/dm68sunrv/image/upload/v1775370399/users/msoppddmcqs3nt7roh38.png\",\r\n    \"name\": \"Chí Phèo\",\r\n    \"price\": 5000,\r\n    \"setting\": {\r\n      \"borrowing_days\": 7,\r\n      \"borrowing_fee\": \"5000.00\",\r\n      \"borrowing_overdue_fine\": \"1000.00\",\r\n      \"id\": 1,\r\n      \"active\": true\r\n    }\r\n  },\r\n  {\r\n    \"book_id\": 42,\r\n    \"borrowing_quantity\": 1,\r\n    \"date\": \"2026-05-06\",\r\n    \"image\": \"http://res.cloudinary.com/dm68sunrv/image/upload/v1775967188/books/wx0mnkcp3aoff8nqmqqz.png\",\r\n    \"name\": \"abc\",\r\n    \"price\": 5000,\r\n    \"setting\": {\r\n      \"borrowing_days\": 7,\r\n      \"borrowing_fee\": \"5000.00\",\r\n      \"borrowing_overdue_fine\": \"1000.00\",\r\n      \"id\": 1,\r\n      \"active\": true\r\n    }\r\n  },\r\n  {\r\n    \"book_id\": 1,\r\n    \"borrowing_quantity\": 1,\r\n    \"date\": \"2026-05-06\",\r\n    \"image\": \"http://res.cloudinary.com/dm68sunrv/image/upload/v1775370399/users/msoppddmcqs3nt7roh38.png\",\r\n    \"name\": \"Chiến tranh và Hòa bình\",\r\n    \"price\": 5000,\r\n    \"setting\": {\r\n      \"borrowing_days\": 7,\r\n      \"borrowing_fee\": \"5000.00\",\r\n      \"borrowing_overdue_fine\": \"1000.00\",\r\n      \"id\": 1,\r\n      \"active\": true\r\n    }\r\n  }\r\n]\r\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "{{URL_PATH}}/borrowing/cart/",
+              "host": [
+                "{{URL_PATH}}"
+              ],
+              "path": [
+                "borrowing",
+                "cart",
+                ""
+              ]
+            }
+          },
+          "status": "Created",
+          "code": 201,
+          "_postman_previewlanguage": null,
+          "header": [
+            {
+              "key": "Date",
+              "value": "Thu, 07 May 2026 10:47:41 GMT"
+            },
+            {
+              "key": "Server",
+              "value": "WSGIServer/0.2 CPython/3.13.9"
+            },
+            {
+              "key": "Content-Type",
+              "value": "application/json"
+            },
+            {
+              "key": "Vary",
+              "value": "Accept, origin"
+            },
+            {
+              "key": "Allow",
+              "value": "POST, OPTIONS"
+            },
+            {
+              "key": "Content-Length",
+              "value": "54"
+            },
+            {
+              "key": "X-Frame-Options",
+              "value": "DENY"
+            },
+            {
+              "key": "X-Content-Type-Options",
+              "value": "nosniff"
+            },
+            {
+              "key": "Referrer-Policy",
+              "value": "same-origin"
+            },
+            {
+              "key": "Cross-Origin-Opener-Policy",
+              "value": "same-origin"
+            }
+          ],
+          "cookie": [],
+          "body": "{\n    \"success\": true,\n    \"message\": \"Đặt sách thành công\"\n}"
+        }
+      ]
+    },
+    {
+      "name": "Update Borrowing",
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "exec": [
+              "pm.test(\"Update borrowing status\", function () {\r",
+              "    const res = pm.response.json();\r",
+              "\r",
+              "    pm.response.to.have.status(200);\r",
+              "    pm.expect(res).to.have.property(\"status\");\r",
+              "\r",
+              "    if (res.status === \"BORROWING\") {\r",
+              "        pm.expect(res).to.have.property(\"borrowing_book_date\");\r",
+              "    }\r",
+              "\r",
+              "    if (res.status === \"RETURNED\") {\r",
+              "        pm.expect(res).to.have.property(\"returning_book_date\");\r",
+              "    }\r",
+              "});"
+            ],
+            "type": "text/javascript",
+            "packages": {},
+            "requests": {}
+          }
+        }
+      ],
+      "request": {
+        "method": "PATCH",
+        "header": [
+          {
+            "key": "Content-Type",
+            "value": "application/json",
+            "type": "text"
+          },
+          {
+            "key": "Authorization",
+            "value": "token {{token}}",
+            "type": "text"
+          }
+        ],
+        "body": {
+          "mode": "raw",
+          "raw": "{\r\n  \"status\": \"CONFIRMED\"\r\n}",
+          "options": {
+            "raw": {
+              "language": "json"
+            }
+          }
+        },
+        "url": {
+          "raw": "{{URL_PATH}}/borrowing/6/update_status/",
+          "host": [
+            "{{URL_PATH}}"
+          ],
+          "path": [
+            "borrowing",
+            "6",
+            "update_status",
+            ""
+          ]
+        }
+      },
+      "response": [
+        {
+          "name": "Update Borrowing pending->confirmed",
+          "originalRequest": {
+            "method": "PATCH",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json",
+                "type": "text"
+              },
+              {
+                "key": "Authorization",
+                "value": "token {{token}}",
+                "type": "text"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\r\n  \"status\": \"CONFIRMED\"\r\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "{{URL_PATH}}/borrowing/6/update_status/",
+              "host": [
+                "{{URL_PATH}}"
+              ],
+              "path": [
+                "borrowing",
+                "6",
+                "update_status",
+                ""
+              ]
+            }
+          },
+          "status": "Accepted",
+          "code": 202,
+          "_postman_previewlanguage": null,
+          "header": [
+            {
+              "key": "Date",
+              "value": "Wed, 06 May 2026 17:13:31 GMT"
+            },
+            {
+              "key": "Server",
+              "value": "WSGIServer/0.2 CPython/3.13.9"
+            },
+            {
+              "key": "Content-Type",
+              "value": "application/json"
+            },
+            {
+              "key": "Vary",
+              "value": "Accept, origin"
+            },
+            {
+              "key": "Allow",
+              "value": "PATCH, OPTIONS"
+            },
+            {
+              "key": "Content-Length",
+              "value": "53"
+            },
+            {
+              "key": "X-Frame-Options",
+              "value": "DENY"
+            },
+            {
+              "key": "X-Content-Type-Options",
+              "value": "nosniff"
+            },
+            {
+              "key": "Referrer-Policy",
+              "value": "same-origin"
+            },
+            {
+              "key": "Cross-Origin-Opener-Policy",
+              "value": "same-origin"
+            }
+          ],
+          "cookie": [],
+          "body": "{\n    \"message\": \"Cập nhật trạng thái thành công\"\n}"
+        },
+        {
+          "name": "CONFIRMED sang RETURNED",
+          "originalRequest": {
+            "method": "PATCH",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json",
+                "type": "text"
+              },
+              {
+                "key": "Authorization",
+                "value": "token {{token}}",
+                "type": "text"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\r\n  \"status\": \"RETURNED\"\r\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "{{URL_PATH}}/borrowing/6/update_status/",
+              "host": [
+                "{{URL_PATH}}"
+              ],
+              "path": [
+                "borrowing",
+                "6",
+                "update_status",
+                ""
+              ]
+            }
+          },
+          "status": "Bad Request",
+          "code": 400,
+          "_postman_previewlanguage": null,
+          "header": [
+            {
+              "key": "Date",
+              "value": "Wed, 06 May 2026 17:15:25 GMT"
+            },
+            {
+              "key": "Server",
+              "value": "WSGIServer/0.2 CPython/3.13.9"
+            },
+            {
+              "key": "Content-Type",
+              "value": "application/json"
+            },
+            {
+              "key": "Vary",
+              "value": "Accept, origin"
+            },
+            {
+              "key": "Allow",
+              "value": "PATCH, OPTIONS"
+            },
+            {
+              "key": "Content-Length",
+              "value": "64"
+            },
+            {
+              "key": "X-Frame-Options",
+              "value": "DENY"
+            },
+            {
+              "key": "X-Content-Type-Options",
+              "value": "nosniff"
+            },
+            {
+              "key": "Referrer-Policy",
+              "value": "same-origin"
+            },
+            {
+              "key": "Cross-Origin-Opener-Policy",
+              "value": "same-origin"
+            }
+          ],
+          "cookie": [],
+          "body": "{\n    \"message\": \"Không thể chuyển từ CONFIRMED sang RETURNED\"\n}"
+        },
+        {
+          "name": "CONFIRMED sang CONFIRMED",
+          "originalRequest": {
+            "method": "PATCH",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json",
+                "type": "text"
+              },
+              {
+                "key": "Authorization",
+                "value": "token {{token}}",
+                "type": "text"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\r\n  \"status\": \"CONFIRMED\"\r\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "{{URL_PATH}}/borrowing/6/update_status/",
+              "host": [
+                "{{URL_PATH}}"
+              ],
+              "path": [
+                "borrowing",
+                "6",
+                "update_status",
+                ""
+              ]
+            }
+          },
+          "status": "Bad Request",
+          "code": 400,
+          "_postman_previewlanguage": null,
+          "header": [
+            {
+              "key": "Date",
+              "value": "Wed, 06 May 2026 17:18:08 GMT"
+            },
+            {
+              "key": "Server",
+              "value": "WSGIServer/0.2 CPython/3.13.9"
+            },
+            {
+              "key": "Content-Type",
+              "value": "application/json"
+            },
+            {
+              "key": "Vary",
+              "value": "Accept, origin"
+            },
+            {
+              "key": "Allow",
+              "value": "PATCH, OPTIONS"
+            },
+            {
+              "key": "Content-Length",
+              "value": "65"
+            },
+            {
+              "key": "X-Frame-Options",
+              "value": "DENY"
+            },
+            {
+              "key": "X-Content-Type-Options",
+              "value": "nosniff"
+            },
+            {
+              "key": "Referrer-Policy",
+              "value": "same-origin"
+            },
+            {
+              "key": "Cross-Origin-Opener-Policy",
+              "value": "same-origin"
+            }
+          ],
+          "cookie": [],
+          "body": "{\n    \"message\": \"Không thể chuyển từ CONFIRMED sang CONFIRMED\"\n}"
+        },
+        {
+          "name": "Update Borrowing With User Role",
+          "originalRequest": {
+            "method": "PATCH",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json",
+                "type": "text"
+              },
+              {
+                "key": "Authorization",
+                "value": "token {{token}}",
+                "type": "text"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\r\n  \"status\": \"CONFIRMED\"\r\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "{{URL_PATH}}/borrowing/6/update_status/",
+              "host": [
+                "{{URL_PATH}}"
+              ],
+              "path": [
+                "borrowing",
+                "6",
+                "update_status",
+                ""
+              ]
+            }
+          },
+          "status": "Forbidden",
+          "code": 403,
+          "_postman_previewlanguage": null,
+          "header": [
+            {
+              "key": "Date",
+              "value": "Thu, 07 May 2026 10:48:28 GMT"
+            },
+            {
+              "key": "Server",
+              "value": "WSGIServer/0.2 CPython/3.13.9"
+            },
+            {
+              "key": "Content-Type",
+              "value": "application/json"
+            },
+            {
+              "key": "Vary",
+              "value": "Accept, origin"
+            },
+            {
+              "key": "Allow",
+              "value": "PATCH, OPTIONS"
+            },
+            {
+              "key": "Content-Length",
+              "value": "63"
+            },
+            {
+              "key": "X-Frame-Options",
+              "value": "DENY"
+            },
+            {
+              "key": "X-Content-Type-Options",
+              "value": "nosniff"
+            },
+            {
+              "key": "Referrer-Policy",
+              "value": "same-origin"
+            },
+            {
+              "key": "Cross-Origin-Opener-Policy",
+              "value": "same-origin"
+            }
+          ],
+          "cookie": [],
+          "body": "{\n    \"detail\": \"You do not have permission to perform this action.\"\n}"
+        }
+      ]
+    },
+    {
+      "name": "Delete Borrowing",
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "exec": [
+              "pm.test(\"Trả sách thành công\", function () {\r",
+              "    const res = pm.response.json();\r",
+              "\r",
+              "    pm.response.to.have.status(200);\r",
+              "    pm.expect(res.status).to.eql(\"RETURNED\");\r",
+              "    pm.expect(res).to.have.property(\"returning_book_date\");\r",
+              "});"
+            ],
+            "type": "text/javascript",
+            "packages": {},
+            "requests": {}
+          }
+        }
+      ],
+      "request": {
+        "method": "PATCH",
+        "header": [
+          {
+            "key": "Authorization",
+            "value": "token {{token}}",
+            "type": "text"
+          }
+        ],
+        "body": {
+          "mode": "raw",
+          "raw": "{\r\n  \"status\": \"RETURNED\"\r\n}",
+          "options": {
+            "raw": {
+              "language": "json"
+            }
+          }
+        },
+        "url": {
+          "raw": "{{URL_PATH}}/borrowing/6/update_status/",
+          "host": [
+            "{{URL_PATH}}"
+          ],
+          "path": [
+            "borrowing",
+            "6",
+            "update_status",
+            ""
+          ]
+        }
+      },
+      "response": [
+        {
+          "name": "Delete Borrowing With Admin Role",
+          "originalRequest": {
+            "method": "PATCH",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "token {{token}}",
+                "type": "text"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\r\n  \"status\": \"RETURNED\"\r\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "{{URL_PATH}}/borrowing/6/update_status/",
+              "host": [
+                "{{URL_PATH}}"
+              ],
+              "path": [
+                "borrowing",
+                "6",
+                "update_status",
+                ""
+              ]
+            }
+          },
+          "status": "Accepted",
+          "code": 202,
+          "_postman_previewlanguage": null,
+          "header": [
+            {
+              "key": "Date",
+              "value": "Thu, 07 May 2026 10:45:03 GMT"
+            },
+            {
+              "key": "Server",
+              "value": "WSGIServer/0.2 CPython/3.13.9"
+            },
+            {
+              "key": "Content-Type",
+              "value": "application/json"
+            },
+            {
+              "key": "Vary",
+              "value": "Accept, origin"
+            },
+            {
+              "key": "Allow",
+              "value": "PATCH, OPTIONS"
+            },
+            {
+              "key": "Content-Length",
+              "value": "53"
+            },
+            {
+              "key": "X-Frame-Options",
+              "value": "DENY"
+            },
+            {
+              "key": "X-Content-Type-Options",
+              "value": "nosniff"
+            },
+            {
+              "key": "Referrer-Policy",
+              "value": "same-origin"
+            },
+            {
+              "key": "Cross-Origin-Opener-Policy",
+              "value": "same-origin"
+            }
+          ],
+          "cookie": [],
+          "body": "{\n    \"message\": \"Cập nhật trạng thái thành công\"\n}"
+        },
+        {
+          "name": "Delete Borrowing With User Role",
+          "originalRequest": {
+            "method": "PATCH",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "token {{token}}",
+                "type": "text"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\r\n  \"status\": \"RETURNED\"\r\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "{{URL_PATH}}/borrowing/6/update_status/",
+              "host": [
+                "{{URL_PATH}}"
+              ],
+              "path": [
+                "borrowing",
+                "6",
+                "update_status",
+                ""
+              ]
+            }
+          },
+          "status": "Forbidden",
+          "code": 403,
+          "_postman_previewlanguage": null,
+          "header": [
+            {
+              "key": "Date",
+              "value": "Thu, 07 May 2026 10:49:11 GMT"
+            },
+            {
+              "key": "Server",
+              "value": "WSGIServer/0.2 CPython/3.13.9"
+            },
+            {
+              "key": "Content-Type",
+              "value": "application/json"
+            },
+            {
+              "key": "Vary",
+              "value": "Accept, origin"
+            },
+            {
+              "key": "Allow",
+              "value": "PATCH, OPTIONS"
+            },
+            {
+              "key": "Content-Length",
+              "value": "63"
+            },
+            {
+              "key": "X-Frame-Options",
+              "value": "DENY"
+            },
+            {
+              "key": "X-Content-Type-Options",
+              "value": "nosniff"
+            },
+            {
+              "key": "Referrer-Policy",
+              "value": "same-origin"
+            },
+            {
+              "key": "Cross-Origin-Opener-Policy",
+              "value": "same-origin"
+            }
+          ],
+          "cookie": [],
+          "body": "{\n    \"detail\": \"You do not have permission to perform this action.\"\n}"
+        }
+      ]
+    }
+  ],
+  "event": [
+    {
+      "listen": "prerequest",
+      "script": {
+        "type": "text/javascript",
+        "packages": {},
+        "requests": {},
+        "exec": [
+          "role = pm.environment.set(\"role\", \"user\")\r",
+          "role = pm.environment.get(\"role\");\r",
+          "if (role === \"admin\") {\r",
+          "    pm.environment.set(\"token\", pm.environment.get(\"admin_token\"));\r",
+          "} else {\r",
+          "    pm.environment.set(\"token\", pm.environment.get(\"user_token\"))\r",
+          "}"
+        ]
+      }
+    },
+    {
+      "listen": "test",
+      "script": {
+        "type": "text/javascript",
+        "packages": {},
+        "requests": {},
+        "exec": [
+          "pm.test(\"Status code theo role + method\", function () {\r",
+          "    const role = pm.environment.get(\"role\");\r",
+          "    const code = pm.response.code;\r",
+          "    const method = pm.request.method;\r",
+          "\r",
+          "    if (method === \"GET\") {\r",
+          "        pm.expect(code).to.be.oneOf([200, 404]);\r",
+          "    } else {\r",
+          "        if (role === \"admin\") {\r",
+          "            pm.expect(code).to.be.oneOf([200, 201, 204]);\r",
+          "        } else {\r",
+          "            pm.expect(code).to.be.oneOf([401, 403]);\r",
+          "        }\r",
+          "    }\r",
+          "});"
+        ]
+      }
+    }
+  ]
+}

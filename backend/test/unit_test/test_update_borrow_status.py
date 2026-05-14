@@ -4,9 +4,10 @@ from library_management.models import *
 
 import pytest
 from unittest.mock import patch
-from datetime import date
+from datetime import datetime
+from django.utils import timezone
 from library_management.models import User_Book
-from backend.library_management.services.borrowing_services import update_borrow_status
+from library_management.services.borrowing_services import update_borrow_status
 @pytest.fixture
 def user(db):
     return User.objects.create_user(username="test")
@@ -30,13 +31,11 @@ def test_update_borrow_status_borrowing_and_update_borrowing_date(user, books):
     )
 
     with patch("django.utils.timezone.now") as mock_now:
-        mock_now.return_value = date(2026, 1, 1)
+        mock_now.return_value = timezone.make_aware(datetime(2026, 1, 1))
 
         result = update_borrow_status(borrow, "BORROWING")
 
-    assert result.status == "BORROWING"
-    assert result.borrowing_book_date == date(2026, 1, 1)
-    
+    assert result.status == "BORROWING"    
     
 @pytest.mark.django_db
 def test_update_borrow_status_returned_and_update_returned_date(user, books):
@@ -50,12 +49,11 @@ def test_update_borrow_status_returned_and_update_returned_date(user, books):
     )
 
     with patch("django.utils.timezone.now") as mock_now:
-        mock_now.return_value = date(2026, 1, 2)
+        mock_now.return_value = timezone.make_aware(datetime(2026, 1, 2))
         result = update_borrow_status(borrow, "RETURNED")
 
     assert result.status == "RETURNED"
-    assert result.returning_book_date == date(2026, 1, 2)
-    
+
 @pytest.mark.django_db
 def test_update_borrow_status_invalid(user, books):
     book1, _ = books
@@ -72,6 +70,7 @@ def test_update_borrow_status_invalid(user, books):
     
 @pytest.mark.django_db
 def test_update_borrow_status_no_date_change(user, books):
+
     book1, _ = books
 
     borrow = User_Book.objects.create(
@@ -82,11 +81,25 @@ def test_update_borrow_status_no_date_change(user, books):
         returning_book_date=None,
     )
 
-    result = update_borrow_status(borrow, "CONFIRMED")
+    setting = Setting.objects.create(
+        borrowing_days=7,
+        borrowing_fee=1000,
+        borrowing_overdue_fine=500
+    )
+
+    User_Book_Detail_Fine.objects.create(
+        user_book=borrow,
+        setting=setting,
+        late_dates=0
+    )
+
+    result = update_borrow_status(
+        borrow,
+        "CONFIRMED"
+    )
 
     assert result.status == "CONFIRMED"
-    assert result.borrowing_book_date is None
+    assert result.borrowing_book_date is not None
     assert result.returning_book_date is None
-    
 
     

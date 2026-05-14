@@ -1,7 +1,7 @@
 import pytest
 
 from library_management.models import *
-from backend.library_management.services import borrowing_services
+from library_management.services import borrowing_services
 @pytest.mark.django_db
 def test_check_stock_return_true():
     category = Category.objects.create(name="IT")

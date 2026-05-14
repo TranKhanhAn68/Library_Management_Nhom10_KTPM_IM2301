@@ -44,7 +44,7 @@ def test_is_overdue_true():
         user=user,
         book=book,
         borrowing_quantity=3,
-        status="BORROWING",
+        status="CONFIRMED",
         borrowing_book_date=date.today() - timedelta(days=30)
     )
 
@@ -68,7 +68,7 @@ def test_is_overdue_false():
         user=user,
         book=book,
         borrowing_quantity=3,
-        status="BORROWING",
+        status="CONFIRMED",
         borrowing_book_date=date.today()
     )
 
@@ -92,7 +92,7 @@ def test_is_overdue_without_due_date():
         user=user,
         book=book,
         borrowing_quantity=3,
-        status="BORROWING",
+        status="CONFIRMED",
         borrowing_book_date=date.today()
     )
     

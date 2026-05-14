@@ -1,5 +1,5 @@
 import pytest
-from backend.library_management.services import borrowing_services
+from library_management.services import borrowing_services
 from library_management.models import *
 from library_management.services import constraint
 

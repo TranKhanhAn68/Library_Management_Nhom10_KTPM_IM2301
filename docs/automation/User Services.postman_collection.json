@@ -222,7 +222,7 @@
         "header": [
           {
             "key": "Authorization",
-            "value": "token {{user_token}}",
+            "value": "token {{token}}",
             "type": "text"
           }
         ],
@@ -317,7 +317,7 @@
             "header": [
               {
                 "key": "Authorization",
-                "value": "token {{user_token}}",
+                "value": "token {{token}}",
                 "type": "text"
               }
             ],
